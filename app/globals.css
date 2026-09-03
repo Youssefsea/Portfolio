@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #fffaf0;
   --foreground: #171717;
 }
 
@@ -12,15 +12,330 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  margin: 0;
+  background: #fffaf0;
+  color: #171717;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: #ffe66d;
+  color: #171717;
+}
+
+/* =========================
+   REVEAL ANIMATIONS
+========================= */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   CARTOON WINDOW
+========================= */
+
+.cartoon-window {
+  position: relative;
+  box-shadow:
+    10px 10px 0 rgba(23, 23, 23, 1),
+    0 20px 50px rgba(23, 23, 23, 0.12);
+  transform: rotate(1deg);
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.cartoon-window:hover {
+  transform: rotate(0deg) translateY(-5px);
+  box-shadow:
+    13px 13px 0 rgba(23, 23, 23, 1),
+    0 25px 60px rgba(23, 23, 23, 0.14);
+}
+
+.window-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid rgba(23, 23, 23, 0.6);
+}
+
+/* =========================
+   STATUS DOT
+========================= */
+
+.status-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #50d890;
+  box-shadow: 0 0 0 0 rgba(80, 216, 144, 0.6);
+  animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(80, 216, 144, 0.55);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(80, 216, 144, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(80, 216, 144, 0);
+  }
+}
+
+/* =========================
+   TERMINAL CURSOR
+========================= */
+
+.cursor-blink {
+  animation: cursorBlink 900ms steps(1) infinite;
+}
+
+@keyframes cursorBlink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================
+   FLOATING ELEMENTS
+========================= */
+
+.animate-float {
+  animation: floatY 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-slow {
+  animation: floatYSlow 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-wiggle {
+  animation: wiggle 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(0, -12px, 0) rotate(5deg);
+  }
+}
+
+@keyframes floatYSlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-2deg);
+  }
+
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(5deg);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate3d(5px, -5px, 0) rotate(5deg);
+  }
+
+  50% {
+    transform: translate3d(-5px, -10px, 0) rotate(-5deg);
+  }
+
+  75% {
+    transform: translate3d(3px, -4px, 0) rotate(3deg);
+  }
+}
+
+/* =========================
+   DOODLES
+========================= */
+
+.cartoon-star {
+  color: #ff9f43;
+}
+
+.doodle-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #50d890;
+  animation: dotBounce 3s ease-in-out infinite;
+}
+
+.doodle-dot-purple {
+  background: #9b7cff;
+  animation-delay: 500ms;
+}
+
+.doodle-dot-orange {
+  background: #ff9f43;
+  animation-delay: 1s;
+}
+
+@keyframes dotBounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(0, -8px, 0) scale(1.15);
+  }
+}
+
+/* =========================
+   STICKERS
+========================= */
+
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid #171717;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 11px;
+  box-shadow: 3px 3px 0 #171717;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.sticker:hover {
+  transform: translate3d(0, -3px, 0) rotate(-2deg);
+  box-shadow: 4px 4px 0 #171717;
+}
+
+.sticker-yellow {
+  background: #ffe66d;
+}
+
+.sticker-green {
+  background: #50d890;
+}
+
+.sticker-purple {
+  background: #cfc5ff;
+}
+
+/* =========================
+   CARD SHINE
+========================= */
+
+.cartoon-card::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -130%;
+  width: 60%;
+  transform: skewX(-20deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  transition: left 600ms ease;
+  pointer-events: none;
+}
+
+.cartoon-card:hover::after {
+  left: 150%;
+}
+
+/* =========================
+   CUSTOM SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fffaf0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #171717;
+  border-radius: 999px;
+  border: 2px solid #fffaf0;
+}
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* =========================
+   MOBILE TUNING
+========================= */
+
+@media (max-width: 640px) {
+  .cartoon-window {
+    transform: none;
+  }
+
+  .cartoon-window:hover {
+    transform: translateY(-3px);
+  }
 }
