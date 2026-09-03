@@ -685,36 +685,41 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
-    const sections = NAV_LINKS.map((item) =>
-      document.getElementById(item.id),
-    ).filter(Boolean);
+  const sections: HTMLElement[] = NAV_LINKS
+    .map((item) => document.getElementById(item.id))
+    .filter((section): section is HTMLElement => section !== null);
 
-    if (!sections.length) return;
+  if (sections.length === 0) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (a, b) =>
-              b.intersectionRatio - a.intersectionRatio,
-          )[0];
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visibleEntries = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort(
+          (a, b) =>
+            b.intersectionRatio - a.intersectionRatio,
+        );
 
-        if (visible) {
-          setActiveSection(visible.target.id);
-        }
-      },
-      {
-        rootMargin: "-28% 0px -58% 0px",
-        threshold: [0, 0.15, 0.3, 0.5],
-      },
-    );
+      const visible = visibleEntries[0];
 
-    sections.forEach((section) => observer.observe(section));
+      if (visible) {
+        setActiveSection(visible.target.id);
+      }
+    },
+    {
+      rootMargin: "-28% 0px -58% 0px",
+      threshold: [0, 0.15, 0.3, 0.5],
+    },
+  );
 
-    return () => observer.disconnect();
-  }, []);
+  sections.forEach((section) => {
+    observer.observe(section);
+  });
 
+  return () => {
+    observer.disconnect();
+  };
+}, []);
   const scrollTo = (id: string) => {
     setMenuOpen(false);
 
