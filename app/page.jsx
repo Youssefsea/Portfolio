@@ -202,12 +202,8 @@ function Reveal({
   children,
   className = "",
   delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -382,10 +378,6 @@ function SectionHeading({
   index,
   title,
   emoji,
-}: {
-  index: string;
-  title: string;
-  emoji: string;
 }) {
   return (
     <div className="flex items-end justify-between gap-4">
@@ -418,10 +410,6 @@ function InfoRow({
   icon: Icon,
   label,
   value,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string;
 }) {
   return (
     <div className="flex gap-4 rounded-2xl border-[3px] border-[#171717] bg-white p-4 shadow-[5px_5px_0_#171717] transition-transform duration-300 hover:-translate-y-1">
@@ -445,9 +433,6 @@ function InfoRow({
 function SkillCard({
   group,
   index,
-}: {
-  group: (typeof SKILL_GROUPS)[number];
-  index: number;
 }) {
   const Icon = group.icon;
 
@@ -506,9 +491,6 @@ function SkillCard({
 function ProjectCard({
   project,
   index,
-}: {
-  project: (typeof PROJECTS)[number];
-  index: number;
 }) {
   const [open, setOpen] = useState(false);
   const style = COLOR_STYLES[project.accent as keyof typeof COLOR_STYLES];
@@ -705,7 +687,7 @@ export default function Portfolio() {
     return () => observer.disconnect();
   }, []);
 
-  const scrollTo = (id: string) => {
+  const scrollTo = (id) => {
     setMenuOpen(false);
 
     const element = document.getElementById(id);
