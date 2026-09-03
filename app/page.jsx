@@ -28,6 +28,7 @@ Coffee,
 Github,
 Linkedin,
 CircleDot,
+MousePointer2,
 } from "lucide-react";
 
 const TERMINAL_LINES = [
@@ -192,6 +193,14 @@ badge: "bg-[#eee9ff] text-[#5b42a9]",
 },
 };
 
+const SKILL_BACKGROUNDS = {
+blue: "bg-[#dff1ff]",
+purple: "bg-[#eee9ff]",
+pink: "bg-[#ffe2f0]",
+yellow: "bg-[#fff2b9]",
+orange: "bg-[#ffe7d1]",
+};
+
 function Reveal({ children, className = "", delay = 0 }) {
 const ref = useRef(null);
 const [visible, setVisible] = useState(false);
@@ -199,7 +208,7 @@ const [visible, setVisible] = useState(false);
 useEffect(() => {
 const element = ref.current;
 
-```
+
 if (!element) return;
 
 const observer = new IntersectionObserver(
@@ -210,14 +219,15 @@ const observer = new IntersectionObserver(
     }
   },
   {
-    threshold: 0.1,
+    threshold: 0.08,
+    rootMargin: "0px 0px -30px 0px",
   }
 );
 
 observer.observe(element);
 
 return () => observer.disconnect();
-```
+
 
 }, []);
 
@@ -236,36 +246,43 @@ transitionDelay: `${delay}ms`,
 }
 
 function FloatingDecorations() {
-return ( <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden"> <div className="absolute left-[5%] top-[18%] text-[#ff9f43] animate-float-slow"> <Star size={28} fill="currentColor" /> </div>
+return ( <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden"> <div className="absolute left-[4%] top-[20%] text-[#ff9f43] animate-float-slow"> <Star size={28} fill="currentColor" /> </div>
 
-```
-  <div className="absolute right-[8%] top-[23%] text-[#ff9f43] animate-float">
-    <Zap size={35} fill="currentColor" />
+
+  <div className="absolute right-[7%] top-[25%] text-[#ff9f43] animate-float">
+    <Zap size={34} fill="currentColor" />
   </div>
 
-  <div className="absolute left-[8%] bottom-[22%] text-[#9b7cff] animate-wiggle">
-    <Sparkles size={35} />
+  <div className="absolute left-[7%] bottom-[20%] text-[#9b7cff] animate-wiggle">
+    <Sparkles size={34} />
   </div>
 
-  <div className="absolute right-[12%] bottom-[17%] text-[#50d890] animate-float-slow">
-    <Heart size={30} fill="currentColor" />
+  <div className="absolute right-[10%] bottom-[15%] text-[#50d890] animate-float-slow">
+    <Heart size={29} fill="currentColor" />
   </div>
 
-  <span className="absolute left-[24%] top-[31%] doodle-dot" />
+  <div className="absolute right-[28%] top-[13%] text-[#ffe66d] animate-spin-slow">
+    <CircleDot size={23} />
+  </div>
+
+  <span className="absolute left-[25%] top-[31%] doodle-dot" />
   <span className="absolute right-[22%] top-[42%] doodle-dot doodle-dot-purple" />
   <span className="absolute left-[14%] bottom-[29%] doodle-dot doodle-dot-orange" />
 
-  <div className="absolute -left-24 top-[8%] h-72 w-72 rounded-full bg-[#50d890]/25 blur-3xl" />
-  <div className="absolute -right-24 top-[40%] h-80 w-80 rounded-full bg-[#9b7cff]/20 blur-3xl" />
-  <div className="absolute left-[40%] bottom-[-150px] h-80 w-80 rounded-full bg-[#ff9f43]/20 blur-3xl" />
+  <div className="absolute -left-24 top-[8%] h-72 w-72 rounded-full bg-[#50d890]/20 blur-3xl" />
+  <div className="absolute -right-24 top-[40%] h-80 w-80 rounded-full bg-[#9b7cff]/15 blur-3xl" />
+  <div className="absolute left-[40%] bottom-[-150px] h-80 w-80 rounded-full bg-[#ff9f43]/15 blur-3xl" />
+
+  <div className="absolute left-[48%] top-[18%] h-2 w-2 rounded-full bg-[#50d890] animate-ping-soft" />
+  <div className="absolute left-[75%] top-[70%] h-2 w-2 rounded-full bg-[#9b7cff] animate-ping-soft delay-700" />
 </div>
-```
+
 
 );
 }
 
 function CartoonBadge() {
-return ( <div className="inline-flex items-center gap-2 rounded-full border-[3px] border-[#171717] bg-white px-4 py-2 text-sm font-black text-[#171717] shadow-[4px_4px_0_#171717] transition-transform hover:-translate-y-1"> <span className="status-dot" />
+return ( <div className="inline-flex items-center gap-2 rounded-full border-[3px] border-[#171717] bg-white px-4 py-2 text-sm font-black text-[#171717] shadow-[4px_4px_0_#171717] transition-all duration-200 hover:-translate-y-1 hover:rotate-[-1deg]"> <span className="status-dot" />
 open to remote work </div>
 );
 }
@@ -276,9 +293,11 @@ const [charIdx, setCharIdx] = useState(0);
 const [done, setDone] = useState([]);
 
 useEffect(() => {
-if (lineIdx >= TERMINAL_LINES.length) return;
+if (lineIdx >= TERMINAL_LINES.length) {
+return;
+}
 
-```
+
 const current = TERMINAL_LINES[lineIdx];
 
 if (charIdx < current.text.length) {
@@ -296,16 +315,16 @@ const timeout = setTimeout(() => {
 }, 350);
 
 return () => clearTimeout(timeout);
-```
+
 
 }, [lineIdx, charIdx]);
 
 const current = TERMINAL_LINES[lineIdx];
 
-return ( <div className="relative"> <div className="absolute -right-4 -top-5 z-10 rotate-6 rounded-full border-[3px] border-[#171717] bg-[#ffe66d] px-4 py-2 font-black shadow-[4px_4px_0_#171717]"> <span className="mr-1">✨</span>
+return ( <div className="relative"> <div className="absolute -right-4 -top-5 z-10 rotate-6 rounded-full border-[3px] border-[#171717] bg-[#ffe66d] px-4 py-2 font-black shadow-[4px_4px_0_#171717] animate-bob"> <span className="mr-1">✨</span>
 dev mode </div>
 
-```
+ 
   <div className="cartoon-window overflow-hidden rounded-[28px] border-[4px] border-[#171717] bg-[#202020]">
     <div className="flex items-center gap-2 border-b-[3px] border-[#171717] bg-[#343434] px-5 py-4">
       <span className="window-dot bg-[#ff6b6b]" />
@@ -361,16 +380,16 @@ dev mode </div>
     </div>
   </div>
 </div>
-```
+ 
 
 );
 }
 
 function SectionHeading({ index, title, emoji }) {
-return ( <div className="flex items-end justify-between gap-4"> <div className="flex items-center gap-4"> <div className="flex h-14 w-14 rotate-[-7deg] items-center justify-center rounded-2xl border-[3px] border-[#171717] bg-[#ffe66d] text-2xl shadow-[5px_5px_0_#171717]">
+return ( <div className="flex items-end justify-between gap-4"> <div className="flex items-center gap-4"> <div className="flex h-14 w-14 rotate-[-7deg] items-center justify-center rounded-2xl border-[3px] border-[#171717] bg-[#ffe66d] text-2xl shadow-[5px_5px_0_#171717] transition-transform duration-300 hover:rotate-3">
 {emoji} </div>
 
-```
+ 
     <div>
       <div className="mb-1 font-mono text-xs font-black text-[#6f6f6f]">
         {index}
@@ -388,15 +407,15 @@ return ( <div className="flex items-end justify-between gap-4"> <div className="
     <span className="h-2 w-2 rounded-full bg-[#171717]" />
   </div>
 </div>
-```
+ 
 
 );
 }
 
 function InfoRow({ icon: Icon, label, value }) {
-return ( <div className="flex gap-4 rounded-2xl border-[3px] border-[#171717] bg-white p-4 shadow-[5px_5px_0_#171717] transition-transform duration-300 hover:-translate-y-1"> <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#dfffea] text-[#157447]"> <Icon size={19} /> </div>
+return ( <div className="flex gap-4 rounded-2xl border-[3px] border-[#171717] bg-white p-4 shadow-[5px_5px_0_#171717] transition-all duration-300 hover:-translate-y-1 hover:rotate-[0.4deg]"> <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#dfffea] text-[#157447]"> <Icon size={19} /> </div>
 
-```
+ 
   <div>
     <div className="mb-1 text-xs font-black uppercase tracking-wider text-[#777]">
       {label}
@@ -407,24 +426,16 @@ return ( <div className="flex gap-4 rounded-2xl border-[3px] border-[#171717] bg
     </div>
   </div>
 </div>
-```
+ 
 
 );
 }
 
 function SkillCard({ group, index }) {
 const Icon = group.icon;
-
-const backgrounds = {
-blue: "bg-[#dff1ff]",
-purple: "bg-[#eee9ff]",
-pink: "bg-[#ffe2f0]",
-yellow: "bg-[#fff2b9]",
-orange: "bg-[#ffe7d1]",
-};
-
 const backgroundClass =
-backgrounds[group.color] || "bg-[#f5f5f5]";
+SKILL_BACKGROUNDS[group.color] ||
+"bg-[#f5f5f5]";
 
 return (
 <Reveal delay={index * 80}> <div className="cartoon-card group relative h-full overflow-hidden rounded-[25px] border-[3px] border-[#171717] bg-white p-5 shadow-[6px_6px_0_#171717] transition-all duration-300 hover:-translate-y-2 hover:rotate-[0.7deg]">
@@ -432,7 +443,7 @@ return (
 className={`absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-70 ${backgroundClass}`}
 />
 
-```
+ 
     <div className="relative mb-5 flex items-center gap-3">
       <div
         className={`flex h-12 w-12 items-center justify-center rounded-2xl border-[3px] border-[#171717] ${backgroundClass} shadow-[3px_3px_0_#171717] transition-transform duration-300 group-hover:rotate-[-8deg]`}
@@ -463,7 +474,7 @@ className={`absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-70 ${backgro
     </div>
   </div>
 </Reveal>
-```
+ 
 
 );
 }
@@ -481,7 +492,7 @@ return (
 className={`group relative overflow-hidden rounded-[32px] border-[4px] border-[#171717] bg-white p-5 ${style.shadow} transition-all duration-300 hover:-translate-y-2 sm:p-7`}
 > <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-[#f8f8f8]" />
 
-```
+ 
     <div className="absolute right-5 top-5 text-4xl transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
       {project.emoji}
     </div>
@@ -496,7 +507,8 @@ className={`group relative overflow-hidden rounded-[32px] border-[4px] border-[#
           </span>
 
           <span className="text-xs font-black text-[#999]">
-            PROJECT {String(index + 1).padStart(2, "0")}
+            PROJECT{" "}
+            {String(index + 1).padStart(2, "0")}
           </span>
         </div>
 
@@ -562,7 +574,6 @@ className={`group relative overflow-hidden rounded-[32px] border-[4px] border-[#
               <span
                 className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full ${style.icon}`}
               />
-
               {highlight}
             </li>
           ))}
@@ -571,7 +582,7 @@ className={`group relative overflow-hidden rounded-[32px] border-[4px] border-[#
     </div>
   </article>
 </Reveal>
-```
+ 
 
 );
 }
@@ -579,14 +590,14 @@ className={`group relative overflow-hidden rounded-[32px] border-[4px] border-[#
 function TerminalContact() {
 return ( <div className="cartoon-window overflow-hidden rounded-[28px] border-[4px] border-[#171717] bg-[#202020] shadow-[7px_7px_0_#171717]"> <div className="flex items-center gap-2 border-b-[3px] border-[#171717] bg-[#343434] px-5 py-4"> <span className="window-dot bg-[#ff6b6b]" /> <span className="window-dot bg-[#ffe66d]" /> <span className="window-dot bg-[#50d890]" />
 
-```
+ 
     <span className="ml-3 text-xs font-bold text-zinc-400">
       contact.json
     </span>
   </div>
 
   <pre className="overflow-x-auto p-5 font-mono text-xs leading-7 text-zinc-300 sm:text-sm">
-```
+ 
 
 {`{
   "name": "Youssef Yasser",
@@ -609,10 +620,12 @@ const [showTop, setShowTop] = useState(false);
 const [copied, setCopied] = useState(false);
 
 useEffect(() => {
-const onScroll = () => {
-const doc = document.documentElement;
+let ticking = false;
 
-```
+ 
+const updateScroll = () => {
+  const doc = document.documentElement;
+
   const scrollTop =
     doc.scrollTop || document.body.scrollTop;
 
@@ -627,18 +640,27 @@ const doc = document.documentElement;
   );
 
   setShowTop(scrollTop > 500);
+
+  ticking = false;
+};
+
+const onScroll = () => {
+  if (!ticking) {
+    window.requestAnimationFrame(updateScroll);
+    ticking = true;
+  }
 };
 
 window.addEventListener("scroll", onScroll, {
   passive: true,
 });
 
-onScroll();
+updateScroll();
 
 return () => {
   window.removeEventListener("scroll", onScroll);
 };
-```
+ 
 
 }, []);
 
@@ -647,19 +669,27 @@ const sections = NAV_LINKS.map((item) =>
 document.getElementById(item.id)
 ).filter(Boolean);
 
-```
+
 if (!sections.length) return;
 
 const observer = new IntersectionObserver(
   (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        setActiveSection(entry.target.id);
-      }
-    });
+    const visibleEntries = entries.filter(
+      (entry) => entry.isIntersecting
+    );
+
+    if (!visibleEntries.length) return;
+
+    const closest = visibleEntries.sort(
+      (a, b) =>
+        Math.abs(a.boundingClientRect.top) -
+        Math.abs(b.boundingClientRect.top)
+    )[0];
+
+    setActiveSection(closest.target.id);
   },
   {
-    rootMargin: "-35% 0px -55% 0px",
+    rootMargin: "-30% 0px -55% 0px",
     threshold: 0,
   }
 );
@@ -669,23 +699,22 @@ sections.forEach((section) =>
 );
 
 return () => observer.disconnect();
-```
+
 
 }, []);
 
 const scrollTo = (id) => {
 setMenuOpen(false);
 
-```
 const element = document.getElementById(id);
 
-if (element) {
-  element.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
-}
-```
+if (!element) return;
+
+element.scrollIntoView({
+  behavior: "smooth",
+  block: "start",
+});
+
 
 };
 
@@ -695,7 +724,7 @@ await navigator.clipboard.writeText(
 "[youssefsea274@gmail.com](mailto:youssefsea274@gmail.com)"
 );
 
-```
+
   setCopied(true);
 
   setTimeout(() => {
@@ -704,13 +733,13 @@ await navigator.clipboard.writeText(
 } catch {
   // Clipboard unavailable
 }
-```
+
 
 };
 
 return ( <div className="min-h-screen overflow-x-hidden bg-[#fffaf0] text-[#171717]"> <FloatingDecorations />
 
-```
+
   <div className="fixed left-0 right-0 top-0 z-[100] h-2 bg-[#171717]/10">
     <div
       className="h-full bg-[#50d890] transition-[width] duration-150"
@@ -787,7 +816,7 @@ return ( <div className="min-h-screen overflow-x-hidden bg-[#fffaf0] text-[#1717
     </nav>
 
     {menuOpen && (
-      <div className="mx-auto mt-2 max-w-6xl rounded-[24px] border-[3px] border-[#171717] bg-white p-4 shadow-[5px_5px_0_#171717] md:hidden">
+      <div className="mx-auto mt-2 max-w-6xl rounded-[24px] border-[3px] border-[#171717] bg-white p-4 shadow-[5px_5px_0_#171717] md:hidden animate-menu-in">
         <div className="flex flex-col gap-2">
           {NAV_LINKS.map((link) => (
             <button
@@ -844,8 +873,10 @@ return ( <div className="min-h-screen overflow-x-hidden bg-[#fffaf0] text-[#1717
             <h1 className="text-[clamp(3.4rem,9vw,7rem)] font-black leading-[0.9] tracking-[-0.06em] text-[#171717]">
               Youssef
               <br />
+
               <span className="relative inline-block text-[#50d890]">
                 Yasser
+
                 <svg
                   className="absolute -bottom-4 left-0 w-full"
                   viewBox="0 0 280 24"
@@ -922,11 +953,18 @@ return ( <div className="min-h-screen overflow-x-hidden bg-[#fffaf0] text-[#1717
             </span>
           </div>
         </Reveal>
+
+        <Reveal delay={460}>
+          <div className="mt-8 flex items-center gap-2 text-xs font-black text-[#929292]">
+            <MousePointer2 size={15} />
+            scroll down to explore
+          </div>
+        </Reveal>
       </div>
 
       <Reveal delay={220}>
         <div className="relative">
-          <div className="absolute -left-8 top-8 hidden rotate-[-12deg] rounded-2xl border-[3px] border-[#171717] bg-[#ff9f43] px-4 py-3 font-black shadow-[4px_4px_0_#171717] sm:block">
+          <div className="absolute -left-8 top-8 hidden rotate-[-12deg] rounded-2xl border-[3px] border-[#171717] bg-[#ff9f43] px-4 py-3 font-black shadow-[4px_4px_0_#171717] sm:block animate-float">
             ship it! 🚀
           </div>
 
@@ -1039,7 +1077,7 @@ return ( <div className="min-h-screen overflow-x-hidden bg-[#fffaf0] text-[#1717
               value="Fullstack Development"
             />
 
-            <div className="rounded-[28px] border-[3px] border-[#171717] bg-[#ffe66d] p-6 shadow-[6px_6px_0_#171717]">
+            <div className="rounded-[28px] border-[3px] border-[#171717] bg-[#ffe66d] p-6 shadow-[6px_6px_0_#171717] transition-transform duration-300 hover:-translate-y-1 hover:rotate-[-1deg]">
               <div className="mb-3 flex items-center gap-2 font-black">
                 <Sparkles size={18} />
                 current mission
@@ -1118,7 +1156,7 @@ return ( <div className="min-h-screen overflow-x-hidden bg-[#fffaf0] text-[#1717
           <div className="absolute left-[23px] top-0 h-full w-[4px] rounded-full bg-[#171717]" />
 
           <div className="relative flex gap-6">
-            <div className="relative z-10 flex h-12 w-12 shrink-0 rotate-[-8deg] items-center justify-center rounded-2xl border-[3px] border-[#171717] bg-[#50d890] shadow-[4px_4px_0_#171717]">
+            <div className="relative z-10 flex h-12 w-12 shrink-0 rotate-[-8deg] items-center justify-center rounded-2xl border-[3px] border-[#171717] bg-[#50d890] shadow-[4px_4px_0_#171717] transition-transform duration-300 hover:rotate-6">
               <Briefcase size={21} />
             </div>
 
@@ -1275,7 +1313,5 @@ return ( <div className="min-h-screen overflow-x-hidden bg-[#fffaf0] text-[#1717
     </button>
   )}
 </div>
-```
-
 );
 }
