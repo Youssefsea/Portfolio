@@ -831,7 +831,7 @@ export default function Portfolio() {
             </a>
           </div>
 
-          <button
+          {/* <button
             type="button"
             onClick={() => setMenuOpen((value) => !value)}
             className="mobile-menu-button lg:hidden"
@@ -843,7 +843,7 @@ export default function Portfolio() {
             ) : (
               <Menu className="h-6 w-6" />
             )}
-          </button>
+          </button> */}
         </nav>
 
         {menuOpen && (
