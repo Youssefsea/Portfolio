@@ -782,7 +782,7 @@ export default function Portfolio() {
           <Reveal>
             <div className="mx-auto grid max-w-6xl grid-cols-2 overflow-hidden rounded-[28px] border-[3px] border-slate-900 bg-white shadow-[8px_8px_0_#0f172a] dark:border-white dark:bg-slate-900 dark:shadow-[8px_8px_0_rgba(255,255,255,0.08)] sm:grid-cols-4">
               {STATS.map((stat, index) => (
-                <div key={stat.label.en} className={`stat-card ${index !== STATS.length - 1 ? "border-b-[3px] border-slate-900 sm:border-b-0 sm:border-r-[3px] dark:border-white" : ""} ${index === 1 ? "bg-blue-50 dark:bg-blue-950/40" : index === 2 ? "bg-pink-50 dark:bg-pink-950/40" : index === 3 ? "bg-purple-50 dark:bg-purple-950/40" : "bg-green-50 dark:bg-green-950/40"}`}>
+                <div key={stat.en} className={`stat-card ${index !== STATS.length - 1? "border-b-[3px] border-slate-900 sm:border-b-0 sm:border-r-[3px] dark:border-white" : ""} ${index === 1 ? "bg-blue-50 dark:bg-blue-950/40" : index === 2 ? "bg-pink-50 dark:bg-pink-950/40" : index === 3 ? "bg-purple-50 dark:bg-purple-950/40" : "bg-green-50 dark:bg-green-950/40"}`}>
                   <div className="font-display text-4xl font-black text-slate-950 dark:text-white">{stat.value}</div>
                   <div className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">{stat[language]}</div>
                 </div>
