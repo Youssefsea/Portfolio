@@ -55,7 +55,6 @@ const EMAIL = "youssefsea274@gmail.com";
 const PHONE = "+20 110 469 9278";
 const LINKEDIN = "https://www.linkedin.com/in/youssef-yasser-97aa742b0";
 const GITHUB = "https://github.com/Youssefsea";
-
 const CV_PATH = "/cvv.pdf";
 
 const NAV_LINKS = [
@@ -369,9 +368,9 @@ function SectionTitle({
   return (
     <div className="mb-12 max-w-4xl">
       <div className="mb-4 flex items-center gap-3">
-        <span className="h-0.5 w-12 bg-slate-500 dark:bg-slate-500" />
+        <span className="h-0.5 w-12 bg-slate-600 dark:bg-slate-400" />
 
-        <span className="text-sm font-black uppercase tracking-[0.18em] text-slate-600 dark:text-slate-300">
+        <span className="text-sm font-black uppercase tracking-[0.18em] text-slate-700 dark:text-slate-300">
           {eyebrow}
         </span>
       </div>
@@ -381,7 +380,7 @@ function SectionTitle({
       </h2>
 
       {description && (
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-700 dark:text-slate-200 sm:text-xl sm:leading-9">
+        <p className="mt-5 max-w-3xl text-lg font-medium leading-8 text-slate-800 dark:text-slate-100 sm:text-xl sm:leading-9">
           {description}
         </p>
       )}
@@ -512,14 +511,14 @@ function TerminalPanel({ language }: { language: Language }) {
 
   return (
     <div className="terminal-panel overflow-hidden rounded-[28px]">
-      <div className="flex items-center justify-between border-b border-white/20 px-5 py-3.5">
+      <div className="flex items-center justify-between border-b border-white/25 px-5 py-3.5">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
           <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
         </div>
 
-        <span className="font-mono text-xs font-semibold text-slate-400">
+        <span className="font-mono text-xs font-semibold text-slate-300">
           youssef@portfolio
         </span>
       </div>
@@ -529,7 +528,7 @@ function TerminalPanel({ language }: { language: Language }) {
           <div key={`${line.text}-${index}`} className="flex gap-3">
             <span
               className={
-                line.prompt === "$" ? "text-emerald-400" : "text-slate-400"
+                line.prompt === "$" ? "text-emerald-400" : "text-slate-300"
               }
             >
               {line.prompt}
@@ -537,7 +536,7 @@ function TerminalPanel({ language }: { language: Language }) {
 
             <span
               className={
-                line.prompt === "$" ? "text-white" : "text-slate-300"
+                line.prompt === "$" ? "text-white" : "text-slate-200"
               }
             >
               {line.text}
@@ -551,7 +550,7 @@ function TerminalPanel({ language }: { language: Language }) {
               className={
                 current.prompt === "$"
                   ? "text-emerald-400"
-                  : "text-slate-400"
+                  : "text-slate-300"
               }
             >
               {current.prompt}
@@ -559,7 +558,7 @@ function TerminalPanel({ language }: { language: Language }) {
 
             <span
               className={
-                current.prompt === "$" ? "text-white" : "text-slate-300"
+                current.prompt === "$" ? "text-white" : "text-slate-200"
               }
             >
               {current.text.slice(0, charIdx)}
@@ -619,13 +618,13 @@ function SkillCard({
           return (
             <div
               key={item.name}
-              className="flex items-center gap-3 rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-3 transition-transform duration-200 group-hover:translate-x-0.5 dark:border-slate-700 dark:bg-slate-950/80"
+              className="flex items-center gap-3 rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-3 dark:border-slate-700 dark:bg-slate-950/85"
             >
               <span className={`shrink-0 ${style.text}`}>
                 <Icon className="h-4.5 w-4.5" />
               </span>
 
-              <span className="text-[15px] font-bold text-slate-800 dark:text-slate-200">
+              <span className="text-[15px] font-bold text-slate-900 dark:text-slate-100">
                 {item.name}
               </span>
             </div>
@@ -653,7 +652,7 @@ function ProjectCard({
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start">
         <div>
           <div className="mb-4 flex items-center gap-3">
-            <span className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400">
+            <span className="font-mono text-sm font-bold text-slate-600 dark:text-slate-400">
               {project.number}
             </span>
 
@@ -668,7 +667,7 @@ function ProjectCard({
             {project.name[language]}
           </h3>
 
-          <p className="mt-4 max-w-4xl text-lg leading-8 text-slate-700 dark:text-slate-200 sm:text-xl sm:leading-9">
+          <p className="mt-4 max-w-4xl text-lg font-medium leading-8 text-slate-800 dark:text-slate-100 sm:text-xl sm:leading-9">
             {project.description[language]}
           </p>
 
@@ -676,7 +675,7 @@ function ProjectCard({
             {project.stack.map((item) => (
               <span
                 key={item}
-                className="rounded-lg border border-slate-300 bg-slate-100 px-3 py-1.5 text-sm font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="rounded-lg border border-slate-300 bg-slate-100 px-3 py-1.5 text-sm font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
               >
                 {item}
               </span>
@@ -688,7 +687,7 @@ function ProjectCard({
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-slate-950 px-5 py-3.5 text-sm font-black text-white transition-all hover:-translate-y-1 hover:shadow-[5px_5px_0_rgba(15,23,42,0.18)] dark:border-white dark:bg-white dark:text-slate-950 dark:hover:shadow-[5px_5px_0_rgba(255,255,255,0.12)]"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-slate-950 px-5 py-3.5 text-sm font-black text-white transition-all hover:-translate-y-1 dark:border-white dark:bg-white dark:text-slate-950"
         >
           {language === "en" ? "Open project" : "فتح المشروع"}
           <ArrowDown className="h-4 w-4 rotate-[-45deg]" />
@@ -699,7 +698,7 @@ function ProjectCard({
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="flex items-center gap-2 text-[15px] font-black text-slate-800 transition-colors hover:text-slate-950 dark:text-slate-200 dark:hover:text-white"
+          className="flex items-center gap-2 text-[15px] font-black text-slate-900 dark:text-white"
           aria-expanded={open}
         >
           {open
@@ -729,13 +728,13 @@ function ProjectCard({
               {project.highlights[language].map((highlight) => (
                 <div
                   key={highlight}
-                  className="flex gap-3 rounded-2xl border-2 border-slate-200 bg-slate-50 p-4.5 dark:border-slate-700 dark:bg-slate-950/70"
+                  className="flex gap-3 rounded-2xl border-2 border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950/70"
                 >
                   <span
                     className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`}
                   />
 
-                  <span className="text-[15px] leading-7 text-slate-700 dark:text-slate-200">
+                  <span className="text-[15px] font-medium leading-7 text-slate-800 dark:text-slate-100">
                     {highlight}
                   </span>
                 </div>
@@ -760,16 +759,16 @@ function InfoCard({
   return (
     <div className="info-card">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
           {icon}
         </span>
 
-        <span className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
+        <span className="text-xs font-black uppercase tracking-[0.14em] text-slate-700 dark:text-slate-300">
           {label}
         </span>
       </div>
 
-      <div className="mt-4 text-[15px] font-bold leading-7 text-slate-800 dark:text-slate-200 sm:text-base">
+      <div className="mt-4 text-[15px] font-bold leading-7 text-slate-900 dark:text-slate-100 sm:text-base">
         {value}
       </div>
     </div>
@@ -790,7 +789,7 @@ function NTICertificateCard({ language }: { language: Language }) {
             </div>
 
             <div>
-              <div className="text-xs font-black uppercase tracking-[0.16em] text-emerald-800 dark:text-emerald-200">
+              <div className="text-xs font-black uppercase tracking-[0.16em] text-emerald-900 dark:text-emerald-100">
                 {language === "en"
                   ? "Professional Certificate"
                   : "شهادة تدريبية"}
@@ -802,59 +801,59 @@ function NTICertificateCard({ language }: { language: Language }) {
             </div>
           </div>
 
-          <span className="rounded-full border border-white/80 bg-white/80 px-3.5 py-1.5 text-xs font-black text-slate-800 backdrop-blur dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-100">
+          <span className="rounded-full border border-white/80 bg-white/80 px-3.5 py-1.5 text-xs font-black text-slate-900 backdrop-blur dark:border-slate-600 dark:bg-slate-900/70 dark:text-white">
             NTI
           </span>
         </div>
 
         <div className="mt-7 grid gap-5 sm:grid-cols-2">
           <div>
-            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-700 dark:text-slate-300">
               Instructor
             </div>
 
-            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-950 dark:text-white">
               Prof. Ahmed Khattab
             </div>
           </div>
 
           <div>
-            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-700 dark:text-slate-300">
               Role
             </div>
 
-            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-950 dark:text-white">
               NTI Director
             </div>
           </div>
 
           <div>
-            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-700 dark:text-slate-300">
               Duration
             </div>
 
-            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-950 dark:text-white">
               28 June — 23 July 2026
             </div>
           </div>
 
           <div>
-            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-700 dark:text-slate-300">
               Total
             </div>
 
-            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-950 dark:text-white">
               120 Hours
             </div>
           </div>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-2.5">
-          <span className="rounded-full border border-white/80 bg-white/70 px-3.5 py-1.5 text-sm font-bold text-slate-800 dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200">
+          <span className="rounded-full border border-white/80 bg-white/70 px-3.5 py-1.5 text-sm font-bold text-slate-900 dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-100">
             Technical — 90 hrs
           </span>
 
-          <span className="rounded-full border border-white/80 bg-white/70 px-3.5 py-1.5 text-sm font-bold text-slate-800 dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200">
+          <span className="rounded-full border border-white/80 bg-white/70 px-3.5 py-1.5 text-sm font-bold text-slate-900 dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-100">
             Freelancing — 30 hrs
           </span>
         </div>
@@ -866,19 +865,19 @@ function NTICertificateCard({ language }: { language: Language }) {
 function ContactCode({ language }: { language: Language }) {
   return (
     <div className="terminal-panel overflow-hidden rounded-[28px]">
-      <div className="flex items-center justify-between border-b border-white/20 px-5 py-3.5">
+      <div className="flex items-center justify-between border-b border-white/25 px-5 py-3.5">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
           <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
         </div>
 
-        <span className="font-mono text-xs font-semibold text-slate-400">
+        <span className="font-mono text-xs font-semibold text-slate-300">
           contact.json
         </span>
       </div>
 
-      <pre className="overflow-x-auto p-6 font-mono text-sm leading-8 text-slate-200 sm:text-[15px] sm:leading-9">
+      <pre className="overflow-x-auto p-6 font-mono text-sm leading-8 text-slate-100 sm:text-[15px] sm:leading-9">
 {`{
   "name": "Youssef Yasser",
   "role": "${
@@ -943,12 +942,88 @@ export default function Portfolio() {
     window.localStorage.setItem("portfolio-language", language);
   }, [language, isArabic]);
 
+  /*
+    Stable scroll tracking:
+    - No IntersectionObserver competition between sections.
+    - Active item is based on the actual document position.
+    - The active tab changes immediately when clicked.
+    - Smooth scrolling still updates it naturally.
+  */
+  useEffect(() => {
+    let rafId = 0;
+
+    const updateActiveSection = () => {
+      const scrollY =
+        window.scrollY ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+
+      const marker = scrollY + 150;
+
+      let currentSection = NAV_LINKS[0].id;
+
+      for (const link of NAV_LINKS) {
+        const section = document.getElementById(link.id);
+
+        if (!section) continue;
+
+        const sectionTop = section.getBoundingClientRect().top + scrollY;
+
+        if (sectionTop <= marker) {
+          currentSection = link.id;
+        }
+      }
+
+      const documentElement = document.documentElement;
+      const reachedBottom =
+        window.innerHeight + scrollY >= documentElement.scrollHeight - 8;
+
+      if (reachedBottom) {
+        currentSection = NAV_LINKS[NAV_LINKS.length - 1].id;
+      }
+
+      setActiveSection((previous) =>
+        previous === currentSection ? previous : currentSection,
+      );
+    };
+
+    const handleScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+
+      rafId = requestAnimationFrame(() => {
+        updateActiveSection();
+      });
+    };
+
+    const handleResize = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+
+      rafId = requestAnimationFrame(() => {
+        updateActiveSection();
+      });
+    };
+
+    updateActiveSection();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     let ticking = false;
 
     const updateScroll = () => {
       const doc = document.documentElement;
       const scrollTop = doc.scrollTop || document.body.scrollTop;
+
       const scrollHeight =
         (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
 
@@ -969,45 +1044,26 @@ export default function Portfolio() {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+
     updateScroll();
 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const sections = NAV_LINKS.map((item) =>
-      document.getElementById(item.id),
-    ).filter((section): section is HTMLElement => section !== null);
-
-    if (!sections.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (visible[0]) {
-          setActiveSection(visible[0].target.id);
-        }
-      },
-      {
-        rootMargin: "-22% 0px -60% 0px",
-        threshold: [0, 0.15, 0.3, 0.5],
-      },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, []);
-
   const scrollTo = (id: string) => {
     setMenuOpen(false);
 
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+    if (id === "hero") {
+      setActiveSection("about");
+    } else if (NAV_LINKS.some((link) => link.id === id)) {
+      setActiveSection(id);
+    }
+
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     });
   };
 
@@ -1209,31 +1265,48 @@ export default function Portfolio() {
           transform: translateY(0);
         }
 
+        /* NAVIGATION */
+
         .nav-link {
           position: relative;
-          padding: 8px 0;
-          color: rgb(71 85 105);
+          padding: 10px 13px;
+          border: 2px solid transparent;
+          border-radius: 14px;
+          color: rgb(51 65 85);
           font-size: 14px;
           font-weight: 900;
-          transition: color 0.2s ease;
+          transition:
+            color 0.2s ease,
+            background 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
         }
 
         .nav-link::after {
           position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
+          left: 13px;
+          right: 13px;
+          bottom: 5px;
           height: 3px;
           content: "";
           border-radius: 99px;
           background: currentColor;
           transform: scaleX(0);
+          transform-origin: center;
           transition: transform 0.2s ease;
         }
 
-        .nav-link:hover,
+        .nav-link:hover {
+          color: rgb(15 23 42);
+          background: rgba(241, 245, 249, 0.9);
+        }
+
         .nav-link-active {
           color: rgb(15 23 42);
+          background: #fef3c7;
+          border-color: rgb(15 23 42);
+          box-shadow: 3px 3px 0 rgba(15, 23, 42, 0.12);
+          transform: translateY(-1px);
         }
 
         .nav-link-active::after {
@@ -1241,12 +1314,19 @@ export default function Portfolio() {
         }
 
         html[data-theme="dark"] .nav-link {
-          color: rgb(203 213 225);
+          color: rgb(226 232 240);
         }
 
-        html[data-theme="dark"] .nav-link:hover,
-        html[data-theme="dark"] .nav-link-active {
+        html[data-theme="dark"] .nav-link:hover {
           color: white;
+          background: rgba(30, 41, 59, 0.95);
+        }
+
+        html[data-theme="dark"] .nav-link-active {
+          color: #ffffff;
+          background: #1e293b;
+          border-color: #e2e8f0;
+          box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.14);
         }
 
         .theme-button,
@@ -1293,6 +1373,8 @@ export default function Portfolio() {
           box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.22);
         }
 
+        /* TERMINAL */
+
         .terminal-panel {
           border: 3px solid #0f172a;
           background: #07111f;
@@ -1321,7 +1403,7 @@ export default function Portfolio() {
           }
         }
 
-        /* Cartoon scene */
+        /* CARTOON */
 
         .mascot-scene {
           isolation: isolate;
@@ -1767,13 +1849,13 @@ export default function Portfolio() {
           }
         }
 
-        /* Cards */
+        /* CARDS */
 
         .skill-card,
         .project-card,
         .info-card {
           border: 2px solid rgb(203 213 225);
-          background: rgba(255, 255, 255, 0.95);
+          background: rgba(255, 255, 255, 0.96);
           border-radius: 28px;
         }
 
@@ -1787,15 +1869,15 @@ export default function Portfolio() {
 
         .skill-card:hover {
           transform: translateY(-5px);
-          border-color: rgb(148 163 184);
-          box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+          border-color: rgb(100 116 139);
+          box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
         }
 
         .project-card {
           position: relative;
           overflow: hidden;
           padding: 30px;
-          box-shadow: 0 15px 45px rgba(15, 23, 42, 0.07);
+          box-shadow: 0 15px 45px rgba(15, 23, 42, 0.08);
         }
 
         .project-top-line {
@@ -1853,16 +1935,16 @@ export default function Portfolio() {
         html[data-theme="dark"] .project-card,
         html[data-theme="dark"] .info-card {
           border-color: rgb(71 85 105);
-          background: rgba(10, 18, 34, 0.96);
+          background: rgba(10, 18, 34, 0.97);
         }
 
         html[data-theme="dark"] .skill-card:hover {
           border-color: rgb(100 116 139);
-          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
         }
 
         html[data-theme="dark"] .project-card {
-          box-shadow: 0 15px 45px rgba(0, 0, 0, 0.28);
+          box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
         }
 
         html[data-theme="dark"] .certificate-card {
@@ -1879,6 +1961,13 @@ export default function Portfolio() {
               rgba(30, 58, 138, 0.9)
             );
           box-shadow: 8px 9px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 1023px) {
+          .nav-link {
+            padding: 9px 10px;
+            font-size: 13px;
+          }
         }
 
         @media (max-width: 640px) {
@@ -1930,7 +2019,7 @@ export default function Portfolio() {
       </div>
 
       <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-[22px] border-2 border-slate-900 bg-white/94 px-3 py-3 shadow-[6px_7px_0_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-slate-200 dark:bg-slate-950/94 dark:shadow-[6px_7px_0_rgba(255,255,255,0.1)] sm:px-5">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-[22px] border-2 border-slate-900 bg-white/95 px-3 py-3 shadow-[6px_7px_0_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-slate-200 dark:bg-slate-950/95 dark:shadow-[6px_7px_0_rgba(255,255,255,0.1)] sm:px-5">
           <button
             type="button"
             onClick={() => scrollTo("hero")}
@@ -1945,7 +2034,7 @@ export default function Portfolio() {
             </span>
           </button>
 
-          <div className="hidden items-center gap-7 lg:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             {NAV_LINKS.map((link) => (
               <button
                 key={link.id}
@@ -2044,10 +2133,10 @@ export default function Portfolio() {
                   key={link.id}
                   type="button"
                   onClick={() => scrollTo(link.id)}
-                  className={`rounded-xl px-4 py-3 text-sm font-black transition-colors ${
+                  className={`rounded-xl border-2 px-4 py-3 text-sm font-black transition-colors ${
                     activeSection === link.id
-                      ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
-                      : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900"
+                      ? "border-slate-900 bg-yellow-200 text-slate-950 dark:border-white dark:bg-slate-800 dark:text-white"
+                      : "border-transparent text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900"
                   } ${isArabic ? "text-right" : "text-left"}`}
                 >
                   {link[language]}
@@ -2081,7 +2170,7 @@ export default function Portfolio() {
       <main className="relative z-10">
         <section
           id="hero"
-          className="mx-auto max-w-6xl scroll-mt-28 px-5 pb-20 pt-36 sm:px-8 sm:pt-40 lg:min-h-screen"
+          className="mx-auto max-w-6xl scroll-mt-32 px-5 pb-20 pt-36 sm:px-8 sm:pt-40 lg:min-h-screen"
         >
           <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr]">
             <Reveal>
@@ -2097,10 +2186,12 @@ export default function Portfolio() {
                 <h1 className="font-display text-5xl font-black leading-[0.94] tracking-[-0.055em] text-slate-950 dark:text-white sm:text-7xl lg:text-[5.7rem]">
                   Youssef
                   <br />
+
                   <span className="relative inline-block">
                     Yasser
                     <span className="absolute -bottom-2 left-0 h-3 w-full -rotate-2 rounded-full bg-yellow-300/80 sm:h-4" />
                   </span>
+
                   <span className="relative">.</span>
                 </h1>
 
@@ -2111,14 +2202,14 @@ export default function Portfolio() {
                       : "مطور Fullstack بتركيز أساسي على الـBackend."}
                   </p>
 
-                  <p className="mt-5 text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
+                  <p className="mt-5 text-lg font-medium leading-9 text-slate-800 dark:text-slate-100 sm:text-xl">
                     {language === "en"
                       ? "Computer Science student at Menoufia University building practical web applications with APIs, databases, authentication, business logic, and modern React interfaces."
                       : "طالب علوم حاسب في جامعة المنوفية، أعمل على بناء تطبيقات ويب عملية تشمل الـAPIs وقواعد البيانات والـAuthentication والـBusiness Logic وواجهات React الحديثة."}
                   </p>
                 </div>
 
-                <div className="mt-7 flex items-center gap-2 text-[15px] font-bold text-slate-600 dark:text-slate-300">
+                <div className="mt-7 flex items-center gap-2 text-[15px] font-bold text-slate-700 dark:text-slate-200">
                   <MapPin className="h-4.5 w-4.5" />
                   Giza, Egypt
                 </div>
@@ -2167,7 +2258,7 @@ export default function Portfolio() {
                   ].map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border-2 border-slate-900 bg-white px-3.5 py-2 text-sm font-black text-slate-700 shadow-[2px_2px_0_rgba(15,23,42,0.15)] dark:border-slate-200 dark:bg-slate-900 dark:text-slate-200"
+                      className="rounded-full border-2 border-slate-900 bg-white px-3.5 py-2 text-sm font-black text-slate-800 shadow-[2px_2px_0_rgba(15,23,42,0.15)] dark:border-slate-200 dark:bg-slate-900 dark:text-slate-100"
                     >
                       {item}
                     </span>
@@ -2209,7 +2300,7 @@ export default function Portfolio() {
                     {stat.value}
                   </div>
 
-                  <div className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 sm:text-sm">
+                  <div className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-slate-700 dark:text-slate-300 sm:text-sm">
                     {stat[language]}
                   </div>
                 </div>
@@ -2220,7 +2311,7 @@ export default function Portfolio() {
 
         <section
           id="about"
-          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+          className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8"
         >
           <Reveal>
             <SectionTitle
@@ -2245,13 +2336,13 @@ export default function Portfolio() {
                         : "منهجي في التطوير"}
                     </div>
 
-                    <div className="mt-1 text-sm font-semibold text-slate-600 dark:text-slate-300">
+                    <div className="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-300">
                       Architecture → API → Data → UI
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-6 text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
+                <div className="space-y-6 text-lg font-medium leading-9 text-slate-800 dark:text-slate-100 sm:text-xl">
                   <p>
                     {language === "en"
                       ? "I focus on building applications where the backend is more than a simple CRUD layer. I care about authentication, business rules, transactions, concurrency, location logic, and integrations."
@@ -2275,7 +2366,7 @@ export default function Portfolio() {
                   ].map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border border-slate-300 bg-slate-100 px-3.5 py-2 text-sm font-black text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                      className="rounded-full border border-slate-300 bg-slate-100 px-3.5 py-2 text-sm font-black text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                     >
                       {item}
                     </span>
@@ -2347,7 +2438,7 @@ export default function Portfolio() {
 
         <section
           id="skills"
-          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+          className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8"
         >
           <Reveal>
             <SectionTitle
@@ -2368,7 +2459,7 @@ export default function Portfolio() {
 
         <section
           id="projects"
-          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+          className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8"
         >
           <Reveal>
             <SectionTitle
@@ -2389,7 +2480,7 @@ export default function Portfolio() {
 
         <section
           id="experience"
-          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+          className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8"
         >
           <Reveal>
             <SectionTitle
@@ -2411,13 +2502,13 @@ export default function Portfolio() {
                     Internship
                   </div>
 
-                  <div className="mt-2 text-[15px] font-bold text-slate-700 dark:text-slate-200">
+                  <div className="mt-2 text-[15px] font-bold text-slate-800 dark:text-slate-200">
                     Egypt
                   </div>
                 </div>
 
                 <div className="p-7 sm:p-9">
-                  <div className="mb-3 text-sm font-black uppercase tracking-[0.12em] text-blue-700 dark:text-blue-300">
+                  <div className="mb-3 text-sm font-black uppercase tracking-[0.12em] text-blue-800 dark:text-blue-200">
                     Gulf of Suez Petroleum Company
                   </div>
 
@@ -2425,7 +2516,7 @@ export default function Portfolio() {
                     IT Intern — GUPCO
                   </h3>
 
-                  <p className="mt-5 max-w-4xl text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
+                  <p className="mt-5 max-w-4xl text-lg font-medium leading-9 text-slate-800 dark:text-slate-100 sm:text-xl">
                     {language === "en"
                       ? "Practical exposure to IT workflows inside a large enterprise environment, alongside continued hands-on work in backend development, databases, and fullstack applications."
                       : "خبرة عملية داخل بيئة مؤسسية كبيرة في مجال الـIT، بالتوازي مع العمل المستمر على تطوير الـBackend وقواعد البيانات وتطبيقات الـFullstack."}
@@ -2440,7 +2531,7 @@ export default function Portfolio() {
                     ].map((item) => (
                       <span
                         key={item}
-                        className="rounded-full border border-slate-300 bg-slate-100 px-3.5 py-2 text-sm font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                        className="rounded-full border border-slate-300 bg-slate-100 px-3.5 py-2 text-sm font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
                       >
                         {item}
                       </span>
@@ -2454,7 +2545,7 @@ export default function Portfolio() {
 
         <section
           id="contact"
-          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+          className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8"
         >
           <Reveal>
             <SectionTitle
@@ -2477,7 +2568,7 @@ export default function Portfolio() {
                       {language === "en" ? "Get in touch" : "تواصل معي"}
                     </div>
 
-                    <div className="mt-1 text-sm font-semibold text-slate-600 dark:text-slate-300">
+                    <div className="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-300">
                       {EMAIL}
                     </div>
                   </div>
@@ -2489,7 +2580,7 @@ export default function Portfolio() {
                     : "هل لديك فرصة عمل أو مشروع أو مشكلة تقنية ترتبط بالـBackend؟"}
                 </h3>
 
-                <p className="mt-5 max-w-2xl text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
+                <p className="mt-5 max-w-2xl text-lg font-medium leading-9 text-slate-800 dark:text-slate-100 sm:text-xl">
                   {language === "en"
                     ? "Email is the fastest way to reach me. You can also find my work and professional profiles below."
                     : "البريد الإلكتروني هو أسرع وسيلة للتواصل معي، ويمكنك أيضًا الوصول إلى أعمالي وحساباتي المهنية من الروابط التالية."}
@@ -2523,24 +2614,24 @@ export default function Portfolio() {
                   <button
                     type="button"
                     onClick={copyEmail}
-                    className="flex w-full items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                    className="flex w-full items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   >
-                    <Mail className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
+                    <Mail className="h-4.5 w-4.5 shrink-0 text-slate-600 dark:text-slate-300" />
 
                     <span className="truncate">{EMAIL}</span>
 
                     {copied ? (
                       <Check className="ml-auto h-4.5 w-4.5 shrink-0 text-emerald-500" />
                     ) : (
-                      <Copy className="ml-auto h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
+                      <Copy className="ml-auto h-4.5 w-4.5 shrink-0 text-slate-600 dark:text-slate-300" />
                     )}
                   </button>
 
                   <a
                     href={`tel:${PHONE.replaceAll(" ", "")}`}
-                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   >
-                    <Phone className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
+                    <Phone className="h-4.5 w-4.5 shrink-0 text-slate-600 dark:text-slate-300" />
                     {PHONE}
                   </a>
 
@@ -2548,9 +2639,9 @@ export default function Portfolio() {
                     href={GITHUB}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   >
-                    <FaGithub className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
+                    <FaGithub className="h-4.5 w-4.5 shrink-0 text-slate-600 dark:text-slate-300" />
                     github.com/Youssefsea
                   </a>
 
@@ -2558,9 +2649,9 @@ export default function Portfolio() {
                     href={LINKEDIN}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   >
-                    <FaLinkedin className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
+                    <FaLinkedin className="h-4.5 w-4.5 shrink-0 text-slate-600 dark:text-slate-300" />
                     linkedin.com/in/youssef-yasser
                   </a>
                 </div>
@@ -2575,11 +2666,12 @@ export default function Portfolio() {
       </main>
 
       <footer className="relative z-10 px-5 pb-8 sm:px-8">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 rounded-[22px] border-2 border-slate-900 bg-white px-5 py-5 text-sm text-slate-600 shadow-[5px_6px_0_rgba(15,23,42,0.08)] dark:border-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:shadow-[5px_6px_0_rgba(255,255,255,0.07)] sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 rounded-[22px] border-2 border-slate-900 bg-white px-5 py-5 text-sm text-slate-700 shadow-[5px_6px_0_rgba(15,23,42,0.08)] dark:border-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:shadow-[5px_6px_0_rgba(255,255,255,0.07)] sm:flex-row sm:items-center sm:justify-between">
           <span className="font-semibold">© 2026 Youssef Yasser</span>
 
-          <div className="flex items-center gap-2 font-black text-slate-800 dark:text-slate-100">
+          <div className="flex items-center gap-2 font-black text-slate-900 dark:text-slate-100">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+
             {language === "en"
               ? "Open to opportunities"
               : "متاح للفرص"}
