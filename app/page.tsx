@@ -65,6 +65,8 @@ const NAV_LINKS = [
   { id: "contact", en: "Contact", ar: "تواصل" },
 ] as const;
 
+type SectionId = (typeof NAV_LINKS)[number]["id"];
+
 const STATS = [
   { value: "3", en: "live projects", ar: "مشاريع منشورة" },
   { value: "30+", en: "REST endpoints", ar: "REST endpoints" },
@@ -900,7 +902,7 @@ function ContactCode({ language }: { language: Language }) {
 
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("about");
+  const [activeSection, setActiveSection] = useState<SectionId>("about");
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showTop, setShowTop] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -908,6 +910,14 @@ export default function Portfolio() {
   const [theme, setTheme] = useState<Theme>("light");
 
   const isArabic = language === "ar";
+
+  /*
+    During programmatic smooth scrolling, the active tab is locked
+    to the clicked destination. Once the destination reaches the
+    navigation anchor, normal scroll tracking takes over again.
+  */
+  const programmaticTargetRef = useRef<SectionId | null>(null);
+  const programmaticTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem(
@@ -942,33 +952,69 @@ export default function Portfolio() {
     window.localStorage.setItem("portfolio-language", language);
   }, [language, isArabic]);
 
-  /*
-    Stable scroll tracking:
-    - No IntersectionObserver competition between sections.
-    - Active item is based on the actual document position.
-    - The active tab changes immediately when clicked.
-    - Smooth scrolling still updates it naturally.
-  */
   useEffect(() => {
     let rafId = 0;
 
+    const getScrollY = () =>
+      window.scrollY ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0;
+
+    const getSectionTop = (id: string) => {
+      const section = document.getElementById(id);
+      if (!section) return Number.POSITIVE_INFINITY;
+
+      return section.getBoundingClientRect().top + getScrollY();
+    };
+
+    const getAnchorPosition = () => {
+      const viewportAnchor = window.innerHeight * 0.2;
+
+      return Math.min(
+        Math.max(viewportAnchor, 120),
+        180,
+      );
+    };
+
     const updateActiveSection = () => {
-      const scrollY =
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0;
+      const scrollY = getScrollY();
+      const anchor = getAnchorPosition();
+      const marker = scrollY + anchor;
 
-      const marker = scrollY + 150;
+      const target = programmaticTargetRef.current;
 
-      let currentSection = NAV_LINKS[0].id;
+      if (target) {
+        const targetTop = getSectionTop(target);
+
+        const reachedTarget =
+          targetTop <= marker + 48 &&
+          targetTop >= marker - 110;
+
+        const documentElement = document.documentElement;
+        const reachedBottom =
+          window.innerHeight + scrollY >=
+          documentElement.scrollHeight - 8;
+
+        if (reachedTarget || reachedBottom) {
+          programmaticTargetRef.current = null;
+
+          if (programmaticTimerRef.current !== null) {
+            window.clearTimeout(programmaticTimerRef.current);
+            programmaticTimerRef.current = null;
+          }
+        } else {
+          setActiveSection((previous) =>
+            previous === target ? previous : target,
+          );
+          return;
+        }
+      }
+
+      let currentSection: SectionId = NAV_LINKS[0].id;
 
       for (const link of NAV_LINKS) {
-        const section = document.getElementById(link.id);
-
-        if (!section) continue;
-
-        const sectionTop = section.getBoundingClientRect().top + scrollY;
+        const sectionTop = getSectionTop(link.id);
 
         if (sectionTop <= marker) {
           currentSection = link.id;
@@ -977,7 +1023,8 @@ export default function Portfolio() {
 
       const documentElement = document.documentElement;
       const reachedBottom =
-        window.innerHeight + scrollY >= documentElement.scrollHeight - 8;
+        window.innerHeight + scrollY >=
+        documentElement.scrollHeight - 8;
 
       if (reachedBottom) {
         currentSection = NAV_LINKS[NAV_LINKS.length - 1].id;
@@ -989,31 +1036,63 @@ export default function Portfolio() {
     };
 
     const handleScroll = () => {
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
 
-      rafId = requestAnimationFrame(() => {
-        updateActiveSection();
-      });
+      rafId = requestAnimationFrame(updateActiveSection);
     };
 
     const handleResize = () => {
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
 
-      rafId = requestAnimationFrame(() => {
-        updateActiveSection();
-      });
+      rafId = requestAnimationFrame(updateActiveSection);
+    };
+
+    const handleUserScrollIntent = () => {
+      if (!programmaticTargetRef.current) return;
+
+      programmaticTargetRef.current = null;
+
+      if (programmaticTimerRef.current !== null) {
+        window.clearTimeout(programmaticTimerRef.current);
+        programmaticTimerRef.current = null;
+      }
+
+      handleScroll();
     };
 
     updateActiveSection();
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
     window.addEventListener("resize", handleResize);
 
+    window.addEventListener("wheel", handleUserScrollIntent, {
+      passive: true,
+    });
+
+    window.addEventListener("touchstart", handleUserScrollIntent, {
+      passive: true,
+    });
+
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+
+      if (programmaticTimerRef.current !== null) {
+        window.clearTimeout(programmaticTimerRef.current);
+      }
 
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("wheel", handleUserScrollIntent);
+      window.removeEventListener("touchstart", handleUserScrollIntent);
     };
   }, []);
 
@@ -1028,7 +1107,9 @@ export default function Portfolio() {
         (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
 
       const progress =
-        scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        scrollHeight > 0
+          ? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100))
+          : 0;
 
       setScrollProgress(progress);
       setShowTop(scrollTop > 600);
@@ -1047,17 +1128,45 @@ export default function Portfolio() {
 
     updateScroll();
 
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
-  const scrollTo = (id: string) => {
+  const scrollTo = (id: SectionId | "hero") => {
     setMenuOpen(false);
 
     if (id === "hero") {
+      programmaticTargetRef.current = null;
+
+      if (programmaticTimerRef.current !== null) {
+        window.clearTimeout(programmaticTimerRef.current);
+        programmaticTimerRef.current = null;
+      }
+
       setActiveSection("about");
-    } else if (NAV_LINKS.some((link) => link.id === id)) {
-      setActiveSection(id);
+
+      requestAnimationFrame(() => {
+        document.getElementById("hero")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+
+      return;
     }
+
+    programmaticTargetRef.current = id;
+    setActiveSection(id);
+
+    if (programmaticTimerRef.current !== null) {
+      window.clearTimeout(programmaticTimerRef.current);
+    }
+
+    programmaticTimerRef.current = window.setTimeout(() => {
+      programmaticTargetRef.current = null;
+      programmaticTimerRef.current = null;
+    }, 1800);
 
     requestAnimationFrame(() => {
       document.getElementById(id)?.scrollIntoView({
@@ -1165,6 +1274,13 @@ export default function Portfolio() {
         body {
           margin: 0;
           font-size: 16px;
+          background: #fff8ed;
+          color: #0f172a;
+        }
+
+        html[data-theme="dark"] body {
+          background: #030712;
+          color: #f8fafc;
         }
 
         ::selection {
@@ -1279,7 +1395,8 @@ export default function Portfolio() {
             color 0.2s ease,
             background 0.2s ease,
             border-color 0.2s ease,
-            transform 0.2s ease;
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
         }
 
         .nav-link::after {
@@ -1289,7 +1406,7 @@ export default function Portfolio() {
           bottom: 5px;
           height: 3px;
           content: "";
-          border-radius: 99px;
+          border-radius: 999px;
           background: currentColor;
           transform: scaleX(0);
           transform-origin: center;
@@ -2043,6 +2160,9 @@ export default function Portfolio() {
                 className={`nav-link ${
                   activeSection === link.id ? "nav-link-active" : ""
                 }`}
+                aria-current={
+                  activeSection === link.id ? "page" : undefined
+                }
               >
                 {link[language]}
               </button>
@@ -2060,6 +2180,7 @@ export default function Portfolio() {
               title={language === "en" ? "العربية" : "English"}
             >
               <Languages className="h-4.5 w-4.5" />
+
               <span className="ml-1 text-xs font-black">
                 {language === "en" ? "AR" : "EN"}
               </span>
@@ -2290,9 +2411,7 @@ export default function Portfolio() {
                     index % 2 === 0
                       ? "border-r-2 border-slate-900"
                       : ""
-                  } ${
-                    index === 1 ? "sm:border-r-2" : ""
-                  } ${
+                  } ${index === 1 ? "sm:border-r-2" : ""} ${
                     index === 3 ? "sm:border-r-0" : ""
                   } dark:border-slate-200`}
                 >
@@ -2415,6 +2534,7 @@ export default function Portfolio() {
                     className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-4 py-3 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:bg-slate-900 dark:text-white dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
                     <FileText className="h-4.5 w-4.5" />
+
                     {language === "en"
                       ? "View resume"
                       : "عرض السيرة الذاتية"}
@@ -2426,6 +2546,7 @@ export default function Portfolio() {
                     className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-yellow-200 px-4 py-3 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
                     <Download className="h-4.5 w-4.5" />
+
                     {language === "en"
                       ? "Download resume"
                       : "تحميل السيرة الذاتية"}
@@ -2594,6 +2715,7 @@ export default function Portfolio() {
                     className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-slate-950 px-4 py-3.5 text-[15px] font-black text-white shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
                     <Mail className="h-4.5 w-4.5" />
+
                     {language === "en"
                       ? "Send Email"
                       : "إرسال بريد إلكتروني"}
@@ -2672,9 +2794,7 @@ export default function Portfolio() {
           <div className="flex items-center gap-2 font-black text-slate-900 dark:text-slate-100">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
 
-            {language === "en"
-              ? "Open to opportunities"
-              : "متاح للفرص"}
+            {language === "en" ? "Open to opportunities" : "متاح للفرص"}
           </div>
         </div>
       </footer>
