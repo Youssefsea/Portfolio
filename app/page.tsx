@@ -56,14 +56,6 @@ const PHONE = "+20 110 469 9278";
 const LINKEDIN = "https://www.linkedin.com/in/youssef-yasser-97aa742b0";
 const GITHUB = "https://github.com/Youssefsea";
 
-/*
-  IMPORTANT:
-  Put the PDF here:
-  public/cvv.pdf
-
-  Then use:
-  /cvv.pdf
-*/
 const CV_PATH = "/cvv.pdf";
 
 const NAV_LINKS = [
@@ -136,7 +128,10 @@ const SKILL_GROUPS: {
     ],
   },
   {
-    label: { en: "AI & Integrations", ar: "الذكاء الاصطناعي والتكاملات" },
+    label: {
+      en: "AI & Integrations",
+      ar: "الذكاء الاصطناعي والتكاملات",
+    },
     color: "yellow",
     items: [
       { name: "Gemini API", icon: SiGoogle },
@@ -274,45 +269,45 @@ const COLOR_STYLES: Record<
   }
 > = {
   green: {
-    text: "text-emerald-600 dark:text-emerald-400",
-    soft: "bg-emerald-50 dark:bg-emerald-950/40",
-    border: "border-emerald-200 dark:border-emerald-900",
-    bg: "bg-emerald-100 dark:bg-emerald-950/50",
+    text: "text-emerald-700 dark:text-emerald-300",
+    soft: "bg-emerald-50 dark:bg-emerald-950/50",
+    border: "border-emerald-300 dark:border-emerald-800",
+    bg: "bg-emerald-100 dark:bg-emerald-950/70",
     dot: "bg-emerald-400",
   },
   blue: {
-    text: "text-blue-600 dark:text-blue-400",
-    soft: "bg-blue-50 dark:bg-blue-950/40",
-    border: "border-blue-200 dark:border-blue-900",
-    bg: "bg-blue-100 dark:bg-blue-950/50",
+    text: "text-blue-700 dark:text-blue-300",
+    soft: "bg-blue-50 dark:bg-blue-950/50",
+    border: "border-blue-300 dark:border-blue-800",
+    bg: "bg-blue-100 dark:bg-blue-950/70",
     dot: "bg-blue-400",
   },
   purple: {
-    text: "text-violet-600 dark:text-violet-400",
-    soft: "bg-violet-50 dark:bg-violet-950/40",
-    border: "border-violet-200 dark:border-violet-900",
-    bg: "bg-violet-100 dark:bg-violet-950/50",
+    text: "text-violet-700 dark:text-violet-300",
+    soft: "bg-violet-50 dark:bg-violet-950/50",
+    border: "border-violet-300 dark:border-violet-800",
+    bg: "bg-violet-100 dark:bg-violet-950/70",
     dot: "bg-violet-400",
   },
   orange: {
-    text: "text-orange-600 dark:text-orange-400",
-    soft: "bg-orange-50 dark:bg-orange-950/40",
-    border: "border-orange-200 dark:border-orange-900",
-    bg: "bg-orange-100 dark:bg-orange-950/50",
+    text: "text-orange-700 dark:text-orange-300",
+    soft: "bg-orange-50 dark:bg-orange-950/50",
+    border: "border-orange-300 dark:border-orange-800",
+    bg: "bg-orange-100 dark:bg-orange-950/70",
     dot: "bg-orange-400",
   },
   pink: {
-    text: "text-pink-600 dark:text-pink-400",
-    soft: "bg-pink-50 dark:bg-pink-950/40",
-    border: "border-pink-200 dark:border-pink-900",
-    bg: "bg-pink-100 dark:bg-pink-950/50",
+    text: "text-pink-700 dark:text-pink-300",
+    soft: "bg-pink-50 dark:bg-pink-950/50",
+    border: "border-pink-300 dark:border-pink-800",
+    bg: "bg-pink-100 dark:bg-pink-950/70",
     dot: "bg-pink-400",
   },
   yellow: {
-    text: "text-amber-600 dark:text-amber-400",
-    soft: "bg-amber-50 dark:bg-amber-950/40",
-    border: "border-amber-200 dark:border-amber-900",
-    bg: "bg-amber-100 dark:bg-amber-950/50",
+    text: "text-amber-700 dark:text-amber-300",
+    soft: "bg-amber-50 dark:bg-amber-950/50",
+    border: "border-amber-300 dark:border-amber-800",
+    bg: "bg-amber-100 dark:bg-amber-950/70",
     dot: "bg-amber-400",
   },
 };
@@ -372,21 +367,21 @@ function SectionTitle({
   description?: string;
 }) {
   return (
-    <div className="mb-12 max-w-3xl">
+    <div className="mb-12 max-w-4xl">
       <div className="mb-4 flex items-center gap-3">
-        <span className="h-px w-10 bg-slate-400 dark:bg-slate-600" />
+        <span className="h-0.5 w-12 bg-slate-500 dark:bg-slate-500" />
 
-        <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+        <span className="text-sm font-black uppercase tracking-[0.18em] text-slate-600 dark:text-slate-300">
           {eyebrow}
         </span>
       </div>
 
-      <h2 className="font-display text-4xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl">
+      <h2 className="font-display text-4xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
         {title}
       </h2>
 
       {description && (
-        <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
+        <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-700 dark:text-slate-200 sm:text-xl sm:leading-9">
           {description}
         </p>
       )}
@@ -517,24 +512,24 @@ function TerminalPanel({ language }: { language: Language }) {
 
   return (
     <div className="terminal-panel overflow-hidden rounded-[28px]">
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+      <div className="flex items-center justify-between border-b border-white/20 px-5 py-3.5">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
           <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
         </div>
 
-        <span className="font-mono text-[11px] text-slate-500">
+        <span className="font-mono text-xs font-semibold text-slate-400">
           youssef@portfolio
         </span>
       </div>
 
-      <div className="min-h-[220px] p-5 font-mono text-sm leading-8 sm:p-7 sm:text-[15px]">
+      <div className="min-h-[240px] p-5 font-mono text-[15px] leading-8 sm:p-7 sm:text-base">
         {done.map((line, index) => (
           <div key={`${line.text}-${index}`} className="flex gap-3">
             <span
               className={
-                line.prompt === "$" ? "text-emerald-400" : "text-slate-500"
+                line.prompt === "$" ? "text-emerald-400" : "text-slate-400"
               }
             >
               {line.prompt}
@@ -542,7 +537,7 @@ function TerminalPanel({ language }: { language: Language }) {
 
             <span
               className={
-                line.prompt === "$" ? "text-slate-100" : "text-slate-400"
+                line.prompt === "$" ? "text-white" : "text-slate-300"
               }
             >
               {line.text}
@@ -554,7 +549,9 @@ function TerminalPanel({ language }: { language: Language }) {
           <div className="flex gap-3">
             <span
               className={
-                current.prompt === "$" ? "text-emerald-400" : "text-slate-500"
+                current.prompt === "$"
+                  ? "text-emerald-400"
+                  : "text-slate-400"
               }
             >
               {current.prompt}
@@ -562,7 +559,7 @@ function TerminalPanel({ language }: { language: Language }) {
 
             <span
               className={
-                current.prompt === "$" ? "text-slate-100" : "text-slate-400"
+                current.prompt === "$" ? "text-white" : "text-slate-300"
               }
             >
               {current.text.slice(0, charIdx)}
@@ -587,10 +584,10 @@ function SkillCard({
 
   return (
     <article className="skill-card group">
-      <div className="mb-5 flex items-center justify-between gap-4">
+      <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <div
-            className={`mb-3 flex h-11 w-11 items-center justify-center rounded-2xl ${style.bg}`}
+            className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${style.bg}`}
           >
             <span className={`font-display text-sm font-black ${style.text}`}>
               {group.label.en === "Backend"
@@ -607,28 +604,28 @@ function SkillCard({
             </span>
           </div>
 
-          <h3 className="font-display text-xl font-black text-slate-950 dark:text-white">
+          <h3 className="font-display text-2xl font-black text-slate-950 dark:text-white">
             {group.label[language]}
           </h3>
         </div>
 
-        <span className={`h-2.5 w-2.5 rounded-full ${style.dot}`} />
+        <span className={`h-3 w-3 rounded-full ${style.dot}`} />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {group.items.map((item) => {
           const Icon = item.icon;
 
           return (
             <div
               key={item.name}
-              className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-slate-50 px-3 py-2.5 transition-transform duration-200 group-hover:translate-x-0.5 dark:border-slate-800 dark:bg-slate-950/70"
+              className="flex items-center gap-3 rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-3 transition-transform duration-200 group-hover:translate-x-0.5 dark:border-slate-700 dark:bg-slate-950/80"
             >
               <span className={`shrink-0 ${style.text}`}>
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4.5 w-4.5" />
               </span>
 
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <span className="text-[15px] font-bold text-slate-800 dark:text-slate-200">
                 {item.name}
               </span>
             </div>
@@ -655,31 +652,31 @@ function ProjectCard({
 
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start">
         <div>
-          <div className="mb-3 flex items-center gap-3">
-            <span className="font-mono text-xs font-bold text-slate-400">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400">
               {project.number}
             </span>
 
             <span
-              className={`rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${style.soft} ${style.border} ${style.text}`}
+              className={`rounded-full border px-3.5 py-1.5 text-xs font-black uppercase tracking-[0.1em] ${style.soft} ${style.border} ${style.text}`}
             >
               {project.slug}
             </span>
           </div>
 
-          <h3 className="font-display text-2xl font-black tracking-tight text-slate-950 dark:text-white sm:text-3xl">
+          <h3 className="font-display text-3xl font-black tracking-tight text-slate-950 dark:text-white sm:text-4xl">
             {project.name[language]}
           </h3>
 
-          <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
+          <p className="mt-4 max-w-4xl text-lg leading-8 text-slate-700 dark:text-slate-200 sm:text-xl sm:leading-9">
             {project.description[language]}
           </p>
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-6 flex flex-wrap gap-2.5">
             {project.stack.map((item) => (
               <span
                 key={item}
-                className="rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                className="rounded-lg border border-slate-300 bg-slate-100 px-3 py-1.5 text-sm font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
               >
                 {item}
               </span>
@@ -691,18 +688,18 @@ function ProjectCard({
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-1 hover:shadow-lg dark:bg-white dark:text-slate-950"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-slate-950 px-5 py-3.5 text-sm font-black text-white transition-all hover:-translate-y-1 hover:shadow-[5px_5px_0_rgba(15,23,42,0.18)] dark:border-white dark:bg-white dark:text-slate-950 dark:hover:shadow-[5px_5px_0_rgba(255,255,255,0.12)]"
         >
           {language === "en" ? "Open project" : "فتح المشروع"}
           <ArrowDown className="h-4 w-4 rotate-[-45deg]" />
         </a>
       </div>
 
-      <div className="mt-7 border-t border-slate-200 pt-5 dark:border-slate-800">
+      <div className="mt-8 border-t-2 border-slate-300 pt-5 dark:border-slate-700">
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="flex items-center gap-2 text-sm font-bold text-slate-700 transition-colors hover:text-slate-950 dark:text-slate-300 dark:hover:text-white"
+          className="flex items-center gap-2 text-[15px] font-black text-slate-800 transition-colors hover:text-slate-950 dark:text-slate-200 dark:hover:text-white"
           aria-expanded={open}
         >
           {open
@@ -732,13 +729,13 @@ function ProjectCard({
               {project.highlights[language].map((highlight) => (
                 <div
                   key={highlight}
-                  className="flex gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/60"
+                  className="flex gap-3 rounded-2xl border-2 border-slate-200 bg-slate-50 p-4.5 dark:border-slate-700 dark:bg-slate-950/70"
                 >
                   <span
-                    className={`mt-2 h-2 w-2 shrink-0 rounded-full ${style.dot}`}
+                    className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full ${style.dot}`}
                   />
 
-                  <span className="text-sm leading-6 text-slate-600 dark:text-slate-400">
+                  <span className="text-[15px] leading-7 text-slate-700 dark:text-slate-200">
                     {highlight}
                   </span>
                 </div>
@@ -763,16 +760,16 @@ function InfoCard({
   return (
     <div className="info-card">
       <div className="flex items-center gap-3">
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
           {icon}
         </span>
 
-        <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
+        <span className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
           {label}
         </span>
       </div>
 
-      <div className="mt-4 text-sm font-semibold leading-6 text-slate-800 dark:text-slate-200">
+      <div className="mt-4 text-[15px] font-bold leading-7 text-slate-800 dark:text-slate-200 sm:text-base">
         {value}
       </div>
     </div>
@@ -793,71 +790,71 @@ function NTICertificateCard({ language }: { language: Language }) {
             </div>
 
             <div>
-              <div className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-300">
+              <div className="text-xs font-black uppercase tracking-[0.16em] text-emerald-800 dark:text-emerald-200">
                 {language === "en"
                   ? "Professional Certificate"
                   : "شهادة تدريبية"}
               </div>
 
-              <h3 className="mt-1 font-display text-xl font-black text-slate-950 dark:text-white">
+              <h3 className="mt-1 font-display text-xl font-black text-slate-950 dark:text-white sm:text-2xl">
                 MEAN-Stack Web Development
               </h3>
             </div>
           </div>
 
-          <span className="rounded-full border border-white/70 bg-white/70 px-3 py-1.5 text-xs font-bold text-slate-700 backdrop-blur dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200">
+          <span className="rounded-full border border-white/80 bg-white/80 px-3.5 py-1.5 text-xs font-black text-slate-800 backdrop-blur dark:border-slate-600 dark:bg-slate-900/70 dark:text-slate-100">
             NTI
           </span>
         </div>
 
-        <div className="mt-7 grid gap-4 sm:grid-cols-2">
+        <div className="mt-7 grid gap-5 sm:grid-cols-2">
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
               Instructor
             </div>
 
-            <div className="mt-1 font-semibold text-slate-800 dark:text-slate-200">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
               Prof. Ahmed Khattab
             </div>
           </div>
 
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
               Role
             </div>
 
-            <div className="mt-1 font-semibold text-slate-800 dark:text-slate-200">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
               NTI Director
             </div>
           </div>
 
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
               Duration
             </div>
 
-            <div className="mt-1 font-semibold text-slate-800 dark:text-slate-200">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
               28 June — 23 July 2026
             </div>
           </div>
 
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+            <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">
               Total
             </div>
 
-            <div className="mt-1 font-semibold text-slate-800 dark:text-slate-200">
+            <div className="mt-1.5 text-[15px] font-bold text-slate-900 dark:text-slate-100">
               120 Hours
             </div>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-2">
-          <span className="rounded-full border border-white/70 bg-white/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-300">
+        <div className="mt-6 flex flex-wrap gap-2.5">
+          <span className="rounded-full border border-white/80 bg-white/70 px-3.5 py-1.5 text-sm font-bold text-slate-800 dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200">
             Technical — 90 hrs
           </span>
 
-          <span className="rounded-full border border-white/70 bg-white/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-300">
+          <span className="rounded-full border border-white/80 bg-white/70 px-3.5 py-1.5 text-sm font-bold text-slate-800 dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-200">
             Freelancing — 30 hrs
           </span>
         </div>
@@ -869,19 +866,19 @@ function NTICertificateCard({ language }: { language: Language }) {
 function ContactCode({ language }: { language: Language }) {
   return (
     <div className="terminal-panel overflow-hidden rounded-[28px]">
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+      <div className="flex items-center justify-between border-b border-white/20 px-5 py-3.5">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
           <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
         </div>
 
-        <span className="font-mono text-[11px] text-slate-500">
+        <span className="font-mono text-xs font-semibold text-slate-400">
           contact.json
         </span>
       </div>
 
-      <pre className="overflow-x-auto p-6 font-mono text-xs leading-8 text-slate-300 sm:text-sm">
+      <pre className="overflow-x-auto p-6 font-mono text-sm leading-8 text-slate-200 sm:text-[15px] sm:leading-9">
 {`{
   "name": "Youssef Yasser",
   "role": "${
@@ -1092,7 +1089,7 @@ export default function Portfolio() {
 
   return (
     <div
-      className={`portfolio-root relative min-h-screen overflow-x-hidden text-slate-900 transition-colors duration-500 dark:text-white ${
+      className={`portfolio-root relative min-h-screen overflow-x-hidden text-slate-950 transition-colors duration-500 dark:text-white ${
         isArabic ? "font-arabic" : ""
       }`}
     >
@@ -1111,6 +1108,7 @@ export default function Portfolio() {
 
         body {
           margin: 0;
+          font-size: 16px;
         }
 
         ::selection {
@@ -1141,59 +1139,59 @@ export default function Portfolio() {
           background:
             radial-gradient(
               circle at 9% 9%,
-              rgba(251, 191, 36, 0.11),
+              rgba(251, 191, 36, 0.14),
               transparent 22%
             ),
             radial-gradient(
               circle at 90% 12%,
-              rgba(96, 165, 250, 0.11),
+              rgba(96, 165, 250, 0.14),
               transparent 22%
             ),
             radial-gradient(
               circle at 70% 72%,
-              rgba(244, 114, 182, 0.08),
+              rgba(244, 114, 182, 0.1),
               transparent 20%
             ),
-            #fffaf2;
+            #fff8ed;
         }
 
         html[data-theme="dark"] .portfolio-root {
           background:
             radial-gradient(
               circle at 8% 8%,
-              rgba(16, 185, 129, 0.08),
+              rgba(16, 185, 129, 0.1),
               transparent 22%
             ),
             radial-gradient(
               circle at 90% 12%,
-              rgba(59, 130, 246, 0.08),
+              rgba(59, 130, 246, 0.1),
               transparent 22%
             ),
             radial-gradient(
               circle at 70% 72%,
-              rgba(139, 92, 246, 0.07),
+              rgba(139, 92, 246, 0.09),
               transparent 22%
             ),
-            #060b16;
+            #030712;
         }
 
         .page-grid {
           background-image:
-            linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+            linear-gradient(rgba(15, 23, 42, 0.055) 1px, transparent 1px),
             linear-gradient(
               90deg,
-              rgba(15, 23, 42, 0.035) 1px,
+              rgba(15, 23, 42, 0.055) 1px,
               transparent 1px
             );
-          background-size: 30px 30px;
+          background-size: 32px 32px;
         }
 
         html[data-theme="dark"] .page-grid {
           background-image:
-            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
             linear-gradient(
               90deg,
-              rgba(255, 255, 255, 0.02) 1px,
+              rgba(255, 255, 255, 0.045) 1px,
               transparent 1px
             );
         }
@@ -1213,10 +1211,10 @@ export default function Portfolio() {
 
         .nav-link {
           position: relative;
-          padding: 7px 0;
-          color: rgb(100 116 139);
-          font-size: 13px;
-          font-weight: 800;
+          padding: 8px 0;
+          color: rgb(71 85 105);
+          font-size: 14px;
+          font-weight: 900;
           transition: color 0.2s ease;
         }
 
@@ -1225,7 +1223,7 @@ export default function Portfolio() {
           bottom: 0;
           left: 0;
           right: 0;
-          height: 2px;
+          height: 3px;
           content: "";
           border-radius: 99px;
           background: currentColor;
@@ -1243,7 +1241,7 @@ export default function Portfolio() {
         }
 
         html[data-theme="dark"] .nav-link {
-          color: rgb(148 163 184);
+          color: rgb(203 213 225);
         }
 
         html[data-theme="dark"] .nav-link:hover,
@@ -1289,10 +1287,10 @@ export default function Portfolio() {
         html[data-theme="dark"] .theme-button,
         html[data-theme="dark"] .social-button,
         html[data-theme="dark"] .mobile-menu-button {
-          border-color: white;
+          border-color: #e2e8f0;
           background: #111827;
-          color: white;
-          box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.18);
+          color: #f8fafc;
+          box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.22);
         }
 
         .terminal-panel {
@@ -1302,14 +1300,15 @@ export default function Portfolio() {
         }
 
         html[data-theme="dark"] .terminal-panel {
-          border-color: white;
-          box-shadow: 8px 10px 0 rgba(255, 255, 255, 0.1);
+          border-color: #e2e8f0;
+          background: #050b16;
+          box-shadow: 8px 10px 0 rgba(255, 255, 255, 0.12);
         }
 
         .terminal-cursor {
           display: inline-block;
-          width: 8px;
-          height: 18px;
+          width: 9px;
+          height: 20px;
           margin-left: 3px;
           vertical-align: middle;
           background: #34d399;
@@ -1339,7 +1338,7 @@ export default function Portfolio() {
           right: 35px;
           width: 170px;
           height: 170px;
-          background: rgba(96, 165, 250, 0.24);
+          background: rgba(96, 165, 250, 0.27);
         }
 
         .mascot-glow-two {
@@ -1347,15 +1346,15 @@ export default function Portfolio() {
           left: 10px;
           width: 180px;
           height: 180px;
-          background: rgba(244, 114, 182, 0.2);
+          background: rgba(244, 114, 182, 0.22);
         }
 
         html[data-theme="dark"] .mascot-glow-one {
-          background: rgba(59, 130, 246, 0.13);
+          background: rgba(59, 130, 246, 0.14);
         }
 
         html[data-theme="dark"] .mascot-glow-two {
-          background: rgba(168, 85, 247, 0.12);
+          background: rgba(168, 85, 247, 0.14);
         }
 
         .mascot-float {
@@ -1373,7 +1372,7 @@ export default function Portfolio() {
           height: 28px;
           transform: translateX(-50%);
           border-radius: 999px;
-          background: rgba(15, 23, 42, 0.13);
+          background: rgba(15, 23, 42, 0.16);
           filter: blur(14px);
         }
 
@@ -1773,13 +1772,13 @@ export default function Portfolio() {
         .skill-card,
         .project-card,
         .info-card {
-          border: 2px solid rgb(226 232 240);
-          background: rgba(255, 255, 255, 0.9);
+          border: 2px solid rgb(203 213 225);
+          background: rgba(255, 255, 255, 0.95);
           border-radius: 28px;
         }
 
         .skill-card {
-          padding: 24px;
+          padding: 26px;
           transition:
             transform 0.3s ease,
             box-shadow 0.3s ease,
@@ -1788,15 +1787,15 @@ export default function Portfolio() {
 
         .skill-card:hover {
           transform: translateY(-5px);
-          border-color: rgb(203 213 225);
-          box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09);
+          border-color: rgb(148 163 184);
+          box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
         }
 
         .project-card {
           position: relative;
           overflow: hidden;
-          padding: 28px;
-          box-shadow: 0 15px 45px rgba(15, 23, 42, 0.06);
+          padding: 30px;
+          box-shadow: 0 15px 45px rgba(15, 23, 42, 0.07);
         }
 
         .project-top-line {
@@ -1808,23 +1807,23 @@ export default function Portfolio() {
         }
 
         .info-card {
-          padding: 20px;
+          padding: 22px;
         }
 
         .certificate-card {
           position: relative;
           overflow: hidden;
-          margin-top: 18px;
-          padding: 26px;
+          margin-top: 20px;
+          padding: 28px;
           border: 3px solid #0f172a;
           border-radius: 28px;
           background:
             radial-gradient(
               circle at 100% 0%,
-              rgba(251, 191, 36, 0.25),
+              rgba(251, 191, 36, 0.3),
               transparent 30%
             ),
-            linear-gradient(135deg, #d1fae5, #dbeafe 50%, #fce7f3);
+            linear-gradient(135deg, #c8f7df, #d6e8ff 50%, #fbd9e9);
           box-shadow: 8px 9px 0 #0f172a;
         }
 
@@ -1839,7 +1838,7 @@ export default function Portfolio() {
           right: -40px;
           width: 150px;
           height: 150px;
-          border: 20px solid rgba(255, 255, 255, 0.3);
+          border: 20px solid rgba(255, 255, 255, 0.32);
         }
 
         .certificate-decoration-two {
@@ -1847,39 +1846,39 @@ export default function Portfolio() {
           left: -50px;
           width: 160px;
           height: 160px;
-          border: 18px solid rgba(255, 255, 255, 0.22);
+          border: 18px solid rgba(255, 255, 255, 0.24);
         }
 
         html[data-theme="dark"] .skill-card,
         html[data-theme="dark"] .project-card,
         html[data-theme="dark"] .info-card {
-          border-color: rgb(30 41 59);
-          background: rgba(15, 23, 42, 0.88);
+          border-color: rgb(71 85 105);
+          background: rgba(10, 18, 34, 0.96);
         }
 
         html[data-theme="dark"] .skill-card:hover {
-          border-color: rgb(51 65 85);
-          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+          border-color: rgb(100 116 139);
+          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
         }
 
         html[data-theme="dark"] .project-card {
-          box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
+          box-shadow: 0 15px 45px rgba(0, 0, 0, 0.28);
         }
 
         html[data-theme="dark"] .certificate-card {
-          border-color: white;
+          border-color: #e2e8f0;
           background:
             radial-gradient(
               circle at 100% 0%,
-              rgba(16, 185, 129, 0.15),
+              rgba(16, 185, 129, 0.18),
               transparent 30%
             ),
             linear-gradient(
               135deg,
-              rgba(6, 78, 59, 0.9),
-              rgba(30, 58, 138, 0.8)
+              rgba(6, 78, 59, 0.94),
+              rgba(30, 58, 138, 0.9)
             );
-          box-shadow: 8px 9px 0 rgba(255, 255, 255, 0.08);
+          box-shadow: 8px 9px 0 rgba(255, 255, 255, 0.1);
         }
 
         @media (max-width: 640px) {
@@ -1918,9 +1917,9 @@ export default function Portfolio() {
         }
       `}</style>
 
-      <div className="page-grid pointer-events-none fixed inset-0 z-0 opacity-70" />
+      <div className="page-grid pointer-events-none fixed inset-0 z-0 opacity-80" />
 
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-1 bg-slate-900/10 dark:bg-white/10">
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-1.5 bg-slate-900/10 dark:bg-white/10">
         <div
           className="h-full rounded-r-full bg-gradient-to-r from-emerald-400 via-blue-500 to-violet-500"
           style={{
@@ -1931,13 +1930,13 @@ export default function Portfolio() {
       </div>
 
       <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-[22px] border-2 border-slate-900 bg-white/92 px-3 py-3 shadow-[6px_7px_0_rgba(15,23,42,0.1)] backdrop-blur-xl dark:border-white dark:bg-slate-950/90 dark:shadow-[6px_7px_0_rgba(255,255,255,0.08)] sm:px-5">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-[22px] border-2 border-slate-900 bg-white/94 px-3 py-3 shadow-[6px_7px_0_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-slate-200 dark:bg-slate-950/94 dark:shadow-[6px_7px_0_rgba(255,255,255,0.1)] sm:px-5">
           <button
             type="button"
             onClick={() => scrollTo("hero")}
             className="flex items-center gap-3"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-slate-900 bg-yellow-300 text-sm font-black text-slate-950 dark:border-white">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-slate-900 bg-yellow-300 text-sm font-black text-slate-950 dark:border-slate-200">
               YY
             </span>
 
@@ -1971,8 +1970,8 @@ export default function Portfolio() {
               aria-label="Toggle language"
               title={language === "en" ? "العربية" : "English"}
             >
-              <Languages className="h-4 w-4" />
-              <span className="ml-1 text-[11px] font-black">
+              <Languages className="h-4.5 w-4.5" />
+              <span className="ml-1 text-xs font-black">
                 {language === "en" ? "AR" : "EN"}
               </span>
             </button>
@@ -1995,9 +1994,9 @@ export default function Portfolio() {
               }
             >
               {theme === "light" ? (
-                <Moon className="h-4 w-4" />
+                <Moon className="h-4.5 w-4.5" />
               ) : (
-                <Sun className="h-4 w-4" />
+                <Sun className="h-4.5 w-4.5" />
               )}
             </button>
 
@@ -2008,7 +2007,7 @@ export default function Portfolio() {
               className="social-button hidden sm:inline-flex"
               aria-label="GitHub"
             >
-              <FaGithub className="h-4.5 w-4.5" />
+              <FaGithub className="h-5 w-5" />
             </a>
 
             <a
@@ -2018,7 +2017,7 @@ export default function Portfolio() {
               className="social-button hidden sm:inline-flex"
               aria-label="LinkedIn"
             >
-              <FaLinkedin className="h-4.5 w-4.5" />
+              <FaLinkedin className="h-5 w-5" />
             </a>
 
             <button
@@ -2038,17 +2037,17 @@ export default function Portfolio() {
         </nav>
 
         {menuOpen && (
-          <div className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-[22px] border-2 border-slate-900 bg-white shadow-[6px_7px_0_rgba(15,23,42,0.1)] dark:border-white dark:bg-slate-950 dark:shadow-[6px_7px_0_rgba(255,255,255,0.08)]">
+          <div className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-[22px] border-2 border-slate-900 bg-white shadow-[6px_7px_0_rgba(15,23,42,0.12)] dark:border-slate-200 dark:bg-slate-950 dark:shadow-[6px_7px_0_rgba(255,255,255,0.1)]">
             <div className="grid grid-cols-2 gap-2 p-3">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.id}
                   type="button"
                   onClick={() => scrollTo(link.id)}
-                  className={`rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
+                  className={`rounded-xl px-4 py-3 text-sm font-black transition-colors ${
                     activeSection === link.id
                       ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
-                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900"
+                      : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900"
                   } ${isArabic ? "text-right" : "text-left"}`}
                 >
                   {link[language]}
@@ -2056,14 +2055,14 @@ export default function Portfolio() {
               ))}
             </div>
 
-            <div className="flex gap-2 border-t-2 border-slate-900 p-3 dark:border-white sm:hidden">
+            <div className="flex gap-2 border-t-2 border-slate-900 p-3 dark:border-slate-700 sm:hidden">
               <a
                 href={GITHUB}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-button"
               >
-                <FaGithub className="h-4.5 w-4.5" />
+                <FaGithub className="h-5 w-5" />
               </a>
 
               <a
@@ -2072,7 +2071,7 @@ export default function Portfolio() {
                 rel="noopener noreferrer"
                 className="social-button"
               >
-                <FaLinkedin className="h-4.5 w-4.5" />
+                <FaLinkedin className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -2087,7 +2086,7 @@ export default function Portfolio() {
           <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr]">
             <Reveal>
               <div>
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-slate-900 bg-emerald-200 px-4 py-2 text-xs font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-white dark:bg-emerald-400">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-slate-900 bg-emerald-200 px-4 py-2.5 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:bg-emerald-400">
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-700" />
 
                   {language === "en"
@@ -2105,60 +2104,60 @@ export default function Portfolio() {
                   <span className="relative">.</span>
                 </h1>
 
-                <div className="mt-7 max-w-2xl">
-                  <p className="font-display text-xl font-bold leading-9 text-slate-900 dark:text-white sm:text-2xl">
+                <div className="mt-7 max-w-3xl">
+                  <p className="font-display text-2xl font-bold leading-10 text-slate-950 dark:text-white sm:text-3xl">
                     {language === "en"
                       ? "Backend-first Fullstack Developer."
                       : "مطور Fullstack بتركيز أساسي على الـBackend."}
                   </p>
 
-                  <p className="mt-4 text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
+                  <p className="mt-5 text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
                     {language === "en"
                       ? "Computer Science student at Menoufia University building practical web applications with APIs, databases, authentication, business logic, and modern React interfaces."
                       : "طالب علوم حاسب في جامعة المنوفية، أعمل على بناء تطبيقات ويب عملية تشمل الـAPIs وقواعد البيانات والـAuthentication والـBusiness Logic وواجهات React الحديثة."}
                   </p>
                 </div>
 
-                <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
-                  <MapPin className="h-4 w-4" />
+                <div className="mt-7 flex items-center gap-2 text-[15px] font-bold text-slate-600 dark:text-slate-300">
+                  <MapPin className="h-4.5 w-4.5" />
                   Giza, Egypt
                 </div>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-9 flex flex-wrap gap-3">
                   <button
                     type="button"
                     onClick={() => scrollTo("projects")}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-yellow-300 px-5 py-3.5 text-sm font-black text-slate-950 shadow-[5px_5px_0_#0f172a] transition-all hover:-translate-y-1 hover:shadow-[7px_7px_0_#0f172a] dark:border-white dark:shadow-[5px_5px_0_rgba(255,255,255,0.12)]"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-yellow-300 px-5 py-3.5 text-[15px] font-black text-slate-950 shadow-[5px_5px_0_#0f172a] transition-all hover:-translate-y-1 hover:shadow-[7px_7px_0_#0f172a] dark:border-slate-200 dark:shadow-[5px_5px_0_rgba(255,255,255,0.16)]"
                   >
                     {language === "en" ? "View projects" : "عرض المشاريع"}
-                    <ArrowDown className="h-4 w-4" />
+                    <ArrowDown className="h-4.5 w-4.5" />
                   </button>
 
                   <a
                     href={CV_PATH}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-5 py-3.5 text-sm font-black text-slate-950 shadow-[5px_5px_0_#0f172a] transition-all hover:-translate-y-1 dark:border-white dark:bg-slate-900 dark:text-white dark:shadow-[5px_5px_0_rgba(255,255,255,0.12)]"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-5 py-3.5 text-[15px] font-black text-slate-950 shadow-[5px_5px_0_#0f172a] transition-all hover:-translate-y-1 dark:border-slate-200 dark:bg-slate-900 dark:text-white dark:shadow-[5px_5px_0_rgba(255,255,255,0.16)]"
                   >
                     {language === "en"
                       ? "View resume"
                       : "عرض السيرة الذاتية"}
-                    <Eye className="h-4 w-4" />
+                    <Eye className="h-4.5 w-4.5" />
                   </a>
 
                   <a
                     href={CV_PATH}
                     download="Youssef-Yasser-CV.pdf"
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-emerald-200 px-5 py-3.5 text-sm font-black text-slate-950 shadow-[5px_5px_0_#0f172a] transition-all hover:-translate-y-1 dark:border-white dark:shadow-[5px_5px_0_rgba(255,255,255,0.12)]"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-emerald-200 px-5 py-3.5 text-[15px] font-black text-slate-950 shadow-[5px_5px_0_#0f172a] transition-all hover:-translate-y-1 dark:border-slate-200 dark:shadow-[5px_5px_0_rgba(255,255,255,0.16)]"
                   >
                     {language === "en"
                       ? "Download resume"
                       : "تحميل السيرة الذاتية"}
-                    <Download className="h-4 w-4" />
+                    <Download className="h-4.5 w-4.5" />
                   </a>
                 </div>
 
-                <div className="mt-7 flex flex-wrap gap-2.5">
+                <div className="mt-8 flex flex-wrap gap-2.5">
                   {[
                     "Backend-first",
                     "TypeScript",
@@ -2168,7 +2167,7 @@ export default function Portfolio() {
                   ].map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border-2 border-slate-900 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-[2px_2px_0_rgba(15,23,42,0.15)] dark:border-white dark:bg-slate-900 dark:text-slate-200"
+                      className="rounded-full border-2 border-slate-900 bg-white px-3.5 py-2 text-sm font-black text-slate-700 shadow-[2px_2px_0_rgba(15,23,42,0.15)] dark:border-slate-200 dark:bg-slate-900 dark:text-slate-200"
                     >
                       {item}
                     </span>
@@ -2188,11 +2187,11 @@ export default function Portfolio() {
 
         <section className="px-5 pb-10 sm:px-8">
           <Reveal>
-            <div className="mx-auto grid max-w-6xl grid-cols-2 overflow-hidden rounded-[28px] border-2 border-slate-900 bg-white shadow-[7px_8px_0_rgba(15,23,42,0.12)] dark:border-white dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.08)] sm:grid-cols-4">
+            <div className="mx-auto grid max-w-6xl grid-cols-2 overflow-hidden rounded-[28px] border-2 border-slate-900 bg-white shadow-[7px_8px_0_rgba(15,23,42,0.13)] dark:border-slate-200 dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.09)] sm:grid-cols-4">
               {STATS.map((stat, index) => (
                 <div
                   key={`${stat.value}-${stat.en}`}
-                  className={`px-5 py-7 sm:px-7 ${
+                  className={`px-5 py-8 sm:px-8 ${
                     index < 2
                       ? "border-b-2 border-slate-900 sm:border-b-0"
                       : ""
@@ -2201,20 +2200,16 @@ export default function Portfolio() {
                       ? "border-r-2 border-slate-900"
                       : ""
                   } ${
-                    index === 1
-                      ? "sm:border-r-2"
-                      : ""
+                    index === 1 ? "sm:border-r-2" : ""
                   } ${
-                    index === 3
-                      ? "sm:border-r-0"
-                      : ""
-                  } dark:border-white`}
+                    index === 3 ? "sm:border-r-0" : ""
+                  } dark:border-slate-200`}
                 >
-                  <div className="font-display text-3xl font-black text-slate-950 dark:text-white sm:text-4xl">
+                  <div className="font-display text-4xl font-black text-slate-950 dark:text-white sm:text-5xl">
                     {stat.value}
                   </div>
 
-                  <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                  <div className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 sm:text-sm">
                     {stat[language]}
                   </div>
                 </div>
@@ -2237,26 +2232,26 @@ export default function Portfolio() {
 
           <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <Reveal delay={80}>
-              <div className="rounded-[30px] border-2 border-slate-900 bg-white p-7 shadow-[7px_8px_0_rgba(15,23,42,0.1)] dark:border-white dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.06)] sm:p-9">
-                <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-100 font-display text-xs font-black text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">
+              <div className="rounded-[30px] border-2 border-slate-900 bg-white p-7 shadow-[7px_8px_0_rgba(15,23,42,0.1)] dark:border-slate-200 dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.08)] sm:p-9">
+                <div className="mb-7 flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 font-display text-sm font-black text-blue-700 dark:bg-blue-950/70 dark:text-blue-300">
                     {"{ }"}
                   </div>
 
                   <div>
-                    <div className="text-sm font-bold text-slate-950 dark:text-white">
+                    <div className="text-[15px] font-black text-slate-950 dark:text-white">
                       {language === "en"
                         ? "How I approach development"
                         : "منهجي في التطوير"}
                     </div>
 
-                    <div className="mt-1 text-xs text-slate-400">
+                    <div className="mt-1 text-sm font-semibold text-slate-600 dark:text-slate-300">
                       Architecture → API → Data → UI
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-5 text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
+                <div className="space-y-6 text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
                   <p>
                     {language === "en"
                       ? "I focus on building applications where the backend is more than a simple CRUD layer. I care about authentication, business rules, transactions, concurrency, location logic, and integrations."
@@ -2270,7 +2265,7 @@ export default function Portfolio() {
                   </p>
                 </div>
 
-                <div className="mt-7 flex flex-wrap gap-2">
+                <div className="mt-8 flex flex-wrap gap-2.5">
                   {[
                     "APIs",
                     "Databases",
@@ -2280,7 +2275,7 @@ export default function Portfolio() {
                   ].map((item) => (
                     <span
                       key={item}
-                      className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                      className="rounded-full border border-slate-300 bg-slate-100 px-3.5 py-2 text-sm font-black text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                     >
                       {item}
                     </span>
@@ -2293,7 +2288,7 @@ export default function Portfolio() {
               <div>
                 <div className="space-y-4">
                   <InfoCard
-                    icon={<GraduationCap className="h-4 w-4" />}
+                    icon={<GraduationCap className="h-4.5 w-4.5" />}
                     label={language === "en" ? "Education" : "التعليم"}
                     value={
                       language === "en"
@@ -2303,13 +2298,13 @@ export default function Portfolio() {
                   />
 
                   <InfoCard
-                    icon={<Terminal className="h-4 w-4" />}
+                    icon={<Terminal className="h-4.5 w-4.5" />}
                     label={language === "en" ? "Focus" : "التركيز"}
                     value="Backend-first Fullstack Development"
                   />
 
                   <InfoCard
-                    icon={<Briefcase className="h-4 w-4" />}
+                    icon={<Briefcase className="h-4.5 w-4.5" />}
                     label={language === "en" ? "Target" : "الهدف"}
                     value={
                       language === "en"
@@ -2321,14 +2316,14 @@ export default function Portfolio() {
 
                 <NTICertificateCard language={language} />
 
-                <div className="mt-5 flex flex-wrap gap-3">
+                <div className="mt-6 flex flex-wrap gap-3">
                   <a
                     href={CV_PATH}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-4 py-3 text-xs font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-white dark:bg-slate-900 dark:text-white dark:shadow-[4px_4px_0_rgba(255,255,255,0.1)]"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-4 py-3 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:bg-slate-900 dark:text-white dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
-                    <FileText className="h-4 w-4" />
+                    <FileText className="h-4.5 w-4.5" />
                     {language === "en"
                       ? "View resume"
                       : "عرض السيرة الذاتية"}
@@ -2337,9 +2332,9 @@ export default function Portfolio() {
                   <a
                     href={CV_PATH}
                     download="Youssef-Yasser-CV.pdf"
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-yellow-200 px-4 py-3 text-xs font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-white dark:shadow-[4px_4px_0_rgba(255,255,255,0.1)]"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-yellow-200 px-4 py-3 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
-                    <Download className="h-4 w-4" />
+                    <Download className="h-4.5 w-4.5" />
                     {language === "en"
                       ? "Download resume"
                       : "تحميل السيرة الذاتية"}
@@ -2405,38 +2400,38 @@ export default function Portfolio() {
           </Reveal>
 
           <Reveal delay={100}>
-            <article className="overflow-hidden rounded-[30px] border-2 border-slate-900 bg-white shadow-[7px_8px_0_rgba(15,23,42,0.1)] dark:border-white dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.06)]">
+            <article className="overflow-hidden rounded-[30px] border-2 border-slate-900 bg-white shadow-[7px_8px_0_rgba(15,23,42,0.1)] dark:border-slate-200 dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.08)]">
               <div className="grid lg:grid-cols-[230px_1fr]">
-                <div className="border-b-2 border-slate-900 bg-blue-50 p-7 dark:border-white dark:bg-blue-950/40 lg:border-b-0 lg:border-r-2">
-                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-slate-900 bg-blue-200 text-xs font-black text-slate-950 dark:border-white dark:bg-blue-400">
+                <div className="border-b-2 border-slate-900 bg-blue-50 p-7 dark:border-slate-700 dark:bg-blue-950/50 lg:border-b-0 lg:border-r-2">
+                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-slate-900 bg-blue-200 text-sm font-black text-slate-950 dark:border-slate-200 dark:bg-blue-400">
                     IT
                   </div>
 
-                  <div className="text-xs font-black uppercase tracking-[0.14em] text-blue-700 dark:text-blue-300">
+                  <div className="text-sm font-black uppercase tracking-[0.14em] text-blue-800 dark:text-blue-200">
                     Internship
                   </div>
 
-                  <div className="mt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">
+                  <div className="mt-2 text-[15px] font-bold text-slate-700 dark:text-slate-200">
                     Egypt
                   </div>
                 </div>
 
                 <div className="p-7 sm:p-9">
-                  <div className="mb-3 text-xs font-black uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400">
+                  <div className="mb-3 text-sm font-black uppercase tracking-[0.12em] text-blue-700 dark:text-blue-300">
                     Gulf of Suez Petroleum Company
                   </div>
 
-                  <h3 className="font-display text-2xl font-black text-slate-950 dark:text-white sm:text-3xl">
+                  <h3 className="font-display text-3xl font-black text-slate-950 dark:text-white sm:text-4xl">
                     IT Intern — GUPCO
                   </h3>
 
-                  <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
+                  <p className="mt-5 max-w-4xl text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
                     {language === "en"
                       ? "Practical exposure to IT workflows inside a large enterprise environment, alongside continued hands-on work in backend development, databases, and fullstack applications."
                       : "خبرة عملية داخل بيئة مؤسسية كبيرة في مجال الـIT، بالتوازي مع العمل المستمر على تطوير الـBackend وقواعد البيانات وتطبيقات الـFullstack."}
                   </p>
 
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-7 flex flex-wrap gap-2.5">
                     {[
                       "Backend",
                       "Databases",
@@ -2445,7 +2440,7 @@ export default function Portfolio() {
                     ].map((item) => (
                       <span
                         key={item}
-                        className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                        className="rounded-full border border-slate-300 bg-slate-100 px-3.5 py-2 text-sm font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                       >
                         {item}
                       </span>
@@ -2471,32 +2466,30 @@ export default function Portfolio() {
 
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
             <Reveal delay={100}>
-              <div className="rounded-[30px] border-2 border-slate-900 bg-white p-7 shadow-[7px_8px_0_rgba(15,23,42,0.1)] dark:border-white dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.06)] sm:p-9">
+              <div className="rounded-[30px] border-2 border-slate-900 bg-white p-7 shadow-[7px_8px_0_rgba(15,23,42,0.1)] dark:border-slate-200 dark:bg-slate-900 dark:shadow-[7px_8px_0_rgba(255,255,255,0.08)] sm:p-9">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border-2 border-slate-900 bg-emerald-200 text-emerald-800 dark:border-white dark:bg-emerald-400 dark:text-slate-950">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-slate-900 bg-emerald-200 text-emerald-800 dark:border-slate-200 dark:bg-emerald-400 dark:text-slate-950">
                     <Mail className="h-5 w-5" />
                   </div>
 
                   <div>
-                    <div className="text-sm font-black text-slate-950 dark:text-white">
-                      {language === "en"
-                        ? "Get in touch"
-                        : "تواصل معي"}
+                    <div className="text-[15px] font-black text-slate-950 dark:text-white">
+                      {language === "en" ? "Get in touch" : "تواصل معي"}
                     </div>
 
-                    <div className="mt-1 text-xs text-slate-400">
+                    <div className="mt-1 text-sm font-semibold text-slate-600 dark:text-slate-300">
                       {EMAIL}
                     </div>
                   </div>
                 </div>
 
-                <h3 className="mt-7 max-w-xl font-display text-3xl font-black tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+                <h3 className="mt-8 max-w-2xl font-display text-4xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl">
                   {language === "en"
                     ? "Have a role, project, or backend-heavy problem?"
                     : "هل لديك فرصة عمل أو مشروع أو مشكلة تقنية ترتبط بالـBackend؟"}
                 </h3>
 
-                <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-400">
+                <p className="mt-5 max-w-2xl text-lg leading-9 text-slate-700 dark:text-slate-200 sm:text-xl">
                   {language === "en"
                     ? "Email is the fastest way to reach me. You can also find my work and professional profiles below."
                     : "البريد الإلكتروني هو أسرع وسيلة للتواصل معي، ويمكنك أيضًا الوصول إلى أعمالي وحساباتي المهنية من الروابط التالية."}
@@ -2507,9 +2500,9 @@ export default function Portfolio() {
                     href={`mailto:${EMAIL}?subject=${encodeURIComponent(
                       "Hello Youssef - Portfolio",
                     )}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-slate-950 px-4 py-3.5 text-sm font-black text-white shadow-[4px_4px_0_#0f172a] dark:border-white dark:shadow-[4px_4px_0_rgba(255,255,255,0.1)]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-slate-950 px-4 py-3.5 text-[15px] font-black text-white shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
-                    <Mail className="h-4 w-4" />
+                    <Mail className="h-4.5 w-4.5" />
                     {language === "en"
                       ? "Send Email"
                       : "إرسال بريد إلكتروني"}
@@ -2519,35 +2512,35 @@ export default function Portfolio() {
                     href={LINKEDIN}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-pink-200 px-4 py-3.5 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-white dark:shadow-[4px_4px_0_rgba(255,255,255,0.1)]"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-pink-200 px-4 py-3.5 text-[15px] font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
-                    <FaLinkedin className="h-4 w-4" />
+                    <FaLinkedin className="h-4.5 w-4.5" />
                     LinkedIn
                   </a>
                 </div>
 
-                <div className="mt-8 space-y-2.5">
+                <div className="mt-8 space-y-3">
                   <button
                     type="button"
                     onClick={copyEmail}
-                    className="flex w-full items-center gap-3 rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                    className="flex w-full items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
                   >
-                    <Mail className="h-4 w-4 shrink-0 text-slate-400" />
+                    <Mail className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
 
                     <span className="truncate">{EMAIL}</span>
 
                     {copied ? (
-                      <Check className="ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+                      <Check className="ml-auto h-4.5 w-4.5 shrink-0 text-emerald-500" />
                     ) : (
-                      <Copy className="ml-auto h-4 w-4 shrink-0 text-slate-400" />
+                      <Copy className="ml-auto h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
                     )}
                   </button>
 
                   <a
                     href={`tel:${PHONE.replaceAll(" ", "")}`}
-                    className="flex items-center gap-3 rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
                   >
-                    <Phone className="h-4 w-4 shrink-0 text-slate-400" />
+                    <Phone className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
                     {PHONE}
                   </a>
 
@@ -2555,9 +2548,9 @@ export default function Portfolio() {
                     href={GITHUB}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
                   >
-                    <FaGithub className="h-4 w-4 shrink-0 text-slate-400" />
+                    <FaGithub className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
                     github.com/Youssefsea
                   </a>
 
@@ -2565,9 +2558,9 @@ export default function Portfolio() {
                     href={LINKEDIN}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                    className="flex items-center gap-3 rounded-xl border-2 border-slate-300 bg-slate-50 px-4 py-3.5 text-[15px] font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
                   >
-                    <FaLinkedin className="h-4 w-4 shrink-0 text-slate-400" />
+                    <FaLinkedin className="h-4.5 w-4.5 shrink-0 text-slate-500 dark:text-slate-400" />
                     linkedin.com/in/youssef-yasser
                   </a>
                 </div>
@@ -2582,10 +2575,10 @@ export default function Portfolio() {
       </main>
 
       <footer className="relative z-10 px-5 pb-8 sm:px-8">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 rounded-[22px] border-2 border-slate-900 bg-white px-5 py-4 text-xs text-slate-500 shadow-[5px_6px_0_rgba(15,23,42,0.08)] dark:border-white dark:bg-slate-900 dark:text-slate-400 dark:shadow-[5px_6px_0_rgba(255,255,255,0.06)] sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 Youssef Yasser</span>
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 rounded-[22px] border-2 border-slate-900 bg-white px-5 py-5 text-sm text-slate-600 shadow-[5px_6px_0_rgba(15,23,42,0.08)] dark:border-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:shadow-[5px_6px_0_rgba(255,255,255,0.07)] sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-semibold">© 2026 Youssef Yasser</span>
 
-          <div className="flex items-center gap-2 font-black text-slate-700 dark:text-slate-200">
+          <div className="flex items-center gap-2 font-black text-slate-800 dark:text-slate-100">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
             {language === "en"
               ? "Open to opportunities"
@@ -2603,7 +2596,7 @@ export default function Portfolio() {
               behavior: "smooth",
             })
           }
-          className="fixed bottom-6 right-5 z-50 flex h-13 w-13 items-center justify-center rounded-2xl border-2 border-slate-900 bg-yellow-300 text-slate-950 shadow-[5px_5px_0_#0f172a] transition-transform hover:-translate-y-1 hover:rotate-3 dark:border-white dark:shadow-[5px_5px_0_rgba(255,255,255,0.1)] sm:right-7"
+          className="fixed bottom-6 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-slate-900 bg-yellow-300 text-slate-950 shadow-[5px_5px_0_#0f172a] transition-transform hover:-translate-y-1 hover:rotate-3 dark:border-slate-200 dark:shadow-[5px_5px_0_rgba(255,255,255,0.12)] sm:right-7"
           aria-label="Back to top"
         >
           <ArrowUp className="h-5 w-5" />
