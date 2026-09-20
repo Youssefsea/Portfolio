@@ -28,179 +28,277 @@ import {
   Terminal,
   X,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 type Language = "en" | "ar";
 type Theme = "light" | "dark";
-type ColorName = "green" | "orange" | "purple" | "blue" | "pink" | "yellow";
+type ColorName = "green" | "blue" | "purple" | "orange" | "pink" | "yellow";
 
 const EMAIL = "youssefsea274@gmail.com";
 const PHONE = "+20 110 469 9278";
 const LINKEDIN = "https://www.linkedin.com/in/youssef-yasser-97aa742b0";
 const GITHUB = "https://github.com/Youssefsea";
-const CV_PATH = "/cvv.pdf";
+const CV_PATH = "/public/cvv.pdf";
 
 const NAV_LINKS = [
-  { id: "about", en: "about", ar: "من أنا" },
-  { id: "skills", en: "stack", ar: "التقنيات" },
-  { id: "projects", en: "projects", ar: "المشاريع" },
-  { id: "experience", en: "experience", ar: "الخبرة" },
-  { id: "contact", en: "contact", ar: "تواصل" },
+  { id: "about", en: "About", ar: "من أنا" },
+  { id: "skills", en: "Stack", ar: "التقنيات" },
+  { id: "projects", en: "Projects", ar: "المشاريع" },
+  { id: "experience", en: "Experience", ar: "الخبرة" },
+  { id: "contact", en: "Contact", ar: "تواصل" },
+] as const;
+
+const STATS = [
+  { value: "3", en: "live projects", ar: "مشاريع حية" },
+  { value: "30+", en: "REST endpoints", ar: "REST endpoints" },
+  { value: "3", en: "platform roles", ar: "أدوار للمنصة" },
+  { value: "2027", en: "graduation", ar: "سنة التخرج" },
 ] as const;
 
 const TERMINAL_LINES = {
   en: [
     { prompt: "$", text: "whoami" },
     { prompt: ">", text: "Youssef Yasser" },
-    { prompt: "$", text: "cat role.txt" },
+    { prompt: "$", text: "role --current" },
     { prompt: ">", text: "Backend-first Fullstack Developer" },
-    { prompt: "$", text: "status --current" },
-    { prompt: ">", text: "building systems, not just screens" },
+    { prompt: "$", text: "focus --now" },
+    { prompt: ">", text: "APIs • Databases • Systems • UI" },
   ],
   ar: [
     { prompt: "$", text: "whoami" },
     { prompt: ">", text: "Youssef Yasser" },
-    { prompt: "$", text: "cat role.txt" },
+    { prompt: "$", text: "role --current" },
     { prompt: ">", text: "Fullstack Developer — Backend First" },
-    { prompt: "$", text: "status --current" },
-    { prompt: ">", text: "ببني أنظمة، مش مجرد شاشات" },
+    { prompt: "$", text: "focus --now" },
+    { prompt: ">", text: "APIs • Databases • Systems • UI" },
   ],
-};
+} as const;
 
-const SKILL_GROUPS = [
+const SKILL_GROUPS: {
+  label: { en: string; ar: string };
+  icon: LucideIcon;
+  color: ColorName;
+  items: string[];
+}[] = [
   {
     label: { en: "Backend", ar: "Backend" },
     icon: Server,
-    color: "blue" as ColorName,
-    items: ["Node.js", "Express.js", "REST API Design", "MVC", "JWT Auth", "HTTP-Only Cookies"],
+    color: "blue",
+    items: [
+      "Node.js",
+      "Express.js",
+      "REST API Design",
+      "MVC",
+      "JWT Authentication",
+      "HTTP-only Cookies",
+    ],
   },
   {
     label: { en: "Databases", ar: "قواعد البيانات" },
     icon: Database,
-    color: "purple" as ColorName,
-    items: ["PostgreSQL", "MySQL", "Redis (Locking)", "Schema Design", "Geospatial Queries", "pgAdmin"],
+    color: "purple",
+    items: [
+      "PostgreSQL",
+      "MySQL",
+      "Redis",
+      "Schema Design",
+      "Geospatial Queries",
+      "pgAdmin",
+    ],
   },
   {
     label: { en: "Frontend", ar: "Frontend" },
     icon: Code2,
-    color: "pink" as ColorName,
-    items: ["React.js", "Next.js (App Router)", "TypeScript", "Tailwind CSS", "Framer Motion", "RTL / Arabic UI"],
+    color: "pink",
+    items: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "RTL / Arabic UI",
+    ],
   },
   {
     label: { en: "AI & Integrations", ar: "AI والتكاملات" },
     icon: Sparkles,
-    color: "yellow" as ColorName,
-    items: ["Google Gemini API", "NLP", "Web Speech API", "Leaflet.js"],
+    color: "yellow",
+    items: [
+      "Gemini API",
+      "NLP",
+      "Web Speech API",
+      "Leaflet.js",
+      "Cloudinary",
+    ],
   },
   {
-    label: { en: "Tools & DevOps", ar: "Tools و DevOps" },
+    label: { en: "Tools & DevOps", ar: "الأدوات و DevOps" },
     icon: Cpu,
-    color: "orange" as ColorName,
-    items: ["Git", "GitHub", "Docker", "AWS Basics", "Postman", "Cloudinary"],
+    color: "orange",
+    items: [
+      "Git",
+      "GitHub",
+      "Docker",
+      "AWS Basics",
+      "Postman",
+      "API Documentation",
+    ],
   },
-] as const;
+  {
+    label: { en: "Engineering", ar: "هندسة البرمجيات" },
+    icon: Terminal,
+    color: "green",
+    items: [
+      "Transactions",
+      "Idempotency",
+      "Redis Locks",
+      "Authentication",
+      "Geospatial Logic",
+      "Role-based Access",
+    ],
+  },
+];
 
 const PROJECTS = [
   {
-    nameAr: "ذاكر صح",
-    name: { en: "EdTech SaaS Platform", ar: "منصة تعليمية SaaS" },
+    name: { en: "EdTech SaaS Platform", ar: "ذاكر صح — منصة تعليمية SaaS" },
+    slug: "Zaker Sah",
     description: {
-      en: "An educational marketplace connecting students across Egypt with nearby learning centers and private tutors — with role-aware workflows and real booking logic.",
-      ar: "منصة تعليمية بتربط الطلاب بالمراكز والمدرسين القريبين، مع أدوار مختلفة ومنطق حجز فعلي.",
+      en: "An educational platform connecting students, learning centers, and tutors with role-aware workflows, booking logic, and protected learning content.",
+      ar: "منصة تعليمية بتربط الطلاب بالمراكز والمدرسين، مع نظام أدوار وحجوزات وحماية للمحتوى التعليمي.",
     },
     highlights: {
       en: [
-        "Three dedicated roles: Student, Center Admin, Teacher",
-        "Geolocation-based discovery via OpenStreetMap",
-        "Token-gated content streaming for paid video/files",
-        "Automatic schedule-conflict detection on booking",
-        "Super Admin panel with platform-wide analytics",
+        "Student, Center Admin, and Teacher roles",
+        "Geolocation-based discovery",
+        "Protected streaming for paid content",
+        "Automatic schedule-conflict detection",
+        "Super Admin dashboard and analytics",
       ],
       ar: [
-        "3 أدوار: طالب، Admin للمركز، ومدرس",
-        "اكتشاف المراكز والمدرسين باستخدام الموقع الجغرافي",
-        "حماية المحتوى المدفوع للفيديو والملفات",
-        "منع تعارض مواعيد الحجز تلقائيًا",
-        "لوحة Super Admin لمتابعة وتحليل المنصة",
+        "أدوار للطالب والمركز والمدرس",
+        "اكتشاف الأماكن والمدرسين حسب الموقع",
+        "حماية المحتوى المدفوع",
+        "منع تعارض مواعيد الحجز",
+        "لوحة Super Admin وتحليلات",
       ],
     },
     stack: ["Next.js", "Express", "PostgreSQL", "Redis", "React"],
     link: "https://center-saas-front-83p8.vercel.app/",
     accent: "green" as ColorName,
-    icon: "🎓",
+    number: "01",
   },
   {
-    nameAr: "أكلي",
-    name: { en: "Food Delivery Platform", ar: "منصة توصيل أكل" },
+    name: { en: "Food Delivery Platform", ar: "أكلي — منصة توصيل أكل" },
+    slug: "Akli",
     description: {
-      en: "A dual-sided delivery app for customers and restaurant vendors, built around live order tracking and real distance-based pricing.",
-      ar: "منصة توصيل للعميل والمطعم، فيها تتبع للطلب وتسعير للتوصيل حسب المسافة الحقيقية.",
+      en: "A customer-and-vendor food delivery platform built around order flows, location-aware delivery pricing, and real-time communication.",
+      ar: "منصة توصيل للعميل والمطعم، فيها إدارة طلبات وتسعير حسب المسافة وشات مباشر.",
     },
     highlights: {
       en: [
-        "Real-time order chat via Socket.IO, gated by payment",
-        "GPS + Haversine distance & delivery-fee calculation",
-        "Multi-restaurant smart cart",
-        "Vodafone Cash / InstaPay proof-of-payment workflow",
-        "Vendor dashboard with live sales analytics",
+        "Customer and vendor workflows",
+        "GPS + Haversine delivery calculation",
+        "Multi-restaurant cart logic",
+        "Vodafone Cash / InstaPay payment proof flow",
+        "Real-time order communication",
       ],
       ar: [
-        "شات مباشر للطلب باستخدام Socket.IO بعد الدفع",
-        "حساب المسافة ورسوم التوصيل بالـGPS وHaversine",
-        "سلة واحدة تدعم أكثر من مطعم",
-        "Workflow لإثبات الدفع بـVodafone Cash / InstaPay",
-        "Dashboard للمطعم مع تحليلات المبيعات",
+        "Workflow منفصل للعميل والمطعم",
+        "حساب المسافة والتوصيل بالـGPS وHaversine",
+        "سلة تدعم أكتر من مطعم",
+        "إثبات دفع Vodafone Cash / InstaPay",
+        "تواصل مباشر أثناء الطلب",
       ],
     },
     stack: ["Next.js", "Express", "PostgreSQL", "Socket.IO", "Leaflet"],
     link: "https://food-front-rho.vercel.app/",
     accent: "orange" as ColorName,
-    icon: "🍔",
+    number: "02",
   },
   {
-    nameAr: "WealthWise AI",
-    name: { en: "Smart Financial Wallet", ar: "محفظة مالية ذكية" },
+    name: { en: "WealthWise AI", ar: "WealthWise AI — محفظة مالية" },
+    slug: "Finance",
     description: {
-      en: "An AI-powered wallet that turns spoken or typed Arabic into categorized, logged transactions.",
-      ar: "محفظة مالية بتحول الكلام العربي المكتوب أو الصوتي لمعاملات مالية مصنفة ومسجلة تلقائيًا.",
+      en: "An AI-assisted wallet that converts typed or spoken Arabic into structured financial transactions while protecting money-moving operations.",
+      ar: "محفظة مالية بتحول الكلام العربي لمعاملات مالية منظمة مع حماية للعمليات الحساسة.",
     },
     highlights: {
       en: [
-        "Gemini-powered Arabic natural-language transaction parsing",
-        "SERIALIZABLE isolation + dual Redis locks for transfers",
+        "Gemini-powered Arabic transaction parsing",
+        "SERIALIZABLE isolation for sensitive operations",
+        "Redis locks for concurrency control",
         "Idempotency keys on money-moving endpoints",
-        "Arabic voice input via the Web Speech API",
-        "Budget tracking with AI advice personalized by city",
+        "Arabic voice input via Web Speech API",
       ],
       ar: [
         "تحليل المعاملات العربية باستخدام Gemini",
-        "SERIALIZABLE + Redis locks للتحويلات",
-        "Idempotency keys لكل endpoint مالي حساس",
-        "إدخال صوتي بالعربي باستخدام Web Speech API",
-        "متابعة الميزانية ونصائح AI حسب المدينة",
+        "SERIALIZABLE للعمليات الحساسة",
+        "Redis locks للتحكم في الـconcurrency",
+        "Idempotency keys للعمليات المالية",
+        "إدخال صوتي عربي باستخدام Web Speech API",
       ],
     },
     stack: ["Next.js", "Express", "PostgreSQL", "Redis", "Gemini AI"],
     link: "https://wallet-wep-react.vercel.app/",
     accent: "purple" as ColorName,
-    icon: "💰",
+    number: "03",
   },
-] as const;
+];
 
-const STATS = [
-  { value: "3", en: "shipped apps", ar: "تطبيقات متنفذة" },
-  { value: "30+", en: "REST endpoints", ar: "REST endpoints" },
-  { value: "3", en: "core platform roles", ar: "أدوار أساسية" },
-  { value: "2027", en: "graduating", ar: "سنة التخرج" },
-] as const;
-
-const COLOR_STYLES: Record<ColorName, { text: string; soft: string; border: string; iconBg: string }> = {
-  green: { text: "text-green-600", soft: "bg-green-100", border: "border-green-300", iconBg: "bg-green-200" },
-  orange: { text: "text-orange-600", soft: "bg-orange-100", border: "border-orange-300", iconBg: "bg-orange-200" },
-  purple: { text: "text-purple-600", soft: "bg-purple-100", border: "border-purple-300", iconBg: "bg-purple-200" },
-  blue: { text: "text-blue-600", soft: "bg-blue-100", border: "border-blue-300", iconBg: "bg-blue-200" },
-  pink: { text: "text-pink-600", soft: "bg-pink-100", border: "border-pink-300", iconBg: "bg-pink-200" },
-  yellow: { text: "text-yellow-700", soft: "bg-yellow-100", border: "border-yellow-300", iconBg: "bg-yellow-200" },
+const COLOR_STYLES: Record<
+  ColorName,
+  {
+    text: string;
+    soft: string;
+    border: string;
+    bg: string;
+    dot: string;
+  }
+> = {
+  green: {
+    text: "text-emerald-600 dark:text-emerald-400",
+    soft: "bg-emerald-50 dark:bg-emerald-950/40",
+    border: "border-emerald-200 dark:border-emerald-900",
+    bg: "bg-emerald-100 dark:bg-emerald-950/50",
+    dot: "bg-emerald-400",
+  },
+  blue: {
+    text: "text-blue-600 dark:text-blue-400",
+    soft: "bg-blue-50 dark:bg-blue-950/40",
+    border: "border-blue-200 dark:border-blue-900",
+    bg: "bg-blue-100 dark:bg-blue-950/50",
+    dot: "bg-blue-400",
+  },
+  purple: {
+    text: "text-violet-600 dark:text-violet-400",
+    soft: "bg-violet-50 dark:bg-violet-950/40",
+    border: "border-violet-200 dark:border-violet-900",
+    bg: "bg-violet-100 dark:bg-violet-950/50",
+    dot: "bg-violet-400",
+  },
+  orange: {
+    text: "text-orange-600 dark:text-orange-400",
+    soft: "bg-orange-50 dark:bg-orange-950/40",
+    border: "border-orange-200 dark:border-orange-900",
+    bg: "bg-orange-100 dark:bg-orange-950/50",
+    dot: "bg-orange-400",
+  },
+  pink: {
+    text: "text-pink-600 dark:text-pink-400",
+    soft: "bg-pink-50 dark:bg-pink-950/40",
+    border: "border-pink-200 dark:border-pink-900",
+    bg: "bg-pink-100 dark:bg-pink-950/50",
+    dot: "bg-pink-400",
+  },
+  yellow: {
+    text: "text-amber-600 dark:text-amber-400",
+    soft: "bg-amber-50 dark:bg-amber-950/40",
+    border: "border-amber-200 dark:border-amber-900",
+    bg: "bg-amber-100 dark:bg-amber-950/50",
+    dot: "bg-amber-400",
+  },
 };
 
 function Reveal({
@@ -226,10 +324,14 @@ function Reveal({
           observer.unobserve(element);
         }
       },
-      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
+      {
+        threshold: 0.08,
+        rootMargin: "0px 0px -40px 0px",
+      },
     );
 
     observer.observe(element);
+
     return () => observer.disconnect();
   }, []);
 
@@ -244,71 +346,42 @@ function Reveal({
   );
 }
 
-function FloatingBackground() {
+function SectionTitle({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}) {
   return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="absolute -left-32 -top-32 h-80 w-80 rounded-full bg-pink-200/40 blur-3xl animate-soft-float" />
-      <div className="absolute -right-20 top-24 h-96 w-96 rounded-full bg-blue-200/40 blur-3xl animate-soft-float" style={{ animationDelay: "1.5s" }} />
-      <div className="absolute left-[12%] top-[30%] h-64 w-64 rounded-full bg-yellow-200/30 blur-3xl animate-soft-float" style={{ animationDelay: "0.8s" }} />
-      <div className="absolute bottom-[10%] right-[8%] h-80 w-80 rounded-full bg-purple-200/30 blur-3xl animate-soft-float" style={{ animationDelay: "2s" }} />
-
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(15,23,42,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.04)_1px,transparent_1px)] bg-[size:32px_32px] dark-grid" />
-
-      {Array.from({ length: 14 }).map((_, index) => (
-        <span
-          key={index}
-          className="absolute h-2 w-2 rounded-full bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.8)] animate-twinkle"
-          style={{
-            left: `${(index * 17) % 100}%`,
-            top: `${(index * 31) % 100}%`,
-            animationDelay: `${(index % 7) * 0.45}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function CartoonCharacter() {
-  return (
-    <div className="character-scene relative mx-auto h-[400px] w-full max-w-[440px]">
-      <div className="absolute left-1/2 top-1/2 h-[310px] w-[310px] -translate-x-1/2 -translate-y-1/2 rounded-[48%] bg-gradient-to-br from-yellow-100 via-pink-100 to-blue-100 shadow-[0_20px_70px_rgba(59,130,246,0.14)]" />
-
-      <div className="absolute left-1/2 top-[14%] h-[225px] w-[200px] -translate-x-1/2 rounded-[45%_45%_42%_42%] border-[6px] border-slate-900 bg-[#f4c7a1] shadow-[8px_10px_0_#0f172a]">
-        <div className="absolute -left-5 top-8 h-20 w-9 rounded-full border-[5px] border-slate-900 bg-[#f4c7a1]" />
-        <div className="absolute -right-5 top-8 h-20 w-9 rounded-full border-[5px] border-slate-900 bg-[#f4c7a1]" />
-        <div className="absolute left-1/2 top-12 h-9 w-32 -translate-x-1/2 rounded-full bg-slate-900" />
-        <div className="absolute left-4 top-2 h-20 w-14 rounded-[60%] bg-slate-900 rotate-[20deg]" />
-        <div className="absolute right-4 top-1 h-24 w-16 rounded-[60%] bg-slate-900 -rotate-[18deg]" />
-        <div className="absolute left-[31px] top-[98px] h-5 w-5 rounded-full bg-slate-900" />
-        <div className="absolute right-[31px] top-[98px] h-5 w-5 rounded-full bg-slate-900" />
-        <div className="absolute left-[26px] top-[87px] h-12 w-12 rounded-full border-4 border-slate-900" />
-        <div className="absolute right-[26px] top-[87px] h-12 w-12 rounded-full border-4 border-slate-900" />
-        <div className="absolute left-1/2 top-[106px] h-3 w-4 -translate-x-1/2 rounded-full bg-slate-900" />
-        <div className="absolute bottom-[38px] left-1/2 h-9 w-20 -translate-x-1/2 rounded-b-full border-[5px] border-t-0 border-slate-900" />
-        <div className="absolute bottom-[-18px] left-1/2 h-16 w-16 -translate-x-1/2 rounded-b-3xl border-[5px] border-slate-900 bg-blue-500" />
+    <div className="mb-12 max-w-3xl">
+      <div className="mb-4 flex items-center gap-3">
+        <span className="h-px w-10 bg-slate-400 dark:bg-slate-600" />
+        <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+          {eyebrow}
+        </span>
       </div>
 
-      <div className="absolute left-1/2 top-[57%] h-[136px] w-[230px] -translate-x-1/2 rounded-[42px] border-[6px] border-slate-900 bg-blue-500 shadow-[10px_12px_0_#0f172a]" />
-      <div className="absolute left-[25%] top-[63%] h-[92px] w-[62px] rounded-[26px] border-[6px] border-slate-900 bg-slate-800 rotate-[10deg]" />
-      <div className="absolute right-[24%] top-[63%] h-[92px] w-[62px] rounded-[26px] border-[6px] border-slate-900 bg-slate-800 -rotate-[10deg]" />
-      <div className="absolute bottom-2 left-[23%] h-16 w-28 rounded-full border-[6px] border-slate-900 bg-pink-400" />
-      <div className="absolute bottom-2 right-[23%] h-16 w-28 rounded-full border-[6px] border-slate-900 bg-purple-400" />
+      <h2 className="font-display text-4xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl">
+        {title}
+      </h2>
 
-      <div className="tech-bubble absolute -right-1 top-8 rotate-6"><span>⚡</span></div>
-      <div className="tech-bubble absolute -left-3 top-32 -rotate-6"><span>💻</span></div>
-      <div className="tech-bubble absolute -right-2 bottom-24 rotate-3"><span>🚀</span></div>
-
-      <div className="absolute bottom-0 left-1/2 h-8 w-[240px] -translate-x-1/2 rounded-full bg-slate-900/10 blur-xl" />
+      {description && (
+        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
+          {description}
+        </p>
+      )}
     </div>
   );
 }
 
-function TerminalIntro({ language }: { language: Language }) {
+function TerminalPanel({ language }: { language: Language }) {
   const lines = TERMINAL_LINES[language];
   const [lineIdx, setLineIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
-  const [done, setDone] = useState<typeof lines>([]);
+  const [done, setDone] = useState<(typeof lines)[number][]>([]);
 
   useEffect(() => {
     setLineIdx(0);
@@ -322,49 +395,82 @@ function TerminalIntro({ language }: { language: Language }) {
         setLineIdx(0);
         setCharIdx(0);
         setDone([]);
-      }, 1800);
+      }, 2200);
+
       return () => window.clearTimeout(restart);
     }
 
     const current = lines[lineIdx];
 
     if (charIdx < current.text.length) {
-      const timeout = window.setTimeout(() => setCharIdx((value) => value + 1), 22);
-      return () => window.clearTimeout(timeout);
+      const timer = window.setTimeout(() => {
+        setCharIdx((value) => value + 1);
+      }, 24);
+
+      return () => window.clearTimeout(timer);
     }
 
-    const timeout = window.setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setDone((value) => [...value, current]);
       setLineIdx((value) => value + 1);
       setCharIdx(0);
-    }, 280);
+    }, 260);
 
-    return () => window.clearTimeout(timeout);
+    return () => window.clearTimeout(timer);
   }, [lineIdx, charIdx, lines]);
 
   const current = lines[lineIdx];
 
   return (
-    <div className="anime-window overflow-hidden rounded-3xl border-[4px] border-slate-900 bg-slate-950 shadow-[10px_12px_0_#0f172a]">
-      <div className="flex items-center gap-2 border-b-[3px] border-slate-900 bg-slate-800 px-5 py-3">
-        <span className="h-3 w-3 rounded-full bg-red-400" />
-        <span className="h-3 w-3 rounded-full bg-yellow-300" />
-        <span className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-3 font-mono text-xs text-slate-400">youssef@portfolio: ~</span>
+    <div className="overflow-hidden rounded-[28px] border border-slate-800/80 bg-[#09111f] shadow-[0_24px_80px_rgba(15,23,42,0.2)]">
+      <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+          <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
+          <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+        </div>
+
+        <span className="font-mono text-[11px] text-slate-500">
+          youssef@portfolio
+        </span>
       </div>
 
-      <div className="min-h-[250px] p-5 font-mono text-sm leading-7 sm:text-base">
+      <div className="min-h-[240px] p-5 font-mono text-sm leading-8 sm:min-h-[280px] sm:p-7 sm:text-[15px]">
         {done.map((line, index) => (
-          <div key={`${line.text}-${index}`} className="flex gap-2">
-            <span className={line.prompt === "$" ? "text-green-400" : "text-slate-500"}>{line.prompt}</span>
-            <span className={line.prompt === "$" ? "text-white" : "text-slate-400"}>{line.text}</span>
+          <div key={`${line.text}-${index}`} className="flex gap-3">
+            <span
+              className={
+                line.prompt === "$" ? "text-emerald-400" : "text-slate-500"
+              }
+            >
+              {line.prompt}
+            </span>
+            <span
+              className={
+                line.prompt === "$" ? "text-slate-100" : "text-slate-400"
+              }
+            >
+              {line.text}
+            </span>
           </div>
         ))}
 
         {current && (
-          <div className="flex gap-2">
-            <span className={current.prompt === "$" ? "text-green-400" : "text-slate-500"}>{current.prompt}</span>
-            <span className={current.prompt === "$" ? "text-white" : "text-slate-400"}>{current.text.slice(0, charIdx)}</span>
+          <div className="flex gap-3">
+            <span
+              className={
+                current.prompt === "$" ? "text-emerald-400" : "text-slate-500"
+              }
+            >
+              {current.prompt}
+            </span>
+            <span
+              className={
+                current.prompt === "$" ? "text-slate-100" : "text-slate-400"
+              }
+            >
+              {current.text.slice(0, charIdx)}
+            </span>
             <span className="terminal-cursor" />
           </div>
         )}
@@ -373,136 +479,317 @@ function TerminalIntro({ language }: { language: Language }) {
   );
 }
 
-function SectionTitle({ number, title, emoji }: { number: string; title: string; emoji: string }) {
+function HeroVisual() {
   return (
-    <div className="mb-10 flex items-end justify-between gap-4">
-      <div>
-        <div className="mb-2 flex items-center gap-2">
-          <span className="sticker-number">{number}</span>
-          <span className="text-xl">{emoji}</span>
+    <div className="relative mx-auto w-full max-w-xl">
+      <div className="absolute -right-4 -top-5 h-24 w-24 rounded-full bg-emerald-200/70 blur-2xl dark:bg-emerald-500/10" />
+      <div className="absolute -bottom-8 -left-3 h-28 w-28 rounded-full bg-blue-200/70 blur-2xl dark:bg-blue-500/10" />
+
+      <div className="relative rounded-[32px] border border-slate-200/90 bg-white/90 p-3 shadow-[0_30px_80px_rgba(15,23,42,0.14)] backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+        <div className="rounded-[26px] border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950 sm:p-6">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-4 dark:border-slate-800">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-sm font-black text-white dark:bg-white dark:text-slate-950">
+                YY
+              </div>
+
+              <div>
+                <div className="text-sm font-bold text-slate-950 dark:text-white">
+                  Youssef Yasser
+                </div>
+                <div className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                  Fullstack Developer
+                </div>
+              </div>
+            </div>
+
+            <div className="hidden rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-400 sm:block">
+              AVAILABLE
+            </div>
+          </div>
+
+          <div className="grid gap-3 py-5 sm:grid-cols-2">
+            {[
+              ["Backend", "Node.js · Express"],
+              ["Database", "PostgreSQL · Redis"],
+              ["Frontend", "Next.js · React"],
+              ["Engineering", "Auth · Transactions"],
+            ].map(([label, value]) => (
+              <div
+                key={label}
+                className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+              >
+                <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                  {label}
+                </div>
+                <div className="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-200">
+                  {value}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-2xl bg-slate-950 p-4 text-white dark:bg-slate-900">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="font-mono text-[11px] text-slate-400">
+                current-focus.ts
+              </span>
+              <span className="text-[11px] text-emerald-400">● active</span>
+            </div>
+
+            <div className="font-mono text-xs leading-7 sm:text-sm">
+              <div>
+                <span className="text-violet-400">const</span>{" "}
+                <span className="text-blue-300">focus</span> ={" "}
+                <span className="text-amber-300">{"{"}</span>
+              </div>
+              <div className="pl-5">
+                <span className="text-slate-400">backend:</span>{" "}
+                <span className="text-emerald-300">true</span>,
+              </div>
+              <div className="pl-5">
+                <span className="text-slate-400">systems:</span>{" "}
+                <span className="text-emerald-300">true</span>,
+              </div>
+              <div className="pl-5">
+                <span className="text-slate-400">clean-ui:</span>{" "}
+                <span className="text-emerald-300">true</span>,
+              </div>
+              <div>
+                <span className="text-amber-300">{"}"}</span>;
+              </div>
+            </div>
+          </div>
         </div>
-        <h2 className="font-display text-4xl font-black tracking-tight text-slate-950 dark:text-white sm:text-5xl">{title}</h2>
       </div>
-      <div className="hidden h-4 w-32 rounded-full border-2 border-slate-900 bg-yellow-300 rotate-2 dark:border-white sm:block" />
+
+      <div className="absolute -bottom-5 left-5 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-lg dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex items-center gap-3">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+            <Code2 className="h-4 w-4" />
+          </span>
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+              building
+            </div>
+            <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+              Real systems, not just screens.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-function InfoCard({ icon: Icon, label, value }: { icon: typeof GraduationCap; label: string; value: string }) {
-  return (
-    <div className="comic-mini-card">
-      <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-        <Icon className="h-4 w-4" />
-        {label}
-      </div>
-      <div className="font-semibold leading-relaxed text-slate-800 dark:text-slate-200">{value}</div>
-    </div>
-  );
-}
-
-function SkillCard({ group, language }: { group: (typeof SKILL_GROUPS)[number]; language: Language }) {
+function SkillCard({
+  group,
+  language,
+}: {
+  group: (typeof SKILL_GROUPS)[number];
+  language: Language;
+}) {
   const Icon = group.icon;
-  const colors = COLOR_STYLES[group.color];
+  const style = COLOR_STYLES[group.color];
 
   return (
-    <div className="comic-card group h-full p-6">
-      <div className="mb-5 flex items-center gap-3">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border-[3px] border-slate-900 ${colors.iconBg} transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110`}>
-          <Icon className={`h-6 w-6 ${colors.text}`} />
+    <article className="group rounded-[26px] border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-slate-900/80 dark:hover:border-slate-700">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div
+            className={`mb-4 flex h-11 w-11 items-center justify-center rounded-2xl ${style.bg}`}
+          >
+            <Icon className={`h-5 w-5 ${style.text}`} />
+          </div>
+
+          <h3 className="font-display text-xl font-black text-slate-950 dark:text-white">
+            {group.label[language]}
+          </h3>
         </div>
-        <h3 className="font-display text-xl font-black text-slate-900 dark:text-white">{group.label[language]}</h3>
+
+        <span
+          className={`mt-2 h-2.5 w-2.5 rounded-full ${style.dot} opacity-70`}
+        />
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="mt-5 flex flex-wrap gap-2">
         {group.items.map((item) => (
-          <span key={item} className={`skill-pill ${colors.soft} ${colors.border}`}>
+          <span
+            key={item}
+            className={`rounded-xl border px-3 py-1.5 text-xs font-semibold ${style.soft} ${style.border} ${style.text}`}
+          >
             {item}
           </span>
         ))}
       </div>
-    </div>
+    </article>
   );
 }
 
-function ProjectCard({ project, language }: { project: (typeof PROJECTS)[number]; language: Language }) {
+function ProjectCard({
+  project,
+  language,
+}: {
+  project: (typeof PROJECTS)[number];
+  language: Language;
+}) {
   const [open, setOpen] = useState(false);
-  const styles = COLOR_STYLES[project.accent];
+  const style = COLOR_STYLES[project.accent];
 
   return (
-    <article className="comic-project-card group">
-      <div className="absolute -right-2 -top-5 rotate-6 rounded-full border-[3px] border-slate-900 bg-yellow-300 px-4 py-2 font-display text-sm font-black shadow-[4px_4px_0_#0f172a] transition-transform duration-300 group-hover:rotate-12 dark:border-white">
-        {project.icon}
-      </div>
+    <article className="relative overflow-hidden rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_14px_40px_rgba(15,23,42,0.05)] dark:border-slate-800 dark:bg-slate-900/80 sm:p-8">
+      <div
+        className={`absolute inset-x-0 top-0 h-1 ${style.dot}`}
+        aria-hidden="true"
+      />
 
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0">
-          <div className="mb-2 flex items-center gap-2">
-            <span className="rounded-full border-2 border-slate-900 bg-white px-3 py-1 text-xs font-black text-slate-700 shadow-[2px_2px_0_#0f172a] dark:border-white dark:bg-slate-900 dark:text-white">
-              {project.nameAr}
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <div className="max-w-3xl">
+          <div className="mb-3 flex items-center gap-3">
+            <span className="font-mono text-xs font-bold text-slate-400">
+              {project.number}
+            </span>
+
+            <span
+              className={`rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${style.soft} ${style.border} ${style.text}`}
+            >
+              {project.slug}
             </span>
           </div>
 
-          <h3 className="font-display text-2xl font-black text-slate-950 dark:text-white sm:text-3xl">{project.name[language]}</h3>
-          <p className="mt-4 max-w-3xl leading-7 text-slate-600 dark:text-slate-300">{project.description[language]}</p>
+          <h3 className="font-display text-2xl font-black tracking-tight text-slate-950 dark:text-white sm:text-3xl">
+            {project.name[language]}
+          </h3>
+
+          <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
+            {project.description[language]}
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {project.stack.map((item) => (
+              <span
+                key={item}
+                className="rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
 
-        <a href={project.link} target="_blank" rel="noopener noreferrer" className={`comic-button shrink-0 ${styles.iconBg}`}>
-          {language === "en" ? "Live demo" : "تجربة المشروع"}
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 dark:bg-white dark:text-slate-950"
+        >
+          {language === "en" ? "Open project" : "فتح المشروع"}
           <ExternalLink className="h-4 w-4" />
         </a>
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-2">
-        {project.stack.map((item) => (
-          <span key={item} className="stack-tag">{item}</span>
-        ))}
-      </div>
+      <div className="mt-7 border-t border-slate-200 pt-5 dark:border-slate-800">
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          className="flex items-center gap-2 text-sm font-bold text-slate-700 transition-colors hover:text-slate-950 dark:text-slate-300 dark:hover:text-white"
+          aria-expanded={open}
+        >
+          {open
+            ? language === "en"
+              ? "Hide implementation details"
+              : "إخفاء تفاصيل التنفيذ"
+            : language === "en"
+              ? "View implementation details"
+              : "عرض تفاصيل التنفيذ"}
 
-      <button
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        className="mt-6 flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-4 py-2 font-display text-xs font-black text-slate-900 shadow-[3px_3px_0_#0f172a] transition-all hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#0f172a] dark:border-white dark:bg-slate-900 dark:text-white"
-      >
-        {open ? (language === "en" ? "hide details" : "إخفاء التفاصيل") : language === "en" ? "show details" : "عرض التفاصيل"}
-        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
-      </button>
+          <ChevronDown
+            className={`h-4 w-4 transition-transform duration-300 ${
+              open ? "rotate-180" : ""
+            }`}
+          />
+        </button>
 
-      <div className={`grid transition-[grid-template-rows,opacity] duration-300 ${open ? "mt-5 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
-        <div className="overflow-hidden">
-          <ul className="space-y-3 border-t-2 border-dashed border-slate-300 pt-5 dark:border-slate-700">
-            {project.highlights[language].map((highlight) => (
-              <li key={highlight} className="flex gap-3 leading-6 text-slate-600 dark:text-slate-300">
-                <span className={`mt-2 h-3 w-3 shrink-0 rounded-full border-2 border-slate-900 ${styles.iconBg} dark:border-white`} />
-                {highlight}
-              </li>
-            ))}
-          </ul>
+        <div
+          className={`grid transition-[grid-template-rows,opacity] duration-300 ${
+            open
+              ? "mt-5 grid-rows-[1fr] opacity-100"
+              : "grid-rows-[0fr] opacity-0"
+          }`}
+        >
+          <div className="overflow-hidden">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {project.highlights[language].map((highlight) => (
+                <div
+                  key={highlight}
+                  className="flex gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50"
+                >
+                  <span
+                    className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${style.dot}`}
+                  />
+                  <span className="text-sm leading-6 text-slate-600 dark:text-slate-400">
+                    {highlight}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </article>
   );
 }
 
-function ContactCard({ language }: { language: Language }) {
+function InfoCard({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}) {
   return (
-    <div className="comic-window overflow-hidden">
-      <div className="flex items-center gap-2 border-b-[3px] border-slate-900 bg-slate-100 px-5 py-3 dark:border-white dark:bg-slate-800">
-        <span className="h-3 w-3 rounded-full bg-red-400" />
-        <span className="h-3 w-3 rounded-full bg-yellow-300" />
-        <span className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-3 font-mono text-xs text-slate-500 dark:text-slate-300">contact.json</span>
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/80">
+      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
+        <Icon className="h-4 w-4" />
+        {label}
       </div>
 
-      <pre className="overflow-x-auto p-6 font-mono text-xs leading-7 text-slate-600 dark:text-slate-300 sm:text-sm">
+      <div className="mt-3 text-sm font-semibold leading-6 text-slate-800 dark:text-slate-200">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function ContactCode({ language }: { language: Language }) {
+  return (
+    <div className="overflow-hidden rounded-[28px] border border-slate-800 bg-[#09111f] shadow-[0_20px_60px_rgba(15,23,42,0.12)]">
+      <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+          <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
+          <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+        </div>
+
+        <span className="font-mono text-[11px] text-slate-500">
+          contact.json
+        </span>
+      </div>
+
+      <pre className="overflow-x-auto p-6 font-mono text-xs leading-8 text-slate-300 sm:text-sm">
 {`{
   "name": "Youssef Yasser",
-  "role": "${language === "en" ? "Backend-First Fullstack Dev" : "Fullstack Developer — Backend First"}",
+  "role": "${
+    language === "en"
+      ? "Backend-first Fullstack Developer"
+      : "Fullstack Developer — Backend First"
+  }",
   "location": "Giza, Egypt",
-  "available_for": [
-    "remote roles",
-    "internships"
-  ],
-  "cv": "/cvv.pdf"
+  "open_to": ["junior roles", "internships"],
+  "github": "github.com/Youssefsea",
+  "linkedin": "linkedin.com/in/youssef-yasser"
 }`}
       </pre>
     </div>
@@ -521,23 +808,35 @@ export default function Portfolio() {
   const isArabic = language === "ar";
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem("portfolio-theme") as Theme | null;
-    const savedLanguage = window.localStorage.getItem("portfolio-language") as Language | null;
+    const savedTheme = window.localStorage.getItem(
+      "portfolio-theme",
+    ) as Theme | null;
 
-    if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
-    if (savedLanguage === "en" || savedLanguage === "ar") setLanguage(savedLanguage);
+    const savedLanguage = window.localStorage.getItem(
+      "portfolio-language",
+    ) as Language | null;
+
+    if (savedTheme === "light" || savedTheme === "dark") {
+      setTheme(savedTheme);
+    }
+
+    if (savedLanguage === "en" || savedLanguage === "ar") {
+      setLanguage(savedLanguage);
+    }
   }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
+
     window.localStorage.setItem("portfolio-theme", theme);
   }, [theme]);
 
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = isArabic ? "rtl" : "ltr";
+
     window.localStorage.setItem("portfolio-language", language);
   }, [isArabic, language]);
 
@@ -547,11 +846,15 @@ export default function Portfolio() {
     const updateScroll = () => {
       const doc = document.documentElement;
       const scrollTop = doc.scrollTop || document.body.scrollTop;
-      const scrollHeight = (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
-      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      const scrollHeight =
+        (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
+
+      const progress =
+        scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
 
       setScrollProgress(progress);
-      setShowTop(scrollTop > 500);
+      setShowTop(scrollTop > 600);
+
       ticking = false;
     };
 
@@ -564,368 +867,955 @@ export default function Portfolio() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     updateScroll();
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const sections = NAV_LINKS
-      .map((item) => document.getElementById(item.id))
-      .filter((section): section is HTMLElement => section !== null);
+    const sections = NAV_LINKS.map((item) =>
+      document.getElementById(item.id),
+    ).filter((section): section is HTMLElement => section !== null);
 
-    if (sections.length === 0) return;
+    if (!sections.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visibleEntries = entries
+        const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
-        if (visibleEntries[0]) setActiveSection(visibleEntries[0].target.id);
+        if (visible[0]) {
+          setActiveSection(visible[0].target.id);
+        }
       },
-      { rootMargin: "-28% 0px -58% 0px", threshold: [0, 0.15, 0.3, 0.5] },
+      {
+        rootMargin: "-24% 0px -60% 0px",
+        threshold: [0, 0.15, 0.3, 0.5],
+      },
     );
 
     sections.forEach((section) => observer.observe(section));
+
     return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id: string) => {
     setMenuOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(EMAIL);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+
+      window.setTimeout(() => {
+        setCopied(false);
+      }, 1800);
     } catch {
-      // Clipboard may be unavailable.
+      // Clipboard can be unavailable in some environments.
     }
   };
 
-  const toggleLanguage = () => setLanguage((value) => (value === "en" ? "ar" : "en"));
-  const toggleTheme = () => setTheme((value) => (value === "light" ? "dark" : "light"));
-
-  const sectionTitles = {
-    about: language === "en" ? "about" : "من أنا",
-    skills: language === "en" ? "stack" : "التقنيات",
-    projects: language === "en" ? "projects" : "المشاريع",
-    experience: language === "en" ? "experience" : "الخبرة",
-    contact: language === "en" ? "contact" : "تواصل",
+  const sectionContent = {
+    about: {
+      en: {
+        title: "A backend-first developer who also ships the UI.",
+        description:
+          "I like working from the system outward: architecture, APIs, data, authentication, then the interface users actually touch.",
+      },
+      ar: {
+        title: "مطور Fullstack بتركيز Backend وبيطلع الواجهة كمان.",
+        description:
+          "بحب أبدأ من جوه السيستم: architecture وAPIs وdatabase وauthentication، وبعدها أبني الواجهة اللي المستخدم بيتعامل معاها.",
+      },
+    },
+    skills: {
+      en: {
+        title: "The stack I actually build with.",
+        description:
+          "A practical stack focused on backend engineering, databases, modern React applications, and real application logic.",
+      },
+      ar: {
+        title: "الـstack اللي بستخدمه فعليًا.",
+        description:
+          "Stack عملي مركز على الـbackend والـdatabases وتطبيقات React الحديثة والـapplication logic الحقيقي.",
+      },
+    },
+    projects: {
+      en: {
+        title: "Projects built around real logic.",
+        description:
+          "Not landing-page demos. These projects focus on authentication, transactions, booking, geolocation, payments, and data flows.",
+      },
+      ar: {
+        title: "مشاريع مبنية على logic حقيقي.",
+        description:
+          "مش مجرد landing pages؛ المشاريع هنا فيها authentication وtransactions وbooking وgeolocation وpayment flows.",
+      },
+    },
+    experience: {
+      en: {
+        title: "Experience that got me closer to real systems.",
+        description:
+          "My practical experience so far includes an IT internship and hands-on application development across backend and fullstack projects.",
+      },
+      ar: {
+        title: "خبرة عملية قربتني من السيستم الحقيقي.",
+        description:
+          "خبرتي العملية حاليًا تشمل تدريب IT بجانب بناء مشاريع Fullstack وBackend بشكل مستمر.",
+      },
+    },
+    contact: {
+      en: {
+        title: "Let's talk about the work.",
+        description:
+          "Open to junior opportunities, internships, and serious software projects.",
+      },
+      ar: {
+        title: "خلينا نتكلم عن الشغل.",
+        description:
+          "متاح لفرص Junior وInternships والمشاريع البرمجية الجادة.",
+      },
+    },
   };
 
   return (
-    <div className={`relative min-h-screen overflow-x-hidden bg-[#fffdf8] text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white ${isArabic ? "font-arabic" : ""}`}>
+    <div
+      className={`min-h-screen overflow-x-hidden bg-[#f7f8f5] text-slate-900 transition-colors duration-300 dark:bg-[#050816] dark:text-white ${
+        isArabic ? "font-arabic" : ""
+      }`}
+    >
       <style jsx global>{`
-        html { scroll-behavior: smooth; }
-        body { margin: 0; background: #fffdf8; }
-        html[data-theme="dark"] body { background: #020617; }
-        ::selection { background: #fde68a; color: #0f172a; }
-        .font-arabic { font-family: Tahoma, Arial, sans-serif; }
-        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
-        .reveal-visible { opacity: 1; transform: translateY(0); }
-        .animate-soft-float { animation: softFloat 7s ease-in-out infinite; }
-        .animate-twinkle { animation: twinkle 2.8s ease-in-out infinite; }
-        @keyframes softFloat { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(0,-14px,0) scale(1.035); } }
-        @keyframes twinkle { 0%,100% { opacity: .15; transform: scale(.7); } 50% { opacity: .9; transform: scale(1); } }
-        @media (prefers-reduced-motion: reduce) {
-          html { scroll-behavior: auto; }
-          .animate-soft-float, .animate-twinkle { animation: none !important; }
-          .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+        :root {
+          --header-height: 88px;
         }
-        html[data-theme="dark"] .dark-grid {
-          background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+
+        html {
+          scroll-behavior: smooth;
+        }
+
+        body {
+          margin: 0;
+          background: #f7f8f5;
+        }
+
+        html[data-theme="dark"] body {
+          background: #050816;
+        }
+
+        ::selection {
+          background: #a7f3d0;
+          color: #0f172a;
+        }
+
+        .font-arabic {
+          font-family:
+            Tahoma,
+            Arial,
+            sans-serif;
+        }
+
+        .font-display {
+          font-family:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+        }
+
+        .site-grid {
+          background-image:
+            linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+            linear-gradient(
+              90deg,
+              rgba(15, 23, 42, 0.035) 1px,
+              transparent 1px
+            );
+          background-size: 32px 32px;
+        }
+
+        html[data-theme="dark"] .site-grid {
+          background-image:
+            linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(
+              90deg,
+              rgba(255, 255, 255, 0.025) 1px,
+              transparent 1px
+            );
+        }
+
+        .reveal {
+          opacity: 0;
+          transform: translateY(20px);
+          transition:
+            opacity 0.65s ease,
+            transform 0.65s ease;
+        }
+
+        .reveal-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .nav-link {
+          position: relative;
+          padding: 8px 0;
+          font-size: 13px;
+          font-weight: 700;
+          color: rgb(100 116 139);
+          transition: color 0.2s ease;
+        }
+
+        .nav-link::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 2px;
+          border-radius: 999px;
+          background: rgb(15 23 42);
+          transform: scaleX(0);
+          transform-origin: center;
+          transition: transform 0.2s ease;
+        }
+
+        .nav-link:hover {
+          color: rgb(15 23 42);
+        }
+
+        .nav-link-active {
+          color: rgb(15 23 42);
+        }
+
+        .nav-link-active::after {
+          transform: scaleX(1);
+        }
+
+        html[data-theme="dark"] .nav-link {
+          color: rgb(148 163 184);
+        }
+
+        html[data-theme="dark"] .nav-link:hover,
+        html[data-theme="dark"] .nav-link-active {
+          color: white;
+        }
+
+        html[data-theme="dark"] .nav-link::after {
+          background: white;
+        }
+
+        .top-action,
+        .social-button,
+        .mobile-menu-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid rgb(226 232 240);
+          background: white;
+          color: rgb(51 65 85);
+          transition:
+            transform 0.2s ease,
+            border-color 0.2s ease,
+            background 0.2s ease;
+        }
+
+        .top-action {
+          min-height: 38px;
+          gap: 7px;
+          border-radius: 12px;
+          padding: 0 11px;
+          font-size: 11px;
+          font-weight: 800;
+        }
+
+        .social-button,
+        .mobile-menu-button {
+          height: 38px;
+          width: 38px;
+          border-radius: 12px;
+        }
+
+        .top-action:hover,
+        .social-button:hover,
+        .mobile-menu-button:hover {
+          transform: translateY(-1px);
+          border-color: rgb(203 213 225);
+          background: rgb(248 250 252);
+        }
+
+        html[data-theme="dark"] .top-action,
+        html[data-theme="dark"] .social-button,
+        html[data-theme="dark"] .mobile-menu-button {
+          border-color: rgb(51 65 85);
+          background: rgb(15 23 42);
+          color: rgb(226 232 240);
+        }
+
+        html[data-theme="dark"] .top-action:hover,
+        html[data-theme="dark"] .social-button:hover,
+        html[data-theme="dark"] .mobile-menu-button:hover {
+          border-color: rgb(71 85 105);
+          background: rgb(30 41 59);
+        }
+
+        .terminal-cursor {
+          display: inline-block;
+          width: 8px;
+          height: 18px;
+          margin-left: 3px;
+          vertical-align: middle;
+          background: rgb(52 211 153);
+          animation: terminalBlink 1s steps(2, start) infinite;
+        }
+
+        @keyframes terminalBlink {
+          50% {
+            opacity: 0;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          html {
+            scroll-behavior: auto;
+          }
+
+          .reveal {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+          }
+
+          .terminal-cursor {
+            animation: none !important;
+          }
         }
       `}</style>
 
-      <FloatingBackground />
+      <div className="site-grid pointer-events-none fixed inset-0 z-0 opacity-70" />
 
-      <div className="fixed left-0 right-0 top-0 z-[100] h-1.5 bg-slate-900/10 dark:bg-white/10">
-        <div className="h-full rounded-r-full bg-gradient-to-r from-green-400 via-blue-500 to-purple-500" style={{ width: `${scrollProgress}%`, transition: "width 120ms linear" }} />
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-1 bg-slate-900/5 dark:bg-white/5">
+        <div
+          className="h-full rounded-r-full bg-gradient-to-r from-emerald-400 via-blue-500 to-violet-500"
+          style={{
+            width: `${scrollProgress}%`,
+            transition: "width 120ms linear",
+          }}
+        />
       </div>
 
-      <header className="fixed left-0 right-0 top-1.5 z-50 px-4 pt-3 sm:px-6">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-3xl border-[3px] border-slate-900 bg-white/90 px-3 py-3 shadow-[6px_6px_0_rgba(15,23,42,0.12)] backdrop-blur-md dark:border-white dark:bg-slate-900/90 dark:shadow-[6px_6px_0_rgba(255,255,255,0.06)] sm:px-5">
-          <button type="button" onClick={() => scrollTo("hero")} className="group flex items-center gap-2 font-display text-lg font-black tracking-tight text-slate-950 dark:text-white">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl border-[2px] border-slate-900 bg-yellow-300 transition-transform group-hover:-rotate-6 dark:border-white">Y</span>
-            <span className="hidden sm:inline">~/youssef</span>
+      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-2xl border border-slate-200/90 bg-white/85 px-3 py-3 shadow-[0_10px_35px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/85 dark:shadow-[0_10px_35px_rgba(0,0,0,0.22)] sm:px-5">
+          <button
+            type="button"
+            onClick={() => scrollTo("hero")}
+            className="flex items-center gap-3"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-950 text-sm font-black text-white dark:bg-white dark:text-slate-950">
+              YY
+            </span>
+
+            <span className="hidden text-sm font-black tracking-tight text-slate-950 dark:text-white sm:inline">
+              Youssef Yasser
+            </span>
           </button>
 
-          <div className="hidden items-center gap-5 lg:flex">
+          <div className="hidden items-center gap-7 lg:flex">
             {NAV_LINKS.map((link) => (
-              <button key={link.id} type="button" onClick={() => scrollTo(link.id)} className={`nav-link ${activeSection === link.id ? "nav-link-active" : ""}`}>
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => scrollTo(link.id)}
+                className={`nav-link ${
+                  activeSection === link.id ? "nav-link-active" : ""
+                }`}
+              >
                 {link[language]}
               </button>
             ))}
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button type="button" onClick={toggleLanguage} className="top-action" aria-label="Toggle language">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() =>
+                setLanguage((value) => (value === "en" ? "ar" : "en"))
+              }
+              className="top-action"
+              aria-label="Toggle language"
+            >
               <Languages className="h-4 w-4" />
               <span>{language === "en" ? "AR" : "EN"}</span>
             </button>
 
-            <button type="button" onClick={toggleTheme} className="top-action" aria-label="Toggle theme">
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            <button
+              type="button"
+              onClick={() =>
+                setTheme((value) => (value === "light" ? "dark" : "light"))
+              }
+              className="top-action px-2.5"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? (
+                <Moon className="h-4 w-4" />
+              ) : (
+                <Sun className="h-4 w-4" />
+              )}
             </button>
 
-            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="social-button hidden sm:flex" aria-label="GitHub">
-              <FaGithub className="h-5 w-5" />
-            </a>
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="social-button hidden sm:flex" aria-label="LinkedIn">
-              <FaLinkedin className="h-5 w-5" />
+            <a
+              href={GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-button hidden sm:inline-flex"
+              aria-label="GitHub"
+            >
+              <FaGithub className="h-4.5 w-4.5" />
             </a>
 
-            <button type="button" onClick={() => setMenuOpen((value) => !value)} className="mobile-menu-button lg:hidden" aria-label="Toggle menu" aria-expanded={menuOpen}>
-              {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <a
+              href={LINKEDIN}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-button hidden sm:inline-flex"
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin className="h-4.5 w-4.5" />
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen((value) => !value)}
+              className="mobile-menu-button lg:hidden"
+              aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+            >
+              {menuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </button>
           </div>
         </nav>
 
         {menuOpen && (
-          <div className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-3xl border-[3px] border-slate-900 bg-white shadow-[6px_6px_0_rgba(15,23,42,0.12)] dark:border-white dark:bg-slate-900">
-            <div className="grid grid-cols-2 gap-2 p-3">
+          <div className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_16px_40px_rgba(15,23,42,0.12)] dark:border-slate-800 dark:bg-slate-950">
+            <div className="grid grid-cols-2 gap-1 p-2">
               {NAV_LINKS.map((link) => (
-                <button key={link.id} type="button" onClick={() => scrollTo(link.id)} className={`rounded-2xl px-4 py-3 text-left font-display text-sm font-black transition-colors ${activeSection === link.id ? "bg-yellow-200 text-slate-950" : "text-slate-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"}`}>
+                <button
+                  key={link.id}
+                  type="button"
+                  onClick={() => scrollTo(link.id)}
+                  className={`rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
+                    activeSection === link.id
+                      ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
+                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900"
+                  } ${isArabic ? "text-right" : "text-left"}`}
+                >
                   {link[language]}
                 </button>
               ))}
             </div>
-            <div className="flex gap-3 border-t-[3px] border-slate-900 p-3 dark:border-white sm:hidden">
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="social-button"><FaGithub className="h-5 w-5" /></a>
-              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="social-button"><FaLinkedin className="h-5 w-5" /></a>
+
+            <div className="flex gap-2 border-t border-slate-200 p-2 dark:border-slate-800 sm:hidden">
+              <a
+                href={GITHUB}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-button"
+              >
+                <FaGithub className="h-4.5 w-4.5" />
+              </a>
+
+              <a
+                href={LINKEDIN}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-button"
+              >
+                <FaLinkedin className="h-4.5 w-4.5" />
+              </a>
             </div>
           </div>
         )}
       </header>
 
       <main className="relative z-10">
-        <section id="hero" className="mx-auto max-w-6xl scroll-mt-32 px-5 pb-20 pt-36 sm:px-8 sm:pb-28 sm:pt-40 lg:min-h-screen lg:pb-12">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <section
+          id="hero"
+          className="mx-auto max-w-6xl scroll-mt-28 px-5 pb-24 pt-36 sm:px-8 sm:pt-40 lg:min-h-screen lg:pb-20"
+        >
+          <div className="grid items-center gap-14 lg:grid-cols-[1.03fr_0.97fr]">
             <Reveal>
               <div>
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border-[3px] border-slate-900 bg-green-200 px-4 py-2 font-display text-xs font-black uppercase tracking-[0.12em] text-slate-900 shadow-[4px_4px_0_#0f172a] dark:border-white">
-                  <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-green-500" />
-                  {language === "en" ? "open to remote work" : "متاح للشغل عن بُعد"}
-                </div>
-
-                <div className="relative inline-block">
-                  <h1 className="font-display text-5xl font-black leading-[0.95] tracking-[-0.04em] text-slate-950 dark:text-white sm:text-7xl">
-                    Youssef
-                    <br />
-                    <span className="relative inline-block">
-                      Yasser
-                      <span className="absolute -bottom-2 left-0 right-0 h-4 -skew-x-12 rounded-full bg-yellow-300/80 sm:h-5" />
-                    </span>
-                  </h1>
-                  <span className="absolute -right-6 -top-5 hidden rotate-12 rounded-2xl border-[3px] border-slate-900 bg-pink-300 px-3 py-2 font-display text-xs font-black shadow-[4px_4px_0_#0f172a] dark:border-white sm:block">HELLO!</span>
-                </div>
-
-                <p className="mt-7 max-w-2xl text-lg font-medium leading-8 text-slate-600 dark:text-slate-300 sm:text-xl">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-xs font-bold text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-400">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_0_5px_rgba(52,211,153,0.12)]" />
                   {language === "en"
-                    ? "Backend-first Fullstack Developer studying Computer Science at Menoufia University. I design the systems under the hood — then build the interface on top."
-                    : "Fullstack Developer بتركيز Backend، بدرس علوم حاسب في جامعة المنوفية. ببني الأنظمة من الداخل وبعدها بطلع الواجهة فوقها."}
-                </p>
+                    ? "Open to junior roles & internships"
+                    : "متاح لفرص Junior و Internships"}
+                </div>
 
-                <div className="mt-5 flex items-center gap-2 font-display text-sm font-bold text-slate-500 dark:text-slate-400">
+                <h1 className="max-w-4xl font-display text-5xl font-black tracking-[-0.05em] text-slate-950 dark:text-white sm:text-7xl lg:text-[5.6rem] lg:leading-[0.95]">
+                  Youssef
+                  <br />
+                  <span className="bg-gradient-to-r from-slate-950 via-blue-700 to-violet-600 bg-clip-text text-transparent dark:from-white dark:via-blue-300 dark:to-violet-300">
+                    Yasser.
+                  </span>
+                </h1>
+
+                <div className="mt-6 max-w-2xl">
+                  <p className="text-xl font-semibold leading-9 text-slate-800 dark:text-slate-200 sm:text-2xl">
+                    {language === "en"
+                      ? "Backend-first Fullstack Developer."
+                      : "Fullstack Developer بتركيز Backend."}
+                  </p>
+
+                  <p className="mt-4 text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
+                    {language === "en"
+                      ? "Computer Science student at Menoufia University building real web applications with APIs, databases, authentication, business logic, and modern React interfaces."
+                      : "طالب علوم حاسب في جامعة المنوفية، ببني تطبيقات Web حقيقية فيها APIs وDatabases وAuthentication وBusiness Logic وواجهات React حديثة."}
+                  </p>
+                </div>
+
+                <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
                   <MapPin className="h-4 w-4" />
                   Giza, Egypt
                 </div>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <button type="button" onClick={() => scrollTo("projects")} className="comic-main-button bg-yellow-300">
-                    {language === "en" ? "View Projects" : "شوف المشاريع"}
-                    <ArrowDown className="h-5 w-5" />
+                  <button
+                    type="button"
+                    onClick={() => scrollTo("projects")}
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(15,23,42,0.16)] transition-transform hover:-translate-y-0.5 dark:bg-white dark:text-slate-950"
+                  >
+                    {language === "en" ? "View projects" : "شوف المشاريع"}
+                    <ArrowDown className="h-4 w-4" />
                   </button>
 
-                  <a href={CV_PATH} target="_blank" rel="noopener noreferrer" className="comic-main-button bg-white dark:bg-slate-900 dark:text-white">
+                  <a
+                    href={CV_PATH}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3.5 text-sm font-bold text-slate-800 transition-transform hover:-translate-y-0.5 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                  >
                     {language === "en" ? "View CV" : "عرض الـCV"}
-                    <Eye className="h-5 w-5" />
+                    <Eye className="h-4 w-4" />
                   </a>
 
-                  <a href={CV_PATH} download="Youssef-Yasser-CV.pdf" className="comic-main-button bg-green-200">
+                  <a
+                    href={CV_PATH}
+                    download="Youssef-Yasser-CV.pdf"
+                    className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-bold text-emerald-700 transition-transform hover:-translate-y-0.5 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-400"
+                  >
                     {language === "en" ? "Download CV" : "تحميل الـCV"}
-                    <Download className="h-5 w-5" />
+                    <Download className="h-4 w-4" />
                   </a>
                 </div>
 
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Hello Youssef - Portfolio")}`} className="hero-badge bg-blue-100 hover:-translate-y-0.5">
-                    <Mail className="h-4 w-4" />
-                    {language === "en" ? "Email me" : "ابعتلي Email"}
-                  </a>
-                  <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="hero-badge bg-pink-100 hover:-translate-y-0.5">
-                    <FaLinkedin className="h-4 w-4" />
-                    {language === "en" ? "Message on LinkedIn" : "كلمني على LinkedIn"}
-                  </a>
-                </div>
-
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <div className="hero-badge bg-purple-100"><span>⚙️</span>{language === "en" ? "Backend-first" : "Backend-first"}</div>
-                  <div className="hero-badge bg-yellow-100"><span>🧠</span>{language === "en" ? "AI Integrations" : "AI Integrations"}</div>
-                  <div className="hero-badge bg-green-100"><span>🚀</span>{language === "en" ? "Production-minded" : "Production-minded"}</div>
+                <div className="mt-7 flex flex-wrap gap-2.5">
+                  {[
+                    "Backend-first",
+                    "TypeScript",
+                    "PostgreSQL",
+                    "Next.js",
+                    "AI Integrations",
+                  ].map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
               </div>
             </Reveal>
 
-            <Reveal delay={120}>
-              <div className="space-y-7">
-                <CartoonCharacter />
-                <TerminalIntro language={language} />
+            <Reveal delay={110}>
+              <div className="space-y-8">
+                <HeroVisual />
+                <TerminalPanel language={language} />
               </div>
             </Reveal>
           </div>
         </section>
 
-        <section className="px-5 pb-10 sm:px-8">
+        <section className="px-5 pb-8 sm:px-8">
           <Reveal>
-            <div className="mx-auto grid max-w-6xl grid-cols-2 overflow-hidden rounded-[28px] border-[3px] border-slate-900 bg-white shadow-[8px_8px_0_#0f172a] dark:border-white dark:bg-slate-900 dark:shadow-[8px_8px_0_rgba(255,255,255,0.08)] sm:grid-cols-4">
+            <div className="mx-auto grid max-w-6xl grid-cols-2 overflow-hidden rounded-[26px] border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/80 sm:grid-cols-4">
               {STATS.map((stat, index) => (
-                <div key={stat.en} className={`stat-card ${index !== STATS.length - 1? "border-b-[3px] border-slate-900 sm:border-b-0 sm:border-r-[3px] dark:border-white" : ""} ${index === 1 ? "bg-blue-50 dark:bg-blue-950/40" : index === 2 ? "bg-pink-50 dark:bg-pink-950/40" : index === 3 ? "bg-purple-50 dark:bg-purple-950/40" : "bg-green-50 dark:bg-green-950/40"}`}>
-                  <div className="font-display text-4xl font-black text-slate-950 dark:text-white">{stat.value}</div>
-                  <div className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">{stat[language]}</div>
+                <div
+                  key={`${stat.value}-${stat.en}`}
+                  className={`px-5 py-6 sm:px-7 ${
+                    index < 2
+                      ? "border-b border-slate-200 sm:border-b-0"
+                      : ""
+                  } ${
+                    index % 2 === 0
+                      ? "border-r border-slate-200 sm:border-r"
+                      : ""
+                  } ${
+                    index === 3
+                      ? "sm:border-r-0"
+                      : ""
+                  } dark:border-slate-800`}
+                >
+                  <div className="font-display text-3xl font-black tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+                    {stat.value}
+                  </div>
+
+                  <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                    {stat[language]}
+                  </div>
                 </div>
               ))}
             </div>
           </Reveal>
         </section>
 
-        <section id="about" className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8">
-          <Reveal><SectionTitle number="01" title={sectionTitles.about} emoji="👋" /></Reveal>
-          <div className="grid gap-8 lg:grid-cols-[1.45fr_0.75fr]">
-            <Reveal delay={100}>
-              <div className="comic-card p-7 sm:p-9">
-                <div className="absolute -right-4 -top-5 rotate-[-7deg] rounded-xl border-[3px] border-slate-900 bg-pink-300 px-3 py-2 font-display text-xs font-black shadow-[4px_4px_0_#0f172a] dark:border-white">ABOUT ME</div>
-                <div className="space-y-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
+        <section
+          id="about"
+          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+        >
+          <Reveal>
+            <SectionTitle
+              eyebrow="01 / About"
+              title={sectionContent.about[language].title}
+              description={sectionContent.about[language].description}
+            />
+          </Reveal>
+
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+            <Reveal delay={80}>
+              <div className="rounded-[28px] border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900/80 sm:p-9">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                    <Terminal className="h-5 w-5" />
+                  </span>
+
+                  <span className="text-sm font-bold text-slate-500 dark:text-slate-400">
+                    {language === "en"
+                      ? "How I work"
+                      : "أنا بشتغل إزاي"}
+                  </span>
+                </div>
+
+                <div className="space-y-5 text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
                   <p>
                     {language === "en"
-                      ? "Junior Full Stack Web Developer focused on building real applications with strong backend logic, solid database design, and practical user interfaces. My strongest area is backend architecture, but I like owning the full path from API to UI."
-                      : "Junior Full Stack Web Developer بتركيز قوي على بناء تطبيقات حقيقية فيها Backend منظم، Database Design كويس وواجهة عملية. أقوى جزء عندي هو الـBackend، لكن بحب أمسك الرحلة كاملة من الـAPI لحد الـUI."}
+                      ? "I enjoy building applications where the backend is more than a CRUD layer: authentication, business rules, transactions, concurrency, location logic, and integrations."
+                      : "بحب أبني تطبيقات يكون فيها الـbackend أكتر من مجرد CRUD: authentication وbusiness rules وtransactions وconcurrency وlocation logic وintegrations."}
                   </p>
+
                   <p>
-                    {language === "en" ? "Right now I'm building " : "حاليًا ببني "}
-                    <span className="rounded-lg bg-yellow-200 px-2 py-1 font-bold text-slate-900">ذاكر صح</span>
-                    {language === "en" ? ", an EdTech SaaS platform connecting students with learning centers across Egypt." : "، منصة EdTech SaaS بتربط الطلاب بالمراكز التعليمية والمدرسين."}
+                    {language === "en"
+                      ? "My strongest area is backend engineering, while my fullstack experience lets me carry the same feature from API design to database to the final UI."
+                      : "أقوى جزء عندي هو الـbackend، لكن خبرتي في الـfullstack بتخليني أقدر أمسك نفس الـfeature من تصميم الـAPI للـdatabase لحد الـUI."}
                   </p>
                 </div>
               </div>
             </Reveal>
 
-            <Reveal delay={180}>
+            <Reveal delay={150}>
               <div className="space-y-4">
-                <InfoCard icon={GraduationCap} label={language === "en" ? "Education" : "التعليم"} value={language === "en" ? "B.Sc. Computer Science, Menoufia University · 2023–2027" : "بكالوريوس علوم حاسب، جامعة المنوفية · 2023–2027"} />
-                <InfoCard icon={Terminal} label={language === "en" ? "Focus" : "التركيز"} value="Backend-first Fullstack Development" />
-                <InfoCard icon={Briefcase} label={language === "en" ? "Current Goal" : "الهدف الحالي"} value={language === "en" ? "Building production-grade backend-heavy systems." : "بناء أنظمة قوية Production مع تركيز على الـBackend."} />
-                <div className="comic-mini-card flex flex-wrap gap-3">
-                  <a href={CV_PATH} target="_blank" rel="noopener noreferrer" className="mini-action"><FileText className="h-4 w-4" />{language === "en" ? "View CV" : "عرض CV"}</a>
-                  <a href={CV_PATH} download="Youssef-Yasser-CV.pdf" className="mini-action"><Download className="h-4 w-4" />{language === "en" ? "Download" : "تحميل"}</a>
+                <InfoCard
+                  icon={GraduationCap}
+                  label={language === "en" ? "Education" : "التعليم"}
+                  value={
+                    language === "en"
+                      ? "B.Sc. Computer Science — Menoufia University · Expected 2027"
+                      : "بكالوريوس علوم حاسب — جامعة المنوفية · متوقع التخرج 2027"
+                  }
+                />
+
+                <InfoCard
+                  icon={Terminal}
+                  label={language === "en" ? "Focus" : "التركيز"}
+                  value="Backend-first Fullstack Development"
+                />
+
+                <InfoCard
+                  icon={Briefcase}
+                  label={language === "en" ? "Target" : "الهدف"}
+                  value={
+                    language === "en"
+                      ? "Junior Backend / Fullstack roles"
+                      : "فرص Junior Backend / Fullstack"
+                  }
+                />
+
+                <div className="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900/80">
+                  <a
+                    href={CV_PATH}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-xs font-bold text-white dark:bg-white dark:text-slate-950"
+                  >
+                    <FileText className="h-4 w-4" />
+                    {language === "en" ? "View CV" : "عرض CV"}
+                  </a>
+
+                  <a
+                    href={CV_PATH}
+                    download="Youssef-Yasser-CV.pdf"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                  >
+                    <Download className="h-4 w-4" />
+                    {language === "en" ? "Download" : "تحميل"}
+                  </a>
                 </div>
               </div>
             </Reveal>
           </div>
         </section>
 
-        <section id="skills" className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8">
-          <Reveal><SectionTitle number="02" title={sectionTitles.skills} emoji="🧰" /></Reveal>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {SKILL_GROUPS.map((group, index) => <Reveal key={group.label.en} delay={index * 70}><SkillCard group={group} language={language} /></Reveal>)}
+        <section
+          id="skills"
+          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+        >
+          <Reveal>
+            <SectionTitle
+              eyebrow="02 / Stack"
+              title={sectionContent.skills[language].title}
+              description={sectionContent.skills[language].description}
+            />
+          </Reveal>
+
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {SKILL_GROUPS.map((group, index) => (
+              <Reveal key={group.label.en} delay={index * 60}>
+                <SkillCard group={group} language={language} />
+              </Reveal>
+            ))}
           </div>
         </section>
 
-        <section id="projects" className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8">
-          <Reveal><SectionTitle number="03" title={sectionTitles.projects} emoji="🚀" /></Reveal>
-          <div className="space-y-8">
-            {PROJECTS.map((project, index) => <Reveal key={project.name.en} delay={index * 100}><ProjectCard project={project} language={language} /></Reveal>)}
+        <section
+          id="projects"
+          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+        >
+          <Reveal>
+            <SectionTitle
+              eyebrow="03 / Projects"
+              title={sectionContent.projects[language].title}
+              description={sectionContent.projects[language].description}
+            />
+          </Reveal>
+
+          <div className="space-y-7">
+            {PROJECTS.map((project, index) => (
+              <Reveal key={project.name.en} delay={index * 90}>
+                <ProjectCard project={project} language={language} />
+              </Reveal>
+            ))}
           </div>
         </section>
 
-        <section id="experience" className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8">
-          <Reveal><SectionTitle number="04" title={sectionTitles.experience} emoji="💼" /></Reveal>
+        <section
+          id="experience"
+          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+        >
+          <Reveal>
+            <SectionTitle
+              eyebrow="04 / Experience"
+              title={sectionContent.experience[language].title}
+              description={sectionContent.experience[language].description}
+            />
+          </Reveal>
+
           <Reveal delay={100}>
-            <div className="relative overflow-hidden rounded-[34px] border-[4px] border-slate-900 bg-blue-100 p-7 shadow-[10px_10px_0_#0f172a] dark:border-white dark:bg-blue-950/50 dark:shadow-[10px_10px_0_rgba(255,255,255,0.08)] sm:p-10">
-              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full border-[4px] border-slate-900 bg-yellow-300 dark:border-white" />
-              <div className="absolute -bottom-12 -left-10 h-32 w-32 rounded-full border-[4px] border-slate-900 bg-pink-300 dark:border-white" />
-              <div className="relative z-10 flex gap-5">
-                <div className="relative flex flex-col items-center pt-2">
-                  <span className="h-6 w-6 rounded-full border-[4px] border-slate-900 bg-green-400 shadow-[3px_3px_0_#0f172a] dark:border-white" />
-                  <span className="mt-2 w-[4px] flex-1 rounded-full bg-slate-900/20 dark:bg-white/15" />
+            <article className="overflow-hidden rounded-[30px] border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/80">
+              <div className="grid lg:grid-cols-[220px_1fr]">
+                <div className="border-b border-slate-200 bg-slate-50 p-7 dark:border-slate-800 dark:bg-slate-950/60 lg:border-b-0 lg:border-r">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
+                    <Briefcase className="h-6 w-6" />
+                  </div>
+
+                  <div className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
+                    Internship
+                  </div>
+
+                  <div className="mt-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                    Egypt
+                  </div>
                 </div>
-                <div>
-                  <div className="mb-2 inline-flex rounded-full border-[2px] border-slate-900 bg-white px-3 py-1 font-display text-xs font-black shadow-[3px_3px_0_#0f172a] dark:border-white dark:bg-slate-900 dark:text-white">Gulf of Suez Petroleum Company</div>
-                  <h3 className="font-display text-2xl font-black text-slate-950 dark:text-white sm:text-3xl">IT Intern — GUPCO</h3>
-                  <p className="mt-2 font-mono text-sm font-semibold text-slate-500 dark:text-slate-400">Egypt</p>
-                  <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+
+                <div className="p-7 sm:p-9">
+                  <div className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400">
+                    Gulf of Suez Petroleum Company
+                  </div>
+
+                  <h3 className="font-display text-2xl font-black tracking-tight text-slate-950 dark:text-white sm:text-3xl">
+                    IT Intern — GUPCO
+                  </h3>
+
+                  <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
                     {language === "en"
-                      ? "Selected for an IT internship at a major petroleum enterprise, working across backend development, database architecture, and enterprise infrastructure workflows."
-                      : "تم اختياري لتدريب IT في شركة بترول كبيرة، مع exposure على Backend Development وDatabase Architecture وEnterprise Infrastructure workflows."}
+                      ? "Practical exposure to IT workflows inside a large enterprise environment, alongside continued hands-on work in backend development, databases, and fullstack applications."
+                      : "تعرض عملي لبيئة IT داخل مؤسسة كبيرة، بجانب الاستمرار في بناء مشاريع Backend وDatabases وFullstack بشكل عملي."}
                   </p>
+
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {[
+                      "Backend",
+                      "Databases",
+                      "IT Operations",
+                      "Enterprise Environment",
+                    ].map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            </article>
           </Reveal>
         </section>
 
-        <section id="contact" className="mx-auto max-w-6xl scroll-mt-32 px-5 py-24 sm:px-8">
-          <Reveal><SectionTitle number="05" title={sectionTitles.contact} emoji="📬" /></Reveal>
-          <div className="grid gap-8 lg:grid-cols-2">
+        <section
+          id="contact"
+          className="mx-auto max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8"
+        >
+          <Reveal>
+            <SectionTitle
+              eyebrow="05 / Contact"
+              title={sectionContent.contact[language].title}
+              description={sectionContent.contact[language].description}
+            />
+          </Reveal>
+
+          <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
             <Reveal delay={100}>
-              <div className="comic-card p-7 sm:p-9">
-                <div className="mb-6 inline-flex rotate-[-3deg] rounded-xl border-[3px] border-slate-900 bg-green-300 px-4 py-2 font-display text-xs font-black shadow-[4px_4px_0_#0f172a] dark:border-white">LET&apos;S BUILD</div>
-                <h3 className="max-w-xl font-display text-3xl font-black leading-tight text-slate-950 dark:text-white sm:text-4xl">
-                  {language === "en" ? "Let's build something that runs in production." : "تعالى نبني حاجة شغالة فعلًا في Production."}
+              <div className="rounded-[30px] border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900/80 sm:p-9">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">
+                    <Mail className="h-5 w-5" />
+                  </div>
+
+                  <div>
+                    <div className="text-sm font-bold text-slate-950 dark:text-white">
+                      {language === "en" ? "Get in touch" : "تواصل معايا"}
+                    </div>
+                    <div className="mt-1 text-xs text-slate-400">
+                      {EMAIL}
+                    </div>
+                  </div>
+                </div>
+
+                <h3 className="mt-7 max-w-xl font-display text-3xl font-black tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+                  {language === "en"
+                    ? "Have a role, project, or backend-heavy problem?"
+                    : "عندك شغل أو مشروع أو مشكلة Backend؟"}
                 </h3>
-                <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-                  {language === "en" ? "Open to remote roles and internships. If you have a backend-heavy problem — or just want to talk system design — my inbox is open." : "متاح لفرص Remote وInternships. لو عندك مشكلة Backend أو حابب نتكلم في System Design، ابعتلي."}
+
+                <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-400">
+                  {language === "en"
+                    ? "Email is the fastest way to reach me. You can also find my work and profile below."
+                    : "الإيميل أسرع طريقة للتواصل معايا، وتقدر كمان تشوف شغلي وحساباتي من الروابط اللي تحت."}
                 </p>
 
                 <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                  <a href={`mailto:${EMAIL}?subject=${encodeURIComponent("Hello Youssef - Portfolio")}`} className="contact-action bg-blue-100">
-                    <Mail className="h-5 w-5" />
-                    {language === "en" ? "Send me an Email" : "ابعتلي Email"}
+                  <a
+                    href={`mailto:${EMAIL}?subject=${encodeURIComponent(
+                      "Hello Youssef - Portfolio",
+                    )}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3.5 text-sm font-bold text-white dark:bg-white dark:text-slate-950"
+                  >
+                    <Mail className="h-4 w-4" />
+                    {language === "en" ? "Send Email" : "ابعت Email"}
                   </a>
-                  <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-action bg-pink-100">
-                    <FaLinkedin className="h-5 w-5" />
-                    {language === "en" ? "Message on LinkedIn" : "كلمني على LinkedIn"}
-                  </a>
-                  <a href={CV_PATH} target="_blank" rel="noopener noreferrer" className="contact-action bg-yellow-100">
-                    <Eye className="h-5 w-5" />
-                    {language === "en" ? "View CV" : "شوف الـCV"}
-                  </a>
-                  <a href={CV_PATH} download="Youssef-Yasser-CV.pdf" className="contact-action bg-green-100">
-                    <Download className="h-5 w-5" />
-                    {language === "en" ? "Download CV" : "حمّل الـCV"}
+
+                  <a
+                    href={LINKEDIN}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                  >
+                    <FaLinkedin className="h-4 w-4" />
+                    LinkedIn
                   </a>
                 </div>
 
-                <div className="mt-7 space-y-3">
-                  <button type="button" onClick={copyEmail} className="contact-link">
-                    <Mail className="h-5 w-5" />
-                    {EMAIL}
-                    {copied ? <Check className="ml-auto h-5 w-5 text-green-500" /> : <Copy className="ml-auto h-5 w-5 opacity-40" />}
+                <div className="mt-8 space-y-2.5">
+                  <button
+                    type="button"
+                    onClick={copyEmail}
+                    className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900"
+                  >
+                    <Mail className="h-4 w-4 shrink-0 text-slate-400" />
+                    <span className="truncate">{EMAIL}</span>
+                    {copied ? (
+                      <Check className="ml-auto h-4 w-4 shrink-0 text-emerald-500" />
+                    ) : (
+                      <Copy className="ml-auto h-4 w-4 shrink-0 text-slate-400" />
+                    )}
                   </button>
-                  <a href={`tel:${PHONE.replaceAll(" ", "")}`} className="contact-link"><Phone className="h-5 w-5" />{PHONE}</a>
-                  <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="contact-link"><FaGithub className="h-5 w-5" />github.com/Youssefsea</a>
-                  <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-link"><FaLinkedin className="h-5 w-5" />linkedin.com/in/youssef-yasser</a>
+
+                  <a
+                    href={`tel:${PHONE.replaceAll(" ", "")}`}
+                    className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                  >
+                    <Phone className="h-4 w-4 shrink-0 text-slate-400" />
+                    {PHONE}
+                  </a>
+
+                  <a
+                    href={GITHUB}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                  >
+                    <FaGithub className="h-4 w-4 shrink-0 text-slate-400" />
+                    github.com/Youssefsea
+                  </a>
                 </div>
               </div>
             </Reveal>
 
-            <Reveal delay={180}><ContactCard language={language} /></Reveal>
+            <Reveal delay={170}>
+              <ContactCode language={language} />
+            </Reveal>
           </div>
         </section>
       </main>
 
-      <footer className="relative z-10 px-5 pb-10 sm:px-8">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 rounded-[28px] border-[3px] border-slate-900 bg-white px-6 py-5 font-mono text-xs text-slate-500 shadow-[6px_6px_0_#0f172a] dark:border-white dark:bg-slate-900 dark:text-slate-400 dark:shadow-[6px_6px_0_rgba(255,255,255,0.08)] sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 Youssef Yasser. Built with Next.js.</span>
-          <span className="flex items-center gap-2 font-black text-slate-700 dark:text-slate-200"><span className="h-3 w-3 rounded-full border-2 border-slate-900 bg-green-400 dark:border-white" />status: available</span>
+      <footer className="relative z-10 px-5 pb-8 sm:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-xs text-slate-400 dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between">
+          <span>© 2026 Youssef Yasser</span>
+
+          <div className="flex items-center gap-2 font-semibold">
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            {language === "en" ? "Open to opportunities" : "متاح للفرص"}
+          </div>
         </div>
       </footer>
 
       {showTop && (
-        <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl border-[3px] border-slate-900 bg-yellow-300 text-slate-950 shadow-[5px_5px_0_#0f172a] transition-transform hover:-translate-y-1 hover:rotate-3 dark:border-white" aria-label="Back to top">
-          <ArrowUp className="h-6 w-6" />
+        <button
+          type="button"
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            })
+          }
+          className="fixed bottom-6 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-xl bg-slate-950 text-white shadow-[0_12px_30px_rgba(15,23,42,0.18)] transition-transform hover:-translate-y-1 dark:bg-white dark:text-slate-950 sm:right-7"
+          aria-label="Back to top"
+        >
+          <ArrowUp className="h-5 w-5" />
         </button>
       )}
     </div>
