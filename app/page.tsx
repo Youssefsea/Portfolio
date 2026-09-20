@@ -911,13 +911,20 @@ export default function Portfolio() {
 
   const isArabic = language === "ar";
 
+  const headerRef = useRef<HTMLElement | null>(null);
+
   /*
-    During programmatic smooth scrolling, the active tab is locked
-    to the clicked destination. Once the destination reaches the
-    navigation anchor, normal scroll tracking takes over again.
+    Active-section navigation.
+
+    Instead of guessing from raw scrollY, we use a fixed visual
+    activation line directly below the fixed navbar.
+
+    Whichever section contains that line is considered active.
+    This makes the indicator follow the actual visible section
+    instead of randomly switching/lagging between sections.
   */
-  const programmaticTargetRef = useRef<SectionId | null>(null);
-  const programmaticTimerRef = useRef<number | null>(null);
+  const autoScrollTargetRef = useRef<SectionId | null>(null);
+  const autoScrollTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem(
@@ -961,81 +968,122 @@ export default function Portfolio() {
       document.body.scrollTop ||
       0;
 
-    const getSectionTop = (id: string) => {
-      const section = document.getElementById(id);
-      if (!section) return Number.POSITIVE_INFINITY;
+    const getActivationLine = () => {
+      const headerBottom =
+        headerRef.current?.getBoundingClientRect().bottom ?? 82;
 
-      return section.getBoundingClientRect().top + getScrollY();
+      /*
+        A little below the navbar so the active state corresponds
+        to what the user is actually looking at, not the hidden
+        area behind the navbar.
+      */
+      return Math.max(110, headerBottom + 24);
     };
 
-    const getAnchorPosition = () => {
-      const viewportAnchor = window.innerHeight * 0.2;
+    const getSection = (id: string) =>
+      document.getElementById(id) as HTMLElement | null;
 
-      return Math.min(
-        Math.max(viewportAnchor, 120),
-        180,
-      );
+    const getCurrentSection = (): SectionId => {
+      const activationLine = getActivationLine();
+
+      let closestSection: SectionId = NAV_LINKS[0].id;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      for (const link of NAV_LINKS) {
+        const section = getSection(link.id);
+        if (!section) continue;
+
+        const rect = section.getBoundingClientRect();
+
+        /*
+          Exact case:
+          the activation line is physically inside the section.
+        */
+        if (
+          rect.top <= activationLine &&
+          rect.bottom >= activationLine
+        ) {
+          return link.id;
+        }
+
+        /*
+          Fallback:
+          if we are between section boxes, use the nearest section
+          top so there is always exactly one active item.
+        */
+        const distance = Math.abs(rect.top - activationLine);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = link.id;
+        }
+      }
+
+      /*
+        At the very bottom, always make Contact active.
+      */
+      const scrollY = getScrollY();
+      const documentElement = document.documentElement;
+
+      if (
+        window.innerHeight + scrollY >=
+        documentElement.scrollHeight - 8
+      ) {
+        return NAV_LINKS[NAV_LINKS.length - 1].id;
+      }
+
+      return closestSection;
     };
 
     const updateActiveSection = () => {
-      const scrollY = getScrollY();
-      const anchor = getAnchorPosition();
-      const marker = scrollY + anchor;
+      /*
+        While clicking a navbar item and smooth-scrolling toward it,
+        keep the clicked item active instead of allowing intermediate
+        scroll events to temporarily switch it back.
+      */
+      if (autoScrollTargetRef.current) {
+        const target = getSection(autoScrollTargetRef.current);
 
-      const target = programmaticTargetRef.current;
+        if (target) {
+          const targetRect = target.getBoundingClientRect();
+          const activationLine = getActivationLine();
 
-      if (target) {
-        const targetTop = getSectionTop(target);
+          /*
+            The scroll target is positioned slightly below the
+            navbar, so once it gets close to the activation line
+            we release the temporary lock.
+          */
+          if (
+            Math.abs(targetRect.top - activationLine) <= 35
+          ) {
+            const reached = autoScrollTargetRef.current;
 
-        const reachedTarget =
-          targetTop <= marker + 48 &&
-          targetTop >= marker - 110;
+            autoScrollTargetRef.current = null;
 
-        const documentElement = document.documentElement;
-        const reachedBottom =
-          window.innerHeight + scrollY >=
-          documentElement.scrollHeight - 8;
+            if (autoScrollTimerRef.current !== null) {
+              window.clearTimeout(autoScrollTimerRef.current);
+              autoScrollTimerRef.current = null;
+            }
 
-        if (reachedTarget || reachedBottom) {
-          programmaticTargetRef.current = null;
-
-          if (programmaticTimerRef.current !== null) {
-            window.clearTimeout(programmaticTimerRef.current);
-            programmaticTimerRef.current = null;
+            setActiveSection(reached);
+            return;
           }
-        } else {
-          setActiveSection((previous) =>
-            previous === target ? previous : target,
-          );
+
+          setActiveSection(autoScrollTargetRef.current);
           return;
         }
+
+        autoScrollTargetRef.current = null;
       }
 
-      let currentSection: SectionId = NAV_LINKS[0].id;
-
-      for (const link of NAV_LINKS) {
-        const sectionTop = getSectionTop(link.id);
-
-        if (sectionTop <= marker) {
-          currentSection = link.id;
-        }
-      }
-
-      const documentElement = document.documentElement;
-      const reachedBottom =
-        window.innerHeight + scrollY >=
-        documentElement.scrollHeight - 8;
-
-      if (reachedBottom) {
-        currentSection = NAV_LINKS[NAV_LINKS.length - 1].id;
-      }
+      const current = getCurrentSection();
 
       setActiveSection((previous) =>
-        previous === currentSection ? previous : currentSection,
+        previous === current ? previous : current,
       );
     };
 
-    const handleScroll = () => {
+    const scheduleUpdate = () => {
       if (rafId) {
         cancelAnimationFrame(rafId);
       }
@@ -1043,40 +1091,37 @@ export default function Portfolio() {
       rafId = requestAnimationFrame(updateActiveSection);
     };
 
-    const handleResize = () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
+    const cancelProgrammaticLock = () => {
+      if (!autoScrollTargetRef.current) return;
+
+      autoScrollTargetRef.current = null;
+
+      if (autoScrollTimerRef.current !== null) {
+        window.clearTimeout(autoScrollTimerRef.current);
+        autoScrollTimerRef.current = null;
       }
 
-      rafId = requestAnimationFrame(updateActiveSection);
-    };
-
-    const handleUserScrollIntent = () => {
-      if (!programmaticTargetRef.current) return;
-
-      programmaticTargetRef.current = null;
-
-      if (programmaticTimerRef.current !== null) {
-        window.clearTimeout(programmaticTimerRef.current);
-        programmaticTimerRef.current = null;
-      }
-
-      handleScroll();
+      scheduleUpdate();
     };
 
     updateActiveSection();
 
-    window.addEventListener("scroll", handleScroll, {
+    window.addEventListener("scroll", scheduleUpdate, {
       passive: true,
     });
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", scheduleUpdate);
 
-    window.addEventListener("wheel", handleUserScrollIntent, {
+    /*
+      Manual user interaction cancels the temporary navigation lock.
+      This prevents the navbar from staying stuck if the user starts
+      scrolling manually while a smooth scroll is running.
+    */
+    window.addEventListener("wheel", cancelProgrammaticLock, {
       passive: true,
     });
 
-    window.addEventListener("touchstart", handleUserScrollIntent, {
+    window.addEventListener("touchstart", cancelProgrammaticLock, {
       passive: true,
     });
 
@@ -1085,14 +1130,14 @@ export default function Portfolio() {
         cancelAnimationFrame(rafId);
       }
 
-      if (programmaticTimerRef.current !== null) {
-        window.clearTimeout(programmaticTimerRef.current);
+      if (autoScrollTimerRef.current !== null) {
+        window.clearTimeout(autoScrollTimerRef.current);
       }
 
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("wheel", handleUserScrollIntent);
-      window.removeEventListener("touchstart", handleUserScrollIntent);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("wheel", cancelProgrammaticLock);
+      window.removeEventListener("touchstart", cancelProgrammaticLock);
     };
   }, []);
 
@@ -1104,7 +1149,8 @@ export default function Portfolio() {
       const scrollTop = doc.scrollTop || document.body.scrollTop;
 
       const scrollHeight =
-        (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
+        (doc.scrollHeight || document.body.scrollHeight) -
+        doc.clientHeight;
 
       const progress =
         scrollHeight > 0
@@ -1124,7 +1170,9 @@ export default function Portfolio() {
       }
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
 
     updateScroll();
 
@@ -1136,44 +1184,70 @@ export default function Portfolio() {
   const scrollTo = (id: SectionId | "hero") => {
     setMenuOpen(false);
 
+    if (autoScrollTimerRef.current !== null) {
+      window.clearTimeout(autoScrollTimerRef.current);
+      autoScrollTimerRef.current = null;
+    }
+
     if (id === "hero") {
-      programmaticTargetRef.current = null;
-
-      if (programmaticTimerRef.current !== null) {
-        window.clearTimeout(programmaticTimerRef.current);
-        programmaticTimerRef.current = null;
-      }
-
+      autoScrollTargetRef.current = null;
       setActiveSection("about");
 
       requestAnimationFrame(() => {
-        document.getElementById("hero")?.scrollIntoView({
+        window.scrollTo({
+          top: 0,
           behavior: "smooth",
-          block: "start",
         });
       });
 
       return;
     }
 
-    programmaticTargetRef.current = id;
-    setActiveSection(id);
+    const section = document.getElementById(id);
 
-    if (programmaticTimerRef.current !== null) {
-      window.clearTimeout(programmaticTimerRef.current);
+    if (!section) {
+      return;
     }
 
-    programmaticTimerRef.current = window.setTimeout(() => {
-      programmaticTargetRef.current = null;
-      programmaticTimerRef.current = null;
-    }, 1800);
+    /*
+      Activate the selected tab immediately.
+    */
+    autoScrollTargetRef.current = id;
+    setActiveSection(id);
 
-    requestAnimationFrame(() => {
-      document.getElementById(id)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+    const scrollY = window.scrollY;
+    const headerHeight =
+      headerRef.current?.getBoundingClientRect().height ?? 76;
+
+    /*
+      Position the selected section just under the fixed navbar.
+      This gives us a predictable target and makes the active
+      indicator line up with the actual section.
+    */
+    const targetTop =
+      section.getBoundingClientRect().top +
+      scrollY -
+      headerHeight -
+      24;
+
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: "smooth",
     });
+
+    /*
+      Safety fallback so the lock can never remain forever.
+    */
+    autoScrollTimerRef.current = window.setTimeout(() => {
+      const target = autoScrollTargetRef.current;
+
+      autoScrollTargetRef.current = null;
+      autoScrollTimerRef.current = null;
+
+      if (target) {
+        setActiveSection(target);
+      }
+    }, 1600);
   };
 
   const copyEmail = async () => {
@@ -1385,10 +1459,10 @@ export default function Portfolio() {
 
         .nav-link {
           position: relative;
-          padding: 10px 13px;
+          padding: 9px 13px 11px;
           border: 2px solid transparent;
           border-radius: 14px;
-          color: rgb(51 65 85);
+          color: #475569;
           font-size: 14px;
           font-weight: 900;
           transition:
@@ -1401,8 +1475,8 @@ export default function Portfolio() {
 
         .nav-link::after {
           position: absolute;
-          left: 13px;
-          right: 13px;
+          left: 12px;
+          right: 12px;
           bottom: 5px;
           height: 3px;
           content: "";
@@ -1410,19 +1484,19 @@ export default function Portfolio() {
           background: currentColor;
           transform: scaleX(0);
           transform-origin: center;
-          transition: transform 0.2s ease;
+          transition: transform 0.22s ease;
         }
 
         .nav-link:hover {
-          color: rgb(15 23 42);
-          background: rgba(241, 245, 249, 0.9);
+          color: #0f172a;
+          background: #f8fafc;
         }
 
         .nav-link-active {
-          color: rgb(15 23 42);
+          color: #0f172a;
           background: #fef3c7;
-          border-color: rgb(15 23 42);
-          box-shadow: 3px 3px 0 rgba(15, 23, 42, 0.12);
+          border-color: #0f172a;
+          box-shadow: 3px 3px 0 rgba(15, 23, 42, 0.13);
           transform: translateY(-1px);
         }
 
@@ -1431,12 +1505,12 @@ export default function Portfolio() {
         }
 
         html[data-theme="dark"] .nav-link {
-          color: rgb(226 232 240);
+          color: #cbd5e1;
         }
 
         html[data-theme="dark"] .nav-link:hover {
-          color: white;
-          background: rgba(30, 41, 59, 0.95);
+          color: #ffffff;
+          background: #111827;
         }
 
         html[data-theme="dark"] .nav-link-active {
@@ -1446,26 +1520,29 @@ export default function Portfolio() {
           box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.14);
         }
 
+        /* Theme / social buttons */
+
         .theme-button,
         .social-button,
         .mobile-menu-button {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          border: 2px solid rgb(15 23 42);
+          border: 2px solid #0f172a;
           background: white;
-          color: rgb(15 23 42);
+          color: #0f172a;
           transition:
             transform 0.25s ease,
             box-shadow 0.25s ease,
-            background 0.25s ease;
+            background 0.25s ease,
+            color 0.25s ease;
         }
 
         .theme-button {
           height: 40px;
           width: 40px;
           border-radius: 14px;
-          box-shadow: 3px 3px 0 rgb(15 23 42);
+          box-shadow: 3px 3px 0 #0f172a;
         }
 
         .social-button,
@@ -2082,7 +2159,7 @@ export default function Portfolio() {
 
         @media (max-width: 1023px) {
           .nav-link {
-            padding: 9px 10px;
+            padding: 9px 10px 11px;
             font-size: 13px;
           }
         }
@@ -2135,7 +2212,10 @@ export default function Portfolio() {
         />
       </div>
 
-      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
+      <header
+        ref={headerRef}
+        className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6"
+      >
         <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-[22px] border-2 border-slate-900 bg-white/95 px-3 py-3 shadow-[6px_7px_0_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-slate-200 dark:bg-slate-950/95 dark:shadow-[6px_7px_0_rgba(255,255,255,0.1)] sm:px-5">
           <button
             type="button"
@@ -2161,7 +2241,7 @@ export default function Portfolio() {
                   activeSection === link.id ? "nav-link-active" : ""
                 }`}
                 aria-current={
-                  activeSection === link.id ? "page" : undefined
+                  activeSection === link.id ? "location" : undefined
                 }
               >
                 {link[language]}
@@ -2534,7 +2614,6 @@ export default function Portfolio() {
                     className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-4 py-3 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:bg-slate-900 dark:text-white dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
                     <FileText className="h-4.5 w-4.5" />
-
                     {language === "en"
                       ? "View resume"
                       : "عرض السيرة الذاتية"}
@@ -2546,7 +2625,6 @@ export default function Portfolio() {
                     className="inline-flex items-center gap-2 rounded-xl border-2 border-slate-900 bg-yellow-200 px-4 py-3 text-sm font-black text-slate-950 shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
                     <Download className="h-4.5 w-4.5" />
-
                     {language === "en"
                       ? "Download resume"
                       : "تحميل السيرة الذاتية"}
@@ -2715,7 +2793,6 @@ export default function Portfolio() {
                     className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-slate-950 px-4 py-3.5 text-[15px] font-black text-white shadow-[4px_4px_0_#0f172a] dark:border-slate-200 dark:shadow-[4px_4px_0_rgba(255,255,255,0.12)]"
                   >
                     <Mail className="h-4.5 w-4.5" />
-
                     {language === "en"
                       ? "Send Email"
                       : "إرسال بريد إلكتروني"}
@@ -2802,12 +2879,21 @@ export default function Portfolio() {
       {showTop && (
         <button
           type="button"
-          onClick={() =>
+          onClick={() => {
+            autoScrollTargetRef.current = null;
+
+            if (autoScrollTimerRef.current !== null) {
+              window.clearTimeout(autoScrollTimerRef.current);
+              autoScrollTimerRef.current = null;
+            }
+
+            setActiveSection("about");
+
             window.scrollTo({
               top: 0,
               behavior: "smooth",
-            })
-          }
+            });
+          }}
           className="fixed bottom-6 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-slate-900 bg-yellow-300 text-slate-950 shadow-[5px_5px_0_#0f172a] transition-transform hover:-translate-y-1 hover:rotate-3 dark:border-slate-200 dark:shadow-[5px_5px_0_rgba(255,255,255,0.12)] sm:right-7"
           aria-label="Back to top"
         >

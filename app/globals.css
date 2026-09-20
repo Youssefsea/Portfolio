@@ -1,14 +1,38 @@
 @import "tailwindcss";
 
+/*
+  Tailwind v4:
+  The application toggles `dark` on <html>.
+  This makes every `dark:*` utility follow that class
+  instead of relying on the operating-system preference.
+*/
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #fffdf8;
   --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --border: #0f172a;
+  --muted: #475569;
+  --muted-strong: #334155;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #030712;
+  --foreground: #f8fafc;
+  --surface: #0b1220;
+  --surface-soft: #111827;
+  --border: #e2e8f0;
+  --muted: #cbd5e1;
+  --muted-strong: #e2e8f0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -19,11 +43,18 @@
 
 html {
   background: var(--background);
+  color: var(--foreground);
   scroll-behavior: smooth;
+}
+
+html[data-theme="dark"] {
+  background: #030712;
+  color: #f8fafc;
 }
 
 body {
   min-height: 100vh;
+  margin: 0;
   background:
     radial-gradient(
       circle at 20% 10%,
@@ -36,9 +67,21 @@ body {
   overflow-x: hidden;
 }
 
-/* =========================
-   Fonts
-========================= */
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(16, 185, 129, 0.08),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(59, 130, 246, 0.08),
+      transparent 24%
+    ),
+    #030712;
+  color: #f8fafc;
+}
 
 .font-display {
   font-family:
@@ -51,8 +94,20 @@ body {
     monospace;
 }
 
+.font-arabic {
+  font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
+}
+
+::selection {
+  background: #fde68a;
+  color: #0f172a;
+}
+
 /* =========================
-   Reveal Animation
+Reveal Animation
 ========================= */
 
 .reveal {
@@ -70,7 +125,7 @@ body {
 }
 
 /* =========================
-   Background
+Background
 ========================= */
 
 @keyframes soft-float {
@@ -107,7 +162,7 @@ body {
 }
 
 /* =========================
-   Navigation
+Legacy navigation helpers
 ========================= */
 
 .nav-link {
@@ -119,24 +174,10 @@ body {
     monospace;
   font-size: 0.76rem;
   font-weight: 900;
-  color: #64748b;
+  color: #475569;
   transition:
     color 180ms ease,
     transform 180ms ease;
-}
-
-.nav-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  border-radius: 999px;
-  background: #facc15;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 180ms ease;
 }
 
 .nav-link:hover {
@@ -144,13 +185,17 @@ body {
   transform: translateY(-2px);
 }
 
-.nav-link-active {
-  color: #0f172a;
+html[data-theme="dark"] .nav-link {
+  color: #cbd5e1;
 }
 
-.nav-link-active::after {
-  transform: scaleX(1);
+html[data-theme="dark"] .nav-link:hover {
+  color: #ffffff;
 }
+
+/* =========================
+Legacy buttons
+========================= */
 
 .social-button {
   display: flex;
@@ -175,21 +220,20 @@ body {
   background: #fef3c7;
 }
 
-.mobile-menu-button {
-  display: flex;
-  height: 42px;
-  width: 42px;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #0f172a;
-  border-radius: 14px;
-  background: #fff;
-  color: #0f172a;
-  box-shadow: 3px 3px 0 #0f172a;
+html[data-theme="dark"] .social-button {
+  border-color: #e2e8f0;
+  background: #111827;
+  color: #f8fafc;
+  box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.2);
+}
+
+html[data-theme="dark"] .social-button:hover {
+  background: #1e293b;
+  color: #ffffff;
 }
 
 /* =========================
-   Hero
+Hero
 ========================= */
 
 .hero-badge {
@@ -212,73 +256,32 @@ body {
     box-shadow 180ms ease;
 }
 
+html[data-theme="dark"] .hero-badge {
+  color: #f8fafc;
+  border-color: #e2e8f0;
+}
+
 .hero-badge:hover {
   transform: translateY(-3px) rotate(-2deg);
   box-shadow: 5px 5px 0 #0f172a;
 }
 
 /* =========================
-   Buttons
+Buttons
 ========================= */
 
-.comic-main-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  border: 3px solid #0f172a;
-  border-radius: 18px;
-  padding: 0.8rem 1.1rem;
-  font-family:
-    var(--font-geist-mono),
-    ui-monospace,
-    monospace;
-  font-size: 0.78rem;
-  font-weight: 900;
-  color: #0f172a;
-  box-shadow: 5px 5px 0 #0f172a;
-  transition:
-    transform 150ms ease,
-    box-shadow 150ms ease;
-}
-
-.comic-main-button:hover {
-  transform: translate(-2px, -3px) rotate(-1deg);
-  box-shadow: 8px 8px 0 #0f172a;
-}
-
-.comic-main-button:active {
-  transform: translate(2px, 2px);
-  box-shadow: 3px 3px 0 #0f172a;
-}
-
+.comic-main-button,
 .comic-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  border: 3px solid #0f172a;
-  border-radius: 16px;
-  padding: 0.7rem 1rem;
   color: #0f172a;
-  font-family:
-    var(--font-geist-mono),
-    ui-monospace,
-    monospace;
-  font-size: 0.74rem;
-  font-weight: 900;
-  box-shadow: 4px 4px 0 #0f172a;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease;
 }
 
-.comic-button:hover {
-  transform: translate(-2px, -2px) rotate(-1deg);
-  box-shadow: 6px 6px 0 #0f172a;
+html[data-theme="dark"] .comic-main-button,
+html[data-theme="dark"] .comic-button {
+  color: #f8fafc;
 }
 
 /* =========================
-   Cartoon Character
+Cartoon Character
 ========================= */
 
 .character-scene {
@@ -306,10 +309,18 @@ body {
   border: 4px solid #0f172a;
   border-radius: 18px;
   background: #fff;
+  color: #0f172a;
   font-size: 1.6rem;
   box-shadow: 5px 5px 0 #0f172a;
   animation: bubble-float 4s ease-in-out infinite;
   will-change: transform;
+}
+
+html[data-theme="dark"] .tech-bubble {
+  border-color: #e2e8f0;
+  background: #111827;
+  color: #ffffff;
+  box-shadow: 5px 5px 0 rgba(255, 255, 255, 0.16);
 }
 
 @keyframes bubble-float {
@@ -324,7 +335,7 @@ body {
 }
 
 /* =========================
-   Terminal
+Terminal
 ========================= */
 
 .anime-window {
@@ -336,11 +347,23 @@ body {
     box-shadow 220ms ease;
 }
 
+html[data-theme="dark"] .anime-window {
+  box-shadow:
+    10px 12px 0 rgba(255, 255, 255, 0.15),
+    0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
 .anime-window:hover {
   transform: translateY(-4px) rotate(-0.3deg);
   box-shadow:
     12px 16px 0 #0f172a,
     0 24px 60px rgba(15, 23, 42, 0.15);
+}
+
+html[data-theme="dark"] .anime-window:hover {
+  box-shadow:
+    12px 16px 0 rgba(255, 255, 255, 0.18),
+    0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
 .terminal-cursor {
@@ -365,7 +388,7 @@ body {
 }
 
 /* =========================
-   Section
+Section
 ========================= */
 
 .sticker-number {
@@ -378,6 +401,7 @@ body {
   border-radius: 999px;
   background: #fde68a;
   padding: 0.25rem 0.75rem;
+  color: #0f172a;
   font-family:
     var(--font-geist-mono),
     ui-monospace,
@@ -389,8 +413,22 @@ body {
 }
 
 /* =========================
-   Cards
+Cards
 ========================= */
+
+.comic-card,
+.comic-mini-card,
+.comic-project-card,
+.comic-window {
+  color: #0f172a;
+}
+
+html[data-theme="dark"] .comic-card,
+html[data-theme="dark"] .comic-mini-card,
+html[data-theme="dark"] .comic-project-card,
+html[data-theme="dark"] .comic-window {
+  color: #f8fafc;
+}
 
 .comic-card {
   position: relative;
@@ -401,6 +439,12 @@ body {
   transition:
     transform 220ms ease,
     box-shadow 220ms ease;
+}
+
+html[data-theme="dark"] .comic-card {
+  border-color: #e2e8f0;
+  background: rgba(11, 18, 32, 0.96);
+  box-shadow: 10px 10px 0 rgba(255, 255, 255, 0.12);
 }
 
 .comic-card:hover {
@@ -417,6 +461,12 @@ body {
   transition:
     transform 180ms ease,
     box-shadow 180ms ease;
+}
+
+html[data-theme="dark"] .comic-mini-card {
+  border-color: #64748b;
+  background: #111827;
+  box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.1);
 }
 
 .comic-mini-card:hover {
@@ -437,6 +487,12 @@ body {
     box-shadow 220ms ease;
 }
 
+html[data-theme="dark"] .comic-project-card {
+  border-color: #e2e8f0;
+  background: rgba(11, 18, 32, 0.96);
+  box-shadow: 10px 10px 0 rgba(255, 255, 255, 0.12);
+}
+
 .comic-project-card:hover {
   transform: translateY(-6px) rotate(0.25deg);
   box-shadow: 14px 14px 0 #0f172a;
@@ -452,13 +508,19 @@ body {
     box-shadow 220ms ease;
 }
 
+html[data-theme="dark"] .comic-window {
+  border-color: #e2e8f0;
+  background: rgba(11, 18, 32, 0.97);
+  box-shadow: 10px 10px 0 rgba(255, 255, 255, 0.12);
+}
+
 .comic-window:hover {
   transform: translateY(-4px);
   box-shadow: 13px 13px 0 #0f172a;
 }
 
 /* =========================
-   Skills
+Skills
 ========================= */
 
 .skill-pill {
@@ -476,6 +538,10 @@ body {
   transition:
     transform 150ms ease,
     filter 150ms ease;
+}
+
+html[data-theme="dark"] .skill-pill {
+  color: #e2e8f0;
 }
 
 .skill-pill:hover {
@@ -499,8 +565,14 @@ body {
   box-shadow: 2px 2px 0 rgba(15, 23, 42, 0.16);
 }
 
+html[data-theme="dark"] .stack-tag {
+  border-color: #e2e8f0;
+  background: #111827;
+  color: #f8fafc;
+}
+
 /* =========================
-   Stats
+Stats
 ========================= */
 
 .stat-card {
@@ -512,7 +584,7 @@ body {
 }
 
 /* =========================
-   Contact
+Contact
 ========================= */
 
 .contact-link {
@@ -540,14 +612,25 @@ body {
     background 180ms ease;
 }
 
+html[data-theme="dark"] .contact-link {
+  border-color: #e2e8f0;
+  background: #111827;
+  color: #f8fafc;
+  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.12);
+}
+
 .contact-link:hover {
   transform: translate(-2px, -2px);
   box-shadow: 7px 7px 0 rgba(15, 23, 42, 0.15);
   background: #fefce8;
 }
 
+html[data-theme="dark"] .contact-link:hover {
+  background: #1e293b;
+}
+
 /* =========================
-   Accessibility / Performance
+Accessibility / Performance
 ========================= */
 
 @media (prefers-reduced-motion: reduce) {
