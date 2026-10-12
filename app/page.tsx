@@ -41,6 +41,11 @@ import {
   SiTypescript,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
+import SectionTitle from "../components/SectionTitle";
+import ScrollMascot from "../components/ScrollMascot";
+import HeroDecor from "../components/HeroDecor";
+import CountUp from "../components/CountUp";
+import Tilt from "../components/Tilt";
 
 type Language = "en" | "ar";
 type Theme = "light" | "dark";
@@ -354,38 +359,6 @@ function Reveal({
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
-    </div>
-  );
-}
-
-function SectionTitle({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div className="mb-12 max-w-4xl">
-      <div className="mb-4 flex items-center gap-3">
-        <span className="h-0.5 w-12 bg-slate-600 dark:bg-slate-400" />
-
-        <span className="text-xs font-black uppercase tracking-[0.16em] text-slate-700 dark:text-slate-300 sm:text-sm">
-          {eyebrow}
-        </span>
-      </div>
-
-      <h2 className="font-display text-[2.15rem] font-black leading-[1.02] tracking-tight text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
-        {title}
-      </h2>
-
-      {description && (
-        <p className="mt-5 max-w-3xl text-[1rem] font-medium leading-7 text-slate-800 dark:text-slate-100 sm:text-xl sm:leading-9">
-          {description}
-        </p>
-      )}
     </div>
   );
 }
@@ -1268,7 +1241,9 @@ export default function Portfolio() {
         isArabic ? "font-arabic" : ""
       }`}
     >
+      <div className="section-aura" data-section={activeSection} aria-hidden="true" />
       <div className="page-grid pointer-events-none fixed inset-0 z-0 opacity-80" />
+      <ScrollMascot language={language} />
 
       <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-1.5 bg-slate-900/10 dark:bg-white/10">
         <div
@@ -1441,9 +1416,11 @@ export default function Portfolio() {
       <main className="relative z-10">
         <section
           id="hero"
-          className="mx-auto max-w-6xl scroll-mt-28 px-4 pb-14 pt-28 sm:px-8 sm:pb-20 sm:pt-36 lg:min-h-screen lg:pt-40"
+          className="relative mx-auto max-w-6xl scroll-mt-28 px-4 pb-14 pt-28 sm:px-8 sm:pb-20 sm:pt-36 lg:min-h-screen lg:pt-40"
         >
-          <div className="grid min-w-0 items-center gap-9 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
+          <HeroDecor language={language} />
+
+          <div className="relative z-10 grid min-w-0 items-center gap-9 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
             <Reveal>
               <div className="min-w-0">
                 <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border-2 border-slate-900 bg-emerald-200 px-3.5 py-2 text-[11px] font-black text-slate-950 shadow-[3px_3px_0_#0f172a] dark:border-slate-200 dark:bg-emerald-400 sm:mb-6 sm:px-4 sm:py-2.5 sm:text-sm sm:shadow-[4px_4px_0_#0f172a]">
@@ -1456,7 +1433,7 @@ export default function Portfolio() {
                   </span>
                 </div>
 
-                <h1 className="font-display text-[3.15rem] font-black leading-[0.94] tracking-[-0.06em] text-slate-950 dark:text-white sm:text-7xl lg:text-[5.7rem]">
+                <h1 className="hero-title font-display text-[3.15rem] font-black leading-[0.94] tracking-[-0.06em] text-slate-950 dark:text-white sm:text-7xl lg:text-[5.7rem]">
                   Youssef
                   <br />
 
@@ -1568,7 +1545,7 @@ export default function Portfolio() {
                   } dark:border-slate-200`}
                 >
                   <div className="font-display text-3xl font-black text-slate-950 dark:text-white sm:text-5xl">
-                    {stat.value}
+                    <CountUp value={stat.value} />
                   </div>
 
                   <div className="mt-1.5 break-words text-[10px] font-black uppercase tracking-[0.1em] text-slate-700 dark:text-slate-300 sm:mt-2 sm:text-sm">
@@ -1722,7 +1699,9 @@ export default function Portfolio() {
           <div className="grid min-w-0 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
             {SKILL_GROUPS.map((group, index) => (
               <Reveal key={group.label.en} delay={index * 65}>
-                <SkillCard group={group} language={language} />
+                <Tilt max={5}>
+                  <SkillCard group={group} language={language} />
+                </Tilt>
               </Reveal>
             ))}
           </div>
@@ -1743,7 +1722,9 @@ export default function Portfolio() {
           <div className="min-w-0 space-y-5 sm:space-y-7">
             {PROJECTS.map((project, index) => (
               <Reveal key={project.name.en} delay={index * 90}>
-                <ProjectCard project={project} language={language} />
+                <Tilt max={2}>
+                  <ProjectCard project={project} language={language} />
+                </Tilt>
               </Reveal>
             ))}
           </div>
