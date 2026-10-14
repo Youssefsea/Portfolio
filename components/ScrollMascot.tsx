@@ -53,6 +53,8 @@ function MascotSvg({ pose }: { pose: Pose }) {
         />
         <path d="M92 130 L90 152" stroke="#dbeafe" strokeWidth="3" strokeLinecap="round" />
         <path d="M108 130 L110 152" stroke="#dbeafe" strokeWidth="3" strokeLinecap="round" />
+        <path d="M78 151 Q100 160 122 151" fill="none" stroke="#dbeafe" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+        <path d="M84 157 L84 166 M116 157 L116 166" stroke="#dbeafe" strokeWidth="2" strokeLinecap="round" opacity="0.55" />
 
         {/* laptop */}
         <rect x="66" y="164" width="68" height="40" rx="6" fill="url(#mmScreen)" className="mm-s" />
@@ -68,6 +70,8 @@ function MascotSvg({ pose }: { pose: Pose }) {
           d="M60 70 C58 36 84 26 104 28 C128 30 143 46 140 70 C128 56 112 50 96 52 C80 52 68 58 60 70 Z"
           fill="#172033"
         />
+        <path d="M73 49 C82 38 95 35 108 38" fill="none" stroke="#475569" strokeWidth="3" strokeLinecap="round" opacity="0.75" />
+        <path d="M111 43 Q123 45 132 56" fill="none" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" opacity="0.65" />
         <circle cx="76" cy="95" r="6" fill="#f9a8a8" opacity="0.45" />
         <circle cx="124" cy="95" r="6" fill="#f9a8a8" opacity="0.45" />
 
@@ -75,6 +79,10 @@ function MascotSvg({ pose }: { pose: Pose }) {
         <rect x="68" y="70" width="26" height="19" rx="6" fill="rgba(255,255,255,0.35)" className="mm-s" />
         <rect x="106" y="70" width="26" height="19" rx="6" fill="rgba(255,255,255,0.35)" className="mm-s" />
         <path d="M94 78 H106" className="mm-s" fill="none" />
+        <path d="M70 66 Q80 60 90 66" fill="none" stroke="#172033" strokeWidth="3" strokeLinecap="round" />
+        <path d="M110 66 Q120 60 130 66" fill="none" stroke="#172033" strokeWidth="3" strokeLinecap="round" />
+        <path d="M72 73 L78 70" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+        <path d="M110 73 L116 70" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
         <circle cx="81" cy="79" r="3" fill="#0f172a" />
         <circle cx="119" cy="79" r="3" fill="#0f172a" />
         <path d="M89 99 Q100 110 111 99" className="mm-s mm-smile" fill="none" strokeLinecap="round" />
@@ -227,8 +235,6 @@ export default function ScrollMascot({ language }: { language: Language }) {
     };
 
     const frame = () => {
-      measure();
-
       const scrollY = window.scrollY;
       const velocity = scrollY - lastScroll;
       lastScroll = scrollY;
@@ -273,29 +279,31 @@ export default function ScrollMascot({ language }: { language: Language }) {
       raf = requestAnimationFrame(frame);
     };
 
-    const kick = () => {
+    const kick = (remeasure = false) => {
+      if (remeasure) measure();
       if (running) return;
 
       running = true;
       raf = requestAnimationFrame(frame);
     };
 
+    const onScrollOrResize = () => kick(true);
     const onPointer = (event: PointerEvent) => {
       pointerX = (event.clientX / window.innerWidth - 0.5) * 2;
       pointerY = (event.clientY / window.innerHeight - 0.5) * 2;
       kick();
     };
 
-    kick();
+    kick(true);
 
-    window.addEventListener("scroll", kick, { passive: true });
-    window.addEventListener("resize", kick);
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize);
     window.addEventListener("pointermove", onPointer, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", kick);
-      window.removeEventListener("resize", kick);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
       window.removeEventListener("pointermove", onPointer);
     };
   }, [enabled]);

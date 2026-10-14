@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { flushSync } from "react-dom";
 import {
   ArrowDown,
   ArrowUp,
@@ -878,7 +879,7 @@ function ContactCode({ language }: { language: Language }) {
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionId>("about");
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollProgressRef = useRef<HTMLDivElement | null>(null);
   const [showTop, setShowTop] = useState(false);
   const [copied, setCopied] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
@@ -889,6 +890,52 @@ export default function Portfolio() {
   const headerRef = useRef<HTMLElement | null>(null);
   const autoScrollTargetRef = useRef<SectionId | null>(null);
   const autoScrollTimerRef = useRef<number | null>(null);
+  const transitionSequenceRef = useRef(0);
+
+  const animateChange = (
+    kind: "theme" | "language",
+    direction: "ltr" | "rtl",
+    origin: { x: number; y: number } | undefined,
+    update: () => void,
+  ) => {
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const transitionDocument = document as Document & {
+      startViewTransition?: (callback: () => void) => {
+        finished: Promise<void>;
+      };
+    };
+    const sequence = ++transitionSequenceRef.current;
+
+    if (origin) {
+      root.style.setProperty("--transition-x", `${origin.x}px`);
+      root.style.setProperty("--transition-y", `${origin.y}px`);
+    }
+
+    root.dataset.transitionKind = kind;
+    root.dataset.transitionDirection = direction;
+
+    const clearTransition = () => {
+      if (sequence !== transitionSequenceRef.current) return;
+      delete root.dataset.transitionKind;
+      delete root.dataset.transitionDirection;
+      root.style.removeProperty("--transition-x");
+      root.style.removeProperty("--transition-y");
+    };
+
+    if (reducedMotion || !transitionDocument.startViewTransition) {
+      update();
+      clearTransition();
+      return;
+    }
+
+    const transition = transitionDocument.startViewTransition(() => {
+      flushSync(update);
+    });
+    transition.finished.then(clearTransition, clearTransition);
+  };
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem(
@@ -1079,7 +1126,9 @@ export default function Portfolio() {
           ? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100))
           : 0;
 
-      setScrollProgress(progress);
+      if (scrollProgressRef.current) {
+        scrollProgressRef.current.style.width = `${progress}%`;
+      }
       setShowTop(scrollTop > 600);
 
       ticking = false;
@@ -1247,11 +1296,9 @@ export default function Portfolio() {
 
       <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-1.5 bg-slate-900/10 dark:bg-white/10">
         <div
+          ref={scrollProgressRef}
           className="h-full rounded-r-full bg-gradient-to-r from-emerald-400 via-blue-500 to-violet-500"
-          style={{
-            width: `${scrollProgress}%`,
-            transition: "width 120ms linear",
-          }}
+          style={{ width: "0%" }}
         />
       </div>
 
@@ -1295,9 +1342,16 @@ export default function Portfolio() {
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <button
               type="button"
-              onClick={() =>
-                setLanguage((value) => (value === "en" ? "ar" : "en"))
-              }
+              onClick={(event) => {
+                const nextLanguage = language === "en" ? "ar" : "en";
+                animateChange(
+                  "language",
+                  nextLanguage === "ar" ? "rtl" : "ltr",
+                  undefined,
+                  () => setLanguage(nextLanguage),
+                );
+                event.currentTarget.blur();
+              }}
               className="theme-button !h-9 !w-auto px-2.5 sm:!h-10 sm:px-3"
               aria-label="Toggle language"
               title={language === "en" ? "العربية" : "English"}
@@ -1311,9 +1365,17 @@ export default function Portfolio() {
 
             <button
               type="button"
-              onClick={() =>
-                setTheme((value) => (value === "light" ? "dark" : "light"))
-              }
+              onClick={(event) => {
+                const rect = event.currentTarget.getBoundingClientRect();
+                const nextTheme = theme === "light" ? "dark" : "light";
+                animateChange(
+                  "theme",
+                  language === "ar" ? "rtl" : "ltr",
+                  { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+                  () => setTheme(nextTheme),
+                );
+                event.currentTarget.blur();
+              }}
               className="theme-button !h-9 !w-9 sm:!h-10 sm:!w-10"
               aria-label={
                 theme === "light"
