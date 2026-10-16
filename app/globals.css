@@ -124,7 +124,6 @@ Reveal
   transition:
     opacity 650ms cubic-bezier(0.22, 1, 0.36, 1),
     transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
 }
 
 .reveal-visible {
@@ -170,7 +169,6 @@ html[data-theme="dark"] .page-grid {
 
 .animate-soft-float {
   animation: soft-float 7s ease-in-out infinite;
-  will-change: transform;
 }
 
 @keyframes twinkle {

@@ -1,6 +1,7 @@
 /* =========================================================
-   Motion system: kinetic text, mascot traveler, hero decor,
-   section aura, tilt, focus states, reduced-motion fallback
+   Motion system v2
+   Rules: animate only transform/opacity, no permanent will-change,
+   pause every loop that is off screen, honor reduced motion.
    ========================================================= */
 
 /* ---------- Focus ---------- */
@@ -15,55 +16,66 @@ html[data-theme="dark"] button:focus-visible {
   outline-color: #93c5fd;
 }
 
-/* ---------- Section aura (color shifts between sections) ---------- */
-@property --aura-a {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: rgba(251, 191, 36, 0.16);
+/* ---------- Pause loops that are off screen ---------- */
+[data-paused="true"],
+[data-paused="true"] *,
+[data-paused="true"] *::before,
+[data-paused="true"] *::after {
+  animation-play-state: paused !important;
 }
 
-@property --aura-b {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: rgba(96, 165, 250, 0.14);
-}
-
+/* ---------- Section aura: static layers, opacity cross-fade only ---------- */
 .section-aura {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  contain: strict;
+}
+
+.aura-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.aura-about {
   background:
-    radial-gradient(circle at 10% 20%, var(--aura-a), transparent 32%),
-    radial-gradient(circle at 90% 72%, var(--aura-b), transparent 34%);
-  transition:
-    --aura-a 0.9s ease,
-    --aura-b 0.9s ease;
+    radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.18), transparent 32%),
+    radial-gradient(circle at 90% 72%, rgba(96, 165, 250, 0.15), transparent 34%);
 }
 
-.section-aura[data-section="about"] {
-  --aura-a: rgba(251, 191, 36, 0.18);
-  --aura-b: rgba(96, 165, 250, 0.15);
+.aura-skills {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.18), transparent 32%),
+    radial-gradient(circle at 90% 72%, rgba(167, 139, 250, 0.17), transparent 34%);
 }
 
-.section-aura[data-section="skills"] {
-  --aura-a: rgba(96, 165, 250, 0.18);
-  --aura-b: rgba(167, 139, 250, 0.17);
+.aura-projects {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(52, 211, 153, 0.16), transparent 32%),
+    radial-gradient(circle at 90% 72%, rgba(244, 114, 182, 0.15), transparent 34%);
 }
 
-.section-aura[data-section="projects"] {
-  --aura-a: rgba(52, 211, 153, 0.16);
-  --aura-b: rgba(244, 114, 182, 0.15);
+.aura-experience {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.16), transparent 32%),
+    radial-gradient(circle at 90% 72%, rgba(251, 191, 36, 0.16), transparent 34%);
 }
 
-.section-aura[data-section="experience"] {
-  --aura-a: rgba(96, 165, 250, 0.16);
-  --aura-b: rgba(251, 191, 36, 0.16);
+.aura-contact {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(244, 114, 182, 0.17), transparent 32%),
+    radial-gradient(circle at 90% 72%, rgba(52, 211, 153, 0.16), transparent 34%);
 }
 
-.section-aura[data-section="contact"] {
-  --aura-a: rgba(244, 114, 182, 0.17);
-  --aura-b: rgba(52, 211, 153, 0.16);
+.section-aura[data-section="about"] .aura-about,
+.section-aura[data-section="skills"] .aura-skills,
+.section-aura[data-section="projects"] .aura-projects,
+.section-aura[data-section="experience"] .aura-experience,
+.section-aura[data-section="contact"] .aura-contact {
+  opacity: 1;
 }
 
 html[data-theme="dark"] .section-aura {
@@ -78,12 +90,12 @@ html[data-theme="dark"] .section-aura {
 @keyframes heroTitleIn {
   from {
     opacity: 0;
-    transform: translateY(26px) skewY(2deg);
+    transform: translateY(26px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) skewY(0);
+    transform: translateY(0);
   }
 }
 
@@ -102,44 +114,15 @@ html[data-theme="dark"] .hero-sym {
   opacity: 0.35;
 }
 
-.hs-1 {
-  top: 118px;
-  right: 2%;
-}
-
-.hs-2 {
-  top: 44%;
-  left: -6px;
-  animation-delay: 0.8s;
-}
-
-.hs-3 {
-  bottom: 14%;
-  right: 5%;
-  animation-delay: 1.6s;
-}
-
-.hs-4 {
-  top: 30%;
-  right: 47%;
-  animation-delay: 2.4s;
-}
-
-.hs-5 {
-  bottom: 10%;
-  left: 3%;
-  animation-delay: 3.2s;
-}
+.hs-1 { top: 118px; right: 2%; }
+.hs-2 { top: 44%; left: -6px; animation-delay: 0.8s; }
+.hs-3 { bottom: 14%; right: 5%; animation-delay: 1.6s; }
+.hs-4 { top: 30%; right: 47%; animation-delay: 2.4s; }
+.hs-5 { bottom: 10%; left: 3%; animation-delay: 3.2s; }
 
 @keyframes heroSymFloat {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-4deg);
-  }
-
-  50% {
-    transform: translateY(-12px) rotate(5deg);
-  }
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-12px) rotate(5deg); }
 }
 
 .scroll-cue-mouse {
@@ -161,19 +144,9 @@ html[data-theme="dark"] .hero-sym {
 }
 
 @keyframes scrollCue {
-  0% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-
-  40% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
+  0% { opacity: 0; transform: translateY(0); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(12px); }
 }
 
 /* ---------- Kinetic text ---------- */
@@ -187,171 +160,138 @@ html[data-theme="dark"] .hero-sym {
 
 .kinetic-word {
   display: inline-block;
-  transform: translateY(110%) rotate(3deg);
-  transform-origin: left bottom;
+  transform: translateY(110%);
   transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
 }
 
 .kinetic-on .kinetic-word {
-  transform: translateY(0) rotate(0);
+  transform: translateY(0);
 }
 
 /* ---------- Tilt ---------- */
 .tilt {
-  transition: transform 0.25s ease-out;
+  transition: transform 0.18s ease-out;
+}
+
+.tilt.is-tilting {
   will-change: transform;
 }
 
-/* ---------- Scroll mascot ---------- */
-.mm-perspective {
-  perspective: 700px;
+/* ---------- Character ---------- */
+.mm-svg {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  overflow: visible;
+  animation: mmBob 4.2s ease-in-out infinite;
+}
+
+.mm-o {
+  stroke: #1b2440;
+  stroke-width: 4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.mm-o2 {
+  stroke: #1b2440;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+@keyframes mmBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.mm-eyes-happy,
+.mm-mouth-open,
+.mm-finger {
+  display: none;
+}
+
+.mm-pupil,
+.mm-brows {
+  transition: transform 0.4s ease;
+}
+
+.mm-arm {
+  transform-box: view-box;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mm-wag {
+  transform-box: view-box;
+}
+
+.mm-arm-l,
+.mm-arm-l .mm-wag {
+  transform-origin: 78px 168px;
+}
+
+.mm-arm-r,
+.mm-arm-r .mm-wag {
+  transform-origin: 162px 168px;
+}
+
+/* code: focused, hands on the laptop, eyes on the screen */
+.mm-svg[data-pose="code"] .mm-arm-l { transform: rotate(-12deg); }
+.mm-svg[data-pose="code"] .mm-arm-r { transform: rotate(12deg); }
+.mm-svg[data-pose="code"] .mm-pupil { transform: translateY(2.5px); }
+.mm-svg[data-pose="code"] .mm-brows { transform: translateY(1.5px); }
+
+/* wave */
+.mm-svg[data-pose="wave"] .mm-arm-l { transform: rotate(-12deg); }
+.mm-svg[data-pose="wave"] .mm-arm-r { transform: rotate(-148deg); }
+.mm-svg[data-pose="wave"] .mm-arm-r .mm-wag {
+  animation: mmWave 1.1s ease-in-out infinite;
+}
+
+/* point: left arm out toward the content (mirrored for RTL) */
+.mm-svg[data-pose="point"] .mm-arm-l { transform: rotate(74deg); }
+.mm-svg[data-pose="point"] .mm-arm-r { transform: rotate(12deg); }
+.mm-svg[data-pose="point"] .mm-arm-l .mm-finger { display: block; }
+
+[dir="rtl"] .mm-svg[data-pose="point"] .mm-arm-l { transform: rotate(-12deg); }
+[dir="rtl"] .mm-svg[data-pose="point"] .mm-arm-r { transform: rotate(-74deg); }
+
+/* cheer */
+.mm-svg[data-pose="cheer"] {
+  animation: mmJump 0.7s ease-in-out infinite;
+}
+
+.mm-svg[data-pose="cheer"] .mm-arm-l { transform: rotate(150deg); }
+.mm-svg[data-pose="cheer"] .mm-arm-r { transform: rotate(-150deg); }
+.mm-svg[data-pose="cheer"] .mm-arm-l .mm-wag { animation: mmCheer 0.7s ease-in-out infinite; }
+.mm-svg[data-pose="cheer"] .mm-arm-r .mm-wag { animation: mmCheer 0.7s ease-in-out infinite reverse; }
+.mm-svg[data-pose="cheer"] .mm-eyes-open { display: none; }
+.mm-svg[data-pose="cheer"] .mm-eyes-happy { display: inline; }
+.mm-svg[data-pose="cheer"] .mm-smile { display: none; }
+.mm-svg[data-pose="cheer"] .mm-mouth-open { display: inline; }
+
+@keyframes mmWave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(20deg); }
+}
+
+@keyframes mmCheer {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(14deg); }
+}
+
+@keyframes mmJump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* ---------- Traveling mascot (desktop) ---------- */
+.mascot-traveler {
+  contain: layout;
 }
 
 .mm-tilt {
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-}
-
-.mm-svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  --mm-stroke: #0f172a;
-  filter: drop-shadow(4px 5px 0 rgba(15, 23, 42, 0.16));
-}
-
-html[data-theme="dark"] .mm-svg {
-  --mm-stroke: #e2e8f0;
-  filter: drop-shadow(4px 5px 0 rgba(255, 255, 255, 0.08));
-}
-
-.mm-s {
-  stroke: var(--mm-stroke);
-  stroke-width: 4;
-  stroke-linejoin: round;
-}
-
-.mm-bob {
-  animation: mmBob 4s ease-in-out infinite;
-}
-
-@keyframes mmBob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-.mm-mouth-open {
-  display: none;
-}
-
-.mm-arm {
-  transform-box: view-box;
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.mm-arm-l {
-  transform-origin: 61px 128px;
-}
-
-.mm-arm-r {
-  transform-origin: 139px 128px;
-}
-
-/* Right arm waves hello */
-.mm-svg[data-pose="about"] .mm-arm-r {
-  transform: rotate(-150deg);
-  animation: mmWave 1s ease-in-out infinite;
-}
-
-/* Left arm points toward the cards */
-.mm-svg[data-pose="skills"] .mm-arm-l {
-  transform: rotate(38deg);
-}
-
-.mm-svg[data-pose="projects"] .mm-arm-l {
-  transform: rotate(80deg);
-}
-
-.mm-svg[data-pose="experience"] .mm-arm-r {
-  transform: rotate(-32deg);
-}
-
-/* Celebrate */
-.mm-svg[data-pose="contact"] .mm-arm-l {
-  transform: rotate(150deg);
-  animation: mmCheerL 0.7s ease-in-out infinite;
-}
-
-.mm-svg[data-pose="contact"] .mm-arm-r {
-  transform: rotate(-150deg);
-  animation: mmCheerR 0.7s ease-in-out infinite;
-}
-
-.mm-svg[data-pose="contact"] .mm-bob {
-  animation: mmJump 0.7s ease-in-out infinite;
-}
-
-.mm-svg[data-pose="contact"] .mm-smile {
-  display: none;
-}
-
-.mm-svg[data-pose="contact"] .mm-mouth-open {
-  display: block;
-}
-
-@keyframes mmWave {
-  0%,
-  100% {
-    transform: rotate(-150deg);
-  }
-
-  50% {
-    transform: rotate(-122deg);
-  }
-}
-
-@keyframes mmCheerL {
-  0%,
-  100% {
-    transform: rotate(150deg);
-  }
-
-  50% {
-    transform: rotate(128deg);
-  }
-}
-
-@keyframes mmCheerR {
-  0%,
-  100% {
-    transform: rotate(-150deg);
-  }
-
-  50% {
-    transform: rotate(-128deg);
-  }
-}
-
-@keyframes mmJump {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-14px);
-  }
 }
 
 .mm-bubble {
@@ -369,7 +309,6 @@ html[data-theme="dark"] .mm-svg {
   font-size: 12px;
   font-weight: 900;
   box-shadow: 3px 3px 0 #0f172a;
-  animation: mmBubbleIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 html[data-theme="dark"] .mm-bubble {
@@ -377,16 +316,13 @@ html[data-theme="dark"] .mm-bubble {
   box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.18);
 }
 
-@keyframes mmBubbleIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(8px) scale(0.9);
-  }
+.mm-bubble-in {
+  animation: mmBubbleIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
 
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
+@keyframes mmBubbleIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.9); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 
 .mm-confetti {
@@ -403,18 +339,49 @@ html[data-theme="dark"] .mm-bubble {
   height: 9px;
   border-radius: 2px;
   background: var(--c);
+  opacity: 0;
+}
+
+.mm-confetti.go span {
   animation: mmBurst 1.2s ease-out both;
 }
 
 @keyframes mmBurst {
-  0% {
-    opacity: 1;
-    transform: rotate(var(--a)) translateY(0) scale(1);
-  }
+  0% { opacity: 1; transform: rotate(var(--a)) translateY(0) scale(1); }
+  100% { opacity: 0; transform: rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(0.4); }
+}
 
-  100% {
-    opacity: 0;
-    transform: rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(0.4);
+/* ---------- Inline character (tablet + phone) ---------- */
+.mm-inline {
+  width: 84px;
+  margin-bottom: 4px;
+}
+
+@media (min-width: 640px) {
+  .mm-inline {
+    width: 124px;
+    margin-inline-start: 18px;
+  }
+}
+
+/* ---------- Hero illustration ---------- */
+.hm-scene {
+  height: 400px;
+  isolation: isolate;
+}
+
+.hm-stage {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(330px, 80%);
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+@media (max-width: 640px) {
+  .hm-scene {
+    height: 330px;
   }
 }
 
@@ -428,10 +395,14 @@ html[data-theme="dark"] .mm-bubble {
   .hero-title,
   .hero-sym,
   .scroll-cue-mouse span,
-  .mm-bob,
+  .mm-svg,
+  .mm-wag,
   .mm-arm,
   .mm-bubble,
-  .mm-confetti span {
+  .mm-bubble-in,
+  .mm-confetti span,
+  .floating-code-badge,
+  .aura-layer {
     animation: none !important;
     transition: none !important;
   }
@@ -442,9 +413,6 @@ html[data-theme="dark"] .mm-bubble {
 
   .tilt {
     transform: none !important;
-  }
-
-  .section-aura {
-    transition: none;
+    transition: none !important;
   }
 }

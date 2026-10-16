@@ -1,10 +1,29 @@
 "use client";
 
-/** Floating code symbols + scroll cue for the hero. Decorative only. */
+import { useEffect, useRef } from "react";
+import { observeVisibility } from "./Motion-utils";
+
+/**
+ * Floating code symbols + scroll cue for the hero. Decorative only.
+ * Also pauses every looping animation inside the hero while it is off screen.
+ */
 export default function HeroDecor({ language }: { language: "en" | "ar" }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const hero = ref.current?.closest<HTMLElement>("section");
+
+    if (!hero) return;
+
+    return observeVisibility(hero, (visible) => {
+      hero.dataset.paused = visible ? "false" : "true";
+    });
+  }, []);
+
   return (
     <>
       <div
+        ref={ref}
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 hidden sm:block"
       >

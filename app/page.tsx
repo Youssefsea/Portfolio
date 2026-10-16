@@ -46,6 +46,10 @@ import ScrollMascot from "../components/ScrollMascot";
 import HeroDecor from "../components/HeroDecor";
 import CountUp from "../components/CountUp";
 import Tilt from "../components/Tilt";
+import HeroMascot from "../components/Heromascot";
+import SectionAura from "../components/Sectionaura";
+import HeroInlineMascot from "../components/Heroinlinemascot";
+import { observeOnce, observeVisibility, subscribeScroll } from "../components/Motion-utils";
 
 type Language = "en" | "ar";
 type Theme = "light" | "dark";
@@ -328,34 +332,23 @@ function Reveal({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const element = ref.current;
+
     if (!element) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.unobserve(element);
-        }
-      },
-      {
-        threshold: 0.08,
-        rootMargin: "0px 0px -40px 0px",
-      },
+    return observeOnce(
+      element,
+      () => element.classList.add("reveal-visible"),
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
     );
-
-    observer.observe(element);
-
-    return () => observer.disconnect();
   }, []);
 
   return (
     <div
       ref={ref}
-      className={`reveal ${visible ? "reveal-visible" : ""} ${className}`}
+      className={`reveal ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
@@ -363,88 +356,22 @@ function Reveal({
   );
 }
 
-function AnimatedMascot() {
-  return (
-    <div className="mascot-scene relative mx-auto h-[430px] w-full max-w-[500px]">
-      <div className="mascot-glow mascot-glow-one" />
-      <div className="mascot-glow mascot-glow-two" />
-
-      <div className="floating-code-badge badge-api">
-        <span>API</span>
-      </div>
-
-      <div className="floating-code-badge badge-db">
-        <span>DB</span>
-      </div>
-
-      <div className="floating-code-badge badge-ui">
-        <span>UI</span>
-      </div>
-
-      <div className="mascot-float">
-        <div className="mascot-shadow" />
-
-        <div className="mascot-body">
-          <div className="mascot-hoodie">
-            <div className="hoodie-string hoodie-string-left" />
-            <div className="hoodie-string hoodie-string-right" />
-            <div className="hoodie-pocket" />
-          </div>
-
-          <div className="mascot-neck" />
-
-          <div className="mascot-head">
-            <div className="mascot-hair" />
-
-            <div className="mascot-ear mascot-ear-left" />
-            <div className="mascot-ear mascot-ear-right" />
-
-            <div className="mascot-face">
-              <div className="mascot-glasses glasses-left" />
-              <div className="mascot-glasses glasses-right" />
-              <div className="glasses-bridge" />
-
-              <span className="mascot-eye eye-left" />
-              <span className="mascot-eye eye-right" />
-
-              <span className="mascot-nose" />
-              <span className="mascot-mouth" />
-            </div>
-          </div>
-
-          <div className="mascot-arm arm-left" />
-          <div className="mascot-arm arm-right" />
-
-          <div className="mascot-laptop">
-            <div className="laptop-screen">
-              <div className="laptop-topbar">
-                <span />
-                <span />
-                <span />
-              </div>
-
-              <div className="laptop-code">
-                <span className="code-line short" />
-                <span className="code-line medium" />
-                <span className="code-line long" />
-                <span className="code-line medium" />
-                <span className="code-line short" />
-              </div>
-            </div>
-
-            <div className="laptop-base" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function TerminalPanel({ language }: { language: Language }) {
   const lines = TERMINAL_LINES[language];
   const [lineIdx, setLineIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
   const [done, setDone] = useState<(typeof lines)[number][]>([]);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const [onScreen, setOnScreen] = useState(true);
+
+  useEffect(() => {
+    const element = panelRef.current;
+
+    if (!element) return;
+
+    return observeVisibility(element, setOnScreen);
+  }, []);
 
   useEffect(() => {
     setLineIdx(0);
@@ -453,6 +380,8 @@ function TerminalPanel({ language }: { language: Language }) {
   }, [language]);
 
   useEffect(() => {
+    if (!onScreen) return;
+
     if (lineIdx >= lines.length) {
       const restart = window.setTimeout(() => {
         setLineIdx(0);
@@ -480,12 +409,12 @@ function TerminalPanel({ language }: { language: Language }) {
     }, 260);
 
     return () => window.clearTimeout(timer);
-  }, [lineIdx, charIdx, lines]);
+  }, [lineIdx, charIdx, lines, onScreen]);
 
   const current = lines[lineIdx];
 
   return (
-    <div className="terminal-panel overflow-hidden rounded-[28px]">
+    <div ref={panelRef} className="terminal-panel overflow-hidden rounded-[28px]">
       <div className="flex items-center justify-between gap-3 border-b border-white/25 px-4 py-3 sm:px-5 sm:py-3.5">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
@@ -878,7 +807,7 @@ function ContactCode({ language }: { language: Language }) {
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionId>("about");
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const progressRef = useRef<HTMLDivElement | null>(null);
   const [showTop, setShowTop] = useState(false);
   const [copied, setCopied] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
@@ -1034,9 +963,7 @@ export default function Portfolio() {
 
     update();
 
-    window.addEventListener("scroll", schedule, {
-      passive: true,
-    });
+    const unsubscribeScroll = subscribeScroll(update);
 
     window.addEventListener("resize", schedule);
 
@@ -1057,7 +984,7 @@ export default function Portfolio() {
         window.clearTimeout(autoScrollTimerRef.current);
       }
 
-      window.removeEventListener("scroll", schedule);
+      unsubscribeScroll();
       window.removeEventListener("resize", schedule);
       window.removeEventListener("wheel", cancelLock);
       window.removeEventListener("touchstart", cancelLock);
@@ -1065,42 +992,23 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
-    let ticking = false;
-
     const updateScroll = () => {
       const doc = document.documentElement;
-      const scrollTop = doc.scrollTop || document.body.scrollTop;
-
-      const scrollHeight =
-        (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
-
+      const scrollTop = window.scrollY || doc.scrollTop || 0;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
       const progress =
-        scrollHeight > 0
-          ? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100))
-          : 0;
+        scrollHeight > 0 ? Math.min(1, Math.max(0, scrollTop / scrollHeight)) : 0;
 
-      setScrollProgress(progress);
-      setShowTop(scrollTop > 600);
-
-      ticking = false;
-    };
-
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateScroll);
-        ticking = true;
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${progress.toFixed(4)})`;
       }
-    };
 
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
+      setShowTop(scrollTop > 600);
+    };
 
     updateScroll();
 
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
+    return subscribeScroll(updateScroll);
   }, []);
 
   const scrollTo = (id: SectionId | "hero") => {
@@ -1241,16 +1149,17 @@ export default function Portfolio() {
         isArabic ? "font-arabic" : ""
       }`}
     >
-      <div className="section-aura" data-section={activeSection} aria-hidden="true" />
+      <SectionAura section={activeSection} />
       <div className="page-grid pointer-events-none fixed inset-0 z-0 opacity-80" />
       <ScrollMascot language={language} />
 
       <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-1.5 bg-slate-900/10 dark:bg-white/10">
         <div
-          className="h-full rounded-r-full bg-gradient-to-r from-emerald-400 via-blue-500 to-violet-500"
+          ref={progressRef}
+          className="h-full w-full rounded-r-full bg-gradient-to-r from-emerald-400 via-blue-500 to-violet-500"
           style={{
-            width: `${scrollProgress}%`,
-            transition: "width 120ms linear",
+            transform: "scaleX(0)",
+            transformOrigin: isArabic ? "right" : "left",
           }}
         />
       </div>
@@ -1259,7 +1168,7 @@ export default function Portfolio() {
         ref={headerRef}
         className="fixed inset-x-0 top-0 z-50 px-2.5 pt-2.5 sm:px-4 sm:pt-4"
       >
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-2 rounded-[18px] border-2 border-slate-900 bg-white/95 px-2.5 py-2.5 shadow-[4px_5px_0_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-slate-200 dark:bg-slate-950/95 dark:shadow-[4px_5px_0_rgba(255,255,255,0.1)] sm:rounded-[22px] sm:px-5 sm:py-3">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-2 rounded-[18px] border-2 border-slate-900 bg-white px-2.5 py-2.5 shadow-[4px_5px_0_rgba(15,23,42,0.12)] dark:border-slate-200 dark:bg-slate-950 dark:shadow-[4px_5px_0_rgba(255,255,255,0.1)] sm:rounded-[22px] sm:px-5 sm:py-3">
           <button
             type="button"
             onClick={() => scrollTo("hero")}
@@ -1423,6 +1332,7 @@ export default function Portfolio() {
           <div className="relative z-10 grid min-w-0 items-center gap-9 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
             <Reveal>
               <div className="min-w-0">
+                <HeroInlineMascot />
                 <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border-2 border-slate-900 bg-emerald-200 px-3.5 py-2 text-[11px] font-black text-slate-950 shadow-[3px_3px_0_#0f172a] dark:border-slate-200 dark:bg-emerald-400 sm:mb-6 sm:px-4 sm:py-2.5 sm:text-sm sm:shadow-[4px_4px_0_#0f172a]">
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-700" />
 
@@ -1519,7 +1429,7 @@ export default function Portfolio() {
 
             <Reveal delay={100}>
               <div className="min-w-0 space-y-5 sm:space-y-7">
-                <AnimatedMascot />
+                <HeroMascot />
                 <TerminalPanel language={language} />
               </div>
             </Reveal>

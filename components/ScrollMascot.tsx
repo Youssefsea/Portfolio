@@ -1,15 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import Character, { type Pose } from "./Character";
+import { subscribeScroll, usePrefersReducedMotion } from "./Motion-utils";
 
 type Language = "en" | "ar";
-type Pose = "idle" | "about" | "skills" | "projects" | "experience" | "contact";
+type Anchor = "about" | "skills" | "projects" | "experience" | "contact";
 
-const SIZE = 168;
-const HEIGHT = SIZE * 1.1;
-const CONFETTI_COLORS = ["#fde047", "#34d399", "#60a5fa", "#f472b6", "#a78bfa"];
+const W = 150;
+const H = 175;
+const CONFETTI = ["#fde047", "#34d399", "#60a5fa", "#f472b6", "#a78bfa"];
 
-const BUBBLES: Record<Exclude<Pose, "idle">, { en: string; ar: string }> = {
+const POSES: Record<Anchor, Pose> = {
+  about: "wave",
+  skills: "point",
+  projects: "point",
+  experience: "code",
+  contact: "cheer",
+};
+
+const BUBBLES: Record<Anchor, { en: string; ar: string }> = {
   about: { en: "Welcome!", ar: "أهلًا بك!" },
   skills: { en: "My toolbox", ar: "أدواتي" },
   projects: { en: "Take a look", ar: "ألقِ نظرة" },
@@ -17,255 +27,214 @@ const BUBBLES: Record<Exclude<Pose, "idle">, { en: string; ar: string }> = {
   contact: { en: "Let's talk!", ar: "لنتحدث!" },
 };
 
-function MascotSvg({ pose }: { pose: Pose }) {
-  return (
-    <svg
-      viewBox="0 0 200 220"
-      className="mm-svg"
-      data-pose={pose}
-      role="presentation"
-      focusable="false"
-    >
-      <defs>
-        <linearGradient id="mmHoodie" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#7aa2ff" />
-          <stop offset="1" stopColor="#3f63e0" />
-        </linearGradient>
-        <linearGradient id="mmSkin" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#f9d6b9" />
-          <stop offset="1" stopColor="#e6a984" />
-        </linearGradient>
-        <linearGradient id="mmScreen" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#1e293b" />
-          <stop offset="1" stopColor="#0f172a" />
-        </linearGradient>
-      </defs>
+type Spot = { name: Anchor; x: number; y: number };
 
-      <ellipse cx="100" cy="209" rx="58" ry="8" fill="rgba(15,23,42,0.18)" />
+/** Layout position of an element in the document, ignoring CSS transforms. */
+function docPosition(el: HTMLElement) {
+  let x = 0;
+  let y = 0;
+  let node: HTMLElement | null = el;
 
-      <g className="mm-bob">
-        {/* hood + body */}
-        <ellipse cx="100" cy="124" rx="36" ry="15" fill="#3f63e0" className="mm-s" />
-        <path
-          d="M42 206 C42 150 60 120 100 120 C140 120 158 150 158 206 Z"
-          fill="url(#mmHoodie)"
-          className="mm-s"
-        />
-        <path d="M92 130 L90 152" stroke="#dbeafe" strokeWidth="3" strokeLinecap="round" />
-        <path d="M108 130 L110 152" stroke="#dbeafe" strokeWidth="3" strokeLinecap="round" />
+  while (node) {
+    x += node.offsetLeft;
+    y += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
 
-        {/* laptop */}
-        <rect x="66" y="164" width="68" height="40" rx="6" fill="url(#mmScreen)" className="mm-s" />
-        <rect x="76" y="173" width="26" height="4" rx="2" fill="#34d399" />
-        <rect x="76" y="182" width="40" height="4" rx="2" fill="#60a5fa" />
-        <rect x="76" y="191" width="18" height="4" rx="2" fill="#f472b6" />
-
-        {/* head */}
-        <circle cx="59" cy="80" r="9" fill="url(#mmSkin)" className="mm-s" />
-        <circle cx="141" cy="80" r="9" fill="url(#mmSkin)" className="mm-s" />
-        <ellipse cx="100" cy="76" rx="41" ry="43" fill="url(#mmSkin)" className="mm-s" />
-        <path
-          d="M60 70 C58 36 84 26 104 28 C128 30 143 46 140 70 C128 56 112 50 96 52 C80 52 68 58 60 70 Z"
-          fill="#172033"
-        />
-        <circle cx="76" cy="95" r="6" fill="#f9a8a8" opacity="0.45" />
-        <circle cx="124" cy="95" r="6" fill="#f9a8a8" opacity="0.45" />
-
-        {/* glasses + eyes */}
-        <rect x="68" y="70" width="26" height="19" rx="6" fill="rgba(255,255,255,0.35)" className="mm-s" />
-        <rect x="106" y="70" width="26" height="19" rx="6" fill="rgba(255,255,255,0.35)" className="mm-s" />
-        <path d="M94 78 H106" className="mm-s" fill="none" />
-        <circle cx="81" cy="79" r="3" fill="#0f172a" />
-        <circle cx="119" cy="79" r="3" fill="#0f172a" />
-        <path d="M89 99 Q100 110 111 99" className="mm-s mm-smile" fill="none" strokeLinecap="round" />
-        <ellipse cx="100" cy="102" rx="7" ry="6" fill="#7f1d1d" className="mm-mouth-open" />
-
-        {/* headphones */}
-        <path d="M57 78 C52 24 148 24 143 78" className="mm-s" fill="none" strokeWidth="6" strokeLinecap="round" />
-        <rect x="48" y="68" width="15" height="30" rx="7.5" fill="#fb7185" className="mm-s" />
-        <rect x="137" y="68" width="15" height="30" rx="7.5" fill="#fb7185" className="mm-s" />
-
-        {/* arms */}
-        <g className="mm-arm mm-arm-l">
-          <rect x="46" y="116" width="30" height="62" rx="15" fill="url(#mmHoodie)" className="mm-s" />
-          <circle cx="61" cy="182" r="11" fill="url(#mmSkin)" className="mm-s" />
-        </g>
-        <g className="mm-arm mm-arm-r">
-          <rect x="124" y="116" width="30" height="62" rx="15" fill="url(#mmHoodie)" className="mm-s" />
-          <circle cx="139" cy="182" r="11" fill="url(#mmSkin)" className="mm-s" />
-        </g>
-      </g>
-    </svg>
-  );
+  return { x: x + el.offsetWidth / 2, y: y + el.offsetHeight / 2 };
 }
 
-function Confetti() {
-  return (
-    <div className="mm-confetti" aria-hidden="true">
-      {Array.from({ length: 14 }).map((_, i) => (
-        <span
-          key={i}
-          style={
-            {
-              "--a": `${(i * 360) / 14}deg`,
-              "--c": CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-              "--d": `${70 + (i % 3) * 18}px`,
-            } as React.CSSProperties
-          }
-        />
-      ))}
-    </div>
-  );
+function restart(el: HTMLElement, className: string) {
+  el.classList.remove(className);
+  void el.offsetWidth;
+  el.classList.add(className);
 }
 
+/**
+ * Desktop traveling mascot (>= 1024px). On smaller screens each section title
+ * shows its own inline character instead (see SectionTitle).
+ *
+ * Performance rules this file follows:
+ *  - no React state during scroll: everything is written straight to the DOM
+ *  - anchor positions are measured ONCE (and on resize / content change),
+ *    never per frame, so scrolling causes no layout reads
+ *  - one shared passive scroll listener; the rAF loop sleeps when settled
+ */
 export default function ScrollMascot({ language }: { language: Language }) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const tiltRef = useRef<HTMLDivElement | null>(null);
-  const poseRef = useRef<Pose>("idle");
-
-  const [enabled, setEnabled] = useState(false);
-  const [pose, setPose] = useState<Pose>("idle");
-  const [burst, setBurst] = useState(0);
-
-  // Desktop / large tablets only. Smaller screens keep the hero mascot only.
-  useEffect(() => {
-    const query = window.matchMedia("(min-width: 1024px)");
-    const update = () => setEnabled(query.matches);
-
-    update();
-    query.addEventListener("change", update);
-
-    return () => query.removeEventListener("change", update);
-  }, []);
+  const bubbleRef = useRef<HTMLDivElement | null>(null);
+  const burstRef = useRef<HTMLDivElement | null>(null);
+  const languageRef = useRef<Language>(language);
+  const shownRef = useRef<Anchor | null>(null);
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
-    if (!enabled) return;
+    languageRef.current = language;
 
+    if (shownRef.current && bubbleRef.current) {
+      bubbleRef.current.textContent = BUBBLES[shownRef.current][language];
+    }
+  }, [language]);
+
+  useEffect(() => {
     const wrap = wrapRef.current;
     const tilt = tiltRef.current;
+    const bubble = bubbleRef.current;
+    const burst = burstRef.current;
 
-    if (!wrap || !tilt) return;
+    if (!wrap || !tilt || !bubble || !burst) return;
 
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const ease = reduced ? 1 : 0.1;
+    const svg = tilt.firstElementChild as SVGElement | null;
+    const query = window.matchMedia("(min-width: 1024px)");
+
+    let spots: Spot[] = [];
+    let heroBottom = 0;
+    let vw = window.innerWidth;
+    let vh = window.innerHeight;
 
     let x = 0;
-    let y = window.innerHeight;
-    let s = 0.6;
-    let opacity = 0;
-
-    let targetX = x;
-    let targetY = y;
-    let targetS = s;
-    let targetOpacity = 0;
-
-    let lastScroll = window.scrollY;
+    let y = 0;
+    let s = 0.85;
+    let o = 0;
     let tiltZ = 0;
-    let pointerX = 0;
-    let pointerY = 0;
-    let first = true;
-    let running = false;
+    let lastScroll = window.scrollY;
+    let current = -1;
+    let visible = false;
     let raf = 0;
+    let measureRaf = 0;
+    let running = false;
+    let unsubscribe: (() => void) | null = null;
+    let resizeObserver: ResizeObserver | null = null;
+
+    const ease = reduced ? 1 : 0.14;
 
     const measure = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+      measureRaf = 0;
+
+      vw = window.innerWidth;
+      vh = window.innerHeight;
+
+      spots = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-mascot-anchor]"),
+      )
+        .filter((el) => el.offsetWidth > 0)
+        .map((el) => ({
+          name: el.dataset.mascotAnchor as Anchor,
+          ...docPosition(el),
+        }));
 
       const hero = document.getElementById("hero");
-      const heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
 
-      let bestPose: Pose | null = null;
-      let bestRect: DOMRect | null = null;
-      let bestDistance = Number.POSITIVE_INFINITY;
+      heroBottom = hero ? docPosition(hero).y + hero.offsetHeight / 2 : 0;
 
-      const anchors = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-mascot-anchor]"),
-      );
+      kick();
+    };
 
-      for (const el of anchors) {
-        const rect = el.getBoundingClientRect();
+    const scheduleMeasure = () => {
+      if (!measureRaf) measureRaf = requestAnimationFrame(measure);
+    };
 
-        if (rect.width === 0) continue;
-        if (rect.bottom < vh * 0.12 || rect.top > vh * 0.78) continue;
+    const show = (name: Anchor) => {
+      shownRef.current = name;
 
-        const distance = Math.abs(rect.top + rect.height / 2 - vh * 0.4);
+      if (svg) svg.dataset.pose = POSES[name];
 
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          bestPose = el.dataset.mascotAnchor as Pose;
-          bestRect = rect;
-        }
-      }
+      bubble.textContent = BUBBLES[name][languageRef.current];
 
-      let nextPose: Pose = "idle";
+      if (!reduced) {
+        restart(bubble, "mm-bubble-in");
 
-      if (bestPose && bestRect) {
-        nextPose = bestPose;
-        targetX = bestRect.left + bestRect.width / 2 - SIZE / 2;
-        targetY = bestRect.top + bestRect.height / 2 - HEIGHT / 2;
-        targetS = 1;
-      } else {
-        // Docked: small, bottom-left corner.
-        targetX = 12;
-        targetY = vh - HEIGHT * 0.6 - 14;
-        targetS = 0.6;
-      }
-
-      // The big hero mascot owns the first screen.
-      targetOpacity = heroBottom > vh * 0.3 || vw < 1024 ? 0 : 1;
-
-      if (nextPose !== poseRef.current) {
-        poseRef.current = nextPose;
-        setPose(nextPose);
-
-        if (nextPose === "contact" && !reduced) {
-          setBurst((value) => value + 1);
-        }
+        if (name === "contact") restart(burst, "go");
       }
     };
 
     const frame = () => {
-      measure();
+      raf = 0;
 
-      const scrollY = window.scrollY;
-      const velocity = scrollY - lastScroll;
-      lastScroll = scrollY;
+      const scroll = window.scrollY;
+      const velocity = scroll - lastScroll;
 
-      const tiltTarget = reduced
-        ? 0
-        : Math.max(-10, Math.min(10, velocity * 0.35));
+      lastScroll = scroll;
 
-      tiltZ += (tiltTarget - tiltZ) * 0.15;
+      let tx = x;
+      let ty = y;
+      let target = 0;
 
-      if (first) {
-        x = targetX;
-        y = targetY + 80;
-        first = false;
+      if (spots.length > 0) {
+        const focus = scroll + vh * 0.4;
+        let best = 0;
+        let bestDistance = Infinity;
+
+        for (let i = 0; i < spots.length; i++) {
+          const distance = Math.abs(spots[i].y - focus);
+
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            best = i;
+          }
+        }
+
+        // hysteresis: keep the current spot unless another one is clearly closer
+        if (
+          current >= 0 &&
+          current < spots.length &&
+          best !== current &&
+          Math.abs(spots[current].y - focus) - bestDistance < 90
+        ) {
+          best = current;
+        }
+
+        current = best;
+
+        const spot = spots[current];
+        const viewportY = spot.y - scroll;
+        const low = Math.max(vh * 0.2, 180);
+        const high = vh * 0.8;
+        const margin = visible ? 36 : 0;
+        const inBand =
+          viewportY > low - margin && viewportY < high + margin;
+        const heroGone = heroBottom - scroll < vh * 0.3;
+
+        visible = inBand && heroGone;
+        target = visible ? 1 : 0;
+
+        tx = Math.min(Math.max(spot.x - W / 2, 8), vw - W - 8);
+        ty = viewportY - H / 2;
+
+        // appearing: place it at the new spot while invisible (no flying across)
+        if (target === 1 && o < 0.03) {
+          x = tx;
+          y = ty + (reduced ? 0 : 26);
+        }
+
+        // pose + bubble always follow the spot it is currently at
+        if (target === 1 && shownRef.current !== spot.name) show(spot.name);
       }
 
-      x += (targetX - x) * ease;
-      y += (targetY - y) * ease;
-      s += (targetS - s) * ease;
-      opacity += (targetOpacity - opacity) * (reduced ? 1 : 0.12);
+      const targetScale = target === 1 ? 1 : 0.86;
+      const tiltTarget = reduced ? 0 : Math.max(-9, Math.min(9, velocity * 0.3));
 
-      wrap.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${s})`;
-      wrap.style.opacity = String(opacity);
+      x += (tx - x) * ease;
+      y += (ty - y) * ease;
+      s += (targetScale - s) * ease;
+      o += (target - o) * (reduced ? 1 : 0.16);
+      tiltZ += (tiltTarget - tiltZ) * 0.18;
 
-      const ry = reduced ? 0 : pointerX * 14;
-      const rx = reduced ? 0 : -pointerY * 8;
-
-      tilt.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${tiltZ * 0.6}deg)`;
+      wrap.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${s.toFixed(3)})`;
+      wrap.style.opacity = o.toFixed(3);
+      tilt.style.transform = `rotate(${tiltZ.toFixed(2)}deg)`;
 
       const settled =
-        Math.abs(targetX - x) < 0.4 &&
-        Math.abs(targetY - y) < 0.4 &&
-        Math.abs(targetS - s) < 0.005 &&
-        Math.abs(targetOpacity - opacity) < 0.01 &&
+        Math.abs(tx - x) < 0.3 &&
+        Math.abs(ty - y) < 0.3 &&
+        Math.abs(targetScale - s) < 0.004 &&
+        Math.abs(target - o) < 0.01 &&
         Math.abs(tiltZ) < 0.1;
 
       if (settled) {
+        o = target;
+        wrap.style.opacity = String(target);
         running = false;
         return;
       }
@@ -273,62 +242,81 @@ export default function ScrollMascot({ language }: { language: Language }) {
       raf = requestAnimationFrame(frame);
     };
 
-    const kick = () => {
-      if (running) return;
+    function kick() {
+      if (running || !query.matches) return;
 
       running = true;
       raf = requestAnimationFrame(frame);
+    }
+
+    const start = () => {
+      if (unsubscribe) return;
+
+      scheduleMeasure();
+      unsubscribe = subscribeScroll(kick);
+      window.addEventListener("resize", scheduleMeasure);
+      window.addEventListener("load", scheduleMeasure);
+
+      resizeObserver = new ResizeObserver(scheduleMeasure);
+      resizeObserver.observe(document.documentElement);
+
+      void document.fonts?.ready.then(scheduleMeasure);
     };
 
-    const onPointer = (event: PointerEvent) => {
-      pointerX = (event.clientX / window.innerWidth - 0.5) * 2;
-      pointerY = (event.clientY / window.innerHeight - 0.5) * 2;
-      kick();
+    const stop = () => {
+      unsubscribe?.();
+      unsubscribe = null;
+      resizeObserver?.disconnect();
+      resizeObserver = null;
+      window.removeEventListener("resize", scheduleMeasure);
+      window.removeEventListener("load", scheduleMeasure);
+      cancelAnimationFrame(raf);
+      cancelAnimationFrame(measureRaf);
+      raf = 0;
+      measureRaf = 0;
+      running = false;
+      o = 0;
+      wrap.style.opacity = "0";
     };
 
-    kick();
+    const onQuery = () => (query.matches ? start() : stop());
 
-    window.addEventListener("scroll", kick, { passive: true });
-    window.addEventListener("resize", kick);
-    window.addEventListener("pointermove", onPointer, { passive: true });
+    onQuery();
+    query.addEventListener("change", onQuery);
 
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", kick);
-      window.removeEventListener("resize", kick);
-      window.removeEventListener("pointermove", onPointer);
+      query.removeEventListener("change", onQuery);
+      stop();
     };
-  }, [enabled]);
-
-  if (!enabled) return null;
-
-  const bubble = pose === "idle" ? null : BUBBLES[pose][language];
+  }, [reduced]);
 
   return (
     <div
       ref={wrapRef}
       aria-hidden="true"
-      className="mascot-traveler pointer-events-none fixed left-0 top-0 z-[45] opacity-0"
-      style={{
-        width: SIZE,
-        height: HEIGHT,
-        transformOrigin: "top left",
-        willChange: "transform, opacity",
-      }}
+      className="mascot-traveler pointer-events-none fixed left-0 top-0 z-[45] hidden lg:block"
+      style={{ width: W, height: H, opacity: 0, transformOrigin: "50% 50%" }}
     >
-      {bubble && (
-        <div key={pose} className="mm-bubble">
-          {bubble}
-        </div>
-      )}
+      <div ref={bubbleRef} className="mm-bubble" />
 
-      <div className="mm-perspective">
-        <div ref={tiltRef} className="mm-tilt">
-          <MascotSvg pose={pose} />
-        </div>
+      <div ref={tiltRef} className="mm-tilt">
+        <Character pose="wave" />
       </div>
 
-      {pose === "contact" && <Confetti key={burst} />}
+      <div ref={burstRef} className="mm-confetti">
+        {Array.from({ length: 14 }).map((_, i) => (
+          <span
+            key={i}
+            style={
+              {
+                "--a": `${(i * 360) / 14}deg`,
+                "--c": CONFETTI[i % CONFETTI.length],
+                "--d": `${70 + (i % 3) * 18}px`,
+              } as React.CSSProperties
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 }

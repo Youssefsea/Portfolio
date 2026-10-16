@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { observeOnce, usePrefersReducedMotion } from "./Motion-utils";
 
 /**
- * Counts up once, the first time it scrolls into view. Values that look like
- * years (>= 1000) are shown as-is. The true value is always the initial text,
- * so the final number is correct even if JS animation never runs.
+ * Counts up once, the first time it scrolls into view. Years (>= 1000) and
+ * non-numeric values are shown as-is. The true value is the server-rendered
+ * text, and it is restored when the animation ends, so the final number is
+ * always correct. The text node is updated directly (no React state).
  */
 export default function CountUp({
   value,
@@ -14,36 +16,36 @@ export default function CountUp({
   value: string;
   duration?: number;
 }) {
-  const match = value.match(/^(\d+)(.*)$/);
-  const target = match ? parseInt(match[1], 10) : Number.NaN;
-  const suffix = match ? match[2] : "";
-
   const ref = useRef<HTMLSpanElement | null>(null);
-  const started = useRef(false);
-  const [text, setText] = useState(value);
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const element = ref.current;
+    const node = element?.firstChild as Text | null;
+    const match = value.match(/^(\d+)(.*)$/);
 
-    if (!element || Number.isNaN(target) || target >= 1000) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!element || !node || !match || reduced) return;
+
+    const target = parseInt(match[1], 10);
+    const suffix = match[2];
+
+    if (target >= 1000) return;
 
     let raf = 0;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting || started.current) return;
+    node.nodeValue = `0${suffix}`;
 
-        started.current = true;
-        observer.disconnect();
-
+    const stopObserving = observeOnce(
+      element,
+      () => {
         const begin = performance.now();
 
         const tick = (now: number) => {
           const t = Math.min(1, (now - begin) / duration);
           const eased = 1 - Math.pow(1 - t, 3);
 
-          setText(`${Math.round(target * eased)}${suffix}`);
+          node.nodeValue =
+            t < 1 ? `${Math.round(target * eased)}${suffix}` : value;
 
           if (t < 1) raf = requestAnimationFrame(tick);
         };
@@ -53,17 +55,16 @@ export default function CountUp({
       { threshold: 0.4 },
     );
 
-    observer.observe(element);
-
     return () => {
-      observer.disconnect();
+      stopObserving();
       cancelAnimationFrame(raf);
+      node.nodeValue = value;
     };
-  }, [target, suffix, duration]);
+  }, [value, duration, reduced]);
 
   return (
     <span ref={ref} aria-label={value}>
-      {text}
+      {value}
     </span>
   );
 }
